@@ -1,0 +1,10 @@
+to configure this HMVC:
+
+1. Make Base URL
+2. Set Base URL name in .htaccess
+3. set directory in each index.php
+4. front modules directory place at "aplication/modules/front-module"
+5. back modules directory place at "aplication/modules/back-module"
+
+
+--- happy coding ---

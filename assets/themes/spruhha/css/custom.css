@@ -1,0 +1,115 @@
+.nav .side-menu__icon {
+    font-size: 17px;
+    line-height: 0;
+    margin-right: 10px;
+    width: 35px;
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+    padding: 5px;
+    fill: rgba(255, 255, 255, 0.4);;
+}
+
+.side-menu .nav-link:hover .side-menu__icon {
+    fill: #ffffff;
+}
+
+.main-sidebar-body li a.active .side-menu__icon{
+    background: #3255d2;
+    fill: #fff;
+    border-radius: 50%;
+}
+.card-header{
+    margin-bottom: 20px;
+}
+
+.form-group.has-danger input,
+.form-group.has-danger textarea
+{
+    border-color: #ee335e;
+    padding-right: calc(1.5em + 0.75rem);
+    background-repeat: no-repeat;
+    background-position: center right calc(0.375em + 0.1875rem);
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+}
+.form-group.has-danger  .help-block{
+    color: #ee335e;;
+}
+
+#global-loader{
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.list-group .menu-container svg{
+    width: 20px;
+}
+.list-group  li{
+    padding-right: 0px !important;
+    list-style: none !important;
+    border-bottom: 1px solid #deebfd;
+}
+
+.list-group .menu-container{
+    padding: 5px 0;
+}
+.list-group .menu-container.devider{
+    margin-top: 30px;
+}
+.list-group .menu-container:hover{
+    color: #3255d2;
+    border-top-color: #dde2ef;
+    border-bottom-color: #dde2ef;
+    background-color: #ecf0fa;
+    cursor: pointer;
+}
+.list-group .menu-container h4{
+    font-size: 15px;
+}
+.list-group li:hover li{
+    background: none;
+    color: #031b4e;
+}
+.main-logo img{
+    height: 36px;
+}
+
+.main-toggle{
+    border-radius: 15px;
+}
+.main-toggle span{
+    border-radius: 50%;
+}
+.main-toggle-dark.on{
+    background-color: #3255d2;
+}
+input , textarea{
+    color: #1d212f !important;
+}
+.side-menu__item svg{
+    width: 20px;
+    margin-right: 10px;
+    fill: #3255d2;
+}
+.right-bar-nav.nav{
+    display: block;
+}
+.right-bar-nav.nav{
+    padding: 0 10px;
+    color: #1d212f;
+}
+.right-bar-nav.nav .side-menu__icon {
+    fill: #1d212f;
+}
+.right-bar-nav.nav li a{
+    color: #1d212f;
+}
+.right-bar-nav.nav li a:hover{
+    color: #3255d2;
+}
+.right-bar-nav.nav li a:hover svg{
+    fill: #3255d2;
+}
+
+li{
+    list-style: none;
+}
