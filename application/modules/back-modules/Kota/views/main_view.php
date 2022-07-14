@@ -11,6 +11,8 @@
                             <tr>
                                 <th><span>No</span></th>
                                 <th><span>Kota / Kabupaten</span></th>
+                                <th><span>Provinsi</span></th>
+                                <th><span>Action</span></th>
                             </tr>
                         </thead>
                         <tbody></tbody>

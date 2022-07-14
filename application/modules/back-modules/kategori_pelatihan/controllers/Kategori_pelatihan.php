@@ -66,7 +66,7 @@ class Kategori_pelatihan extends BackendController
         $id = $this->input->post('id');
 
         if ($this->input->post('name') == '') {
-            $data['error_string'][] = 'Harus Diisi';
+            $data['error_string'][] = 'Kategori Pelatihan Harus Diisi';
             $data['inputerror'][] = 'name';
             $data['status'] = FALSE;
         }

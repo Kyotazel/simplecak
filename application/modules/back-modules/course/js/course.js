@@ -68,7 +68,7 @@ $('.btn_save').click(function (e) {
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
                     $('[name="'+data.inputerror[i]+'"]').parent().addClass("has-danger");
-                    $('[name="'+data.inputerror[i]+'"]').next().next(data.error_string[i]);
+                    $('[name="'+data.inputerror[i]+'"]').next().html(data.error_string[i]);
                 }
             }
         },
@@ -80,6 +80,8 @@ $('.btn_save').click(function (e) {
 
 $(document).on('click', '.btn_edit', function () {
     $('.modal-title').text('EDIT DATA');
+    $(".form-group").removeClass('has-danger');
+    $('.help-block').empty();
     id = $(this).data('id');
     id_use = id;
     save_method = 'edit';

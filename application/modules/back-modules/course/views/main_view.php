@@ -5,11 +5,11 @@
                 <div class="mb-3 row">
                     <h3 class="col-md-8">Daftar Pelatihan</h3>
                     <div class="col-md-4 text-right">
-                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Keahlian </a>') ?>
+                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Pelatihan </a>') ?>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_data">
+                    <table class="table table-bordered" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
@@ -47,8 +47,8 @@
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
-                            <label for="name">Pilih Skill</label>
-                            <select name="skill" id="skill" class="form-control">
+                            <label for="skill">Pilih Skill</label>
+                            <select name="skill" id="skill" class="form-control select2">
                                 <option value="">-- Pilih Skill --</option>
                                 <?php
                                     foreach($get_skill as $value) {

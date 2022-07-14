@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_data">
+                    <table class="table table-bordered" id="table_data" style="width: 100%">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>

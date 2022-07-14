@@ -26,7 +26,7 @@ class Course extends BackendController
     {
 
         $this->app_data['get_skill']     = Modules::run('database/get_all', 'tb_skill')->result();
-        $this->app_data['page_title']    = "Kategori Keahlian";
+        $this->app_data['page_title']    = "Daftar Pelatihan";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
     }
@@ -72,17 +72,17 @@ class Course extends BackendController
         $id = $this->input->post('id');
 
         if ($this->input->post('name') == '') {
-            $data['error_string'][] = 'Harus Diisi';
+            $data['error_string'][] = 'Nama Pelatihan Harus Diisi';
             $data['inputerror'][] = 'name';
             $data['status'] = FALSE;
         }
         if ($this->input->post('description') == '') {
-            $data['error_string'][] = 'Harus Diisi';
+            $data['error_string'][] = 'Deskripsi Harus Diisi';
             $data['inputerror'][] = 'description';
             $data['status'] = FALSE;
         }
         if ($this->input->post('skill') == '') {
-            $data['error_string'][] = 'Harus Diisi';
+            $data['error_string'][] = 'Skill Harus Diisi';
             $data['inputerror'][] = 'skill';
             $data['status'] = FALSE;
         }

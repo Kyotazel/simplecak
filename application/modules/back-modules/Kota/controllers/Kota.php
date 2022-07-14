@@ -37,10 +37,17 @@ class Kota extends BackendController
         $data = [];
         foreach ($get_all as $data_table) {
 
+            $get_provinsi = Modules::run('database/find', 'provinces', ['id' => $data_table->province_id])->row();
+
             $no++;
             $row = array();
             $row[] = $no;
             $row[] = $data_table->name;
+            $row[] = $get_provinsi->name;
+            $row[] = '
+                    <a href="javascript:void(0)" data-id="' . $data_table->id . '" class="btn btn-sm btn-info btn_edit"><i class="fas fa-pen"></i> Edit</a>
+                    <a href="javascript:void(0)" data-id="' . $data_table->id . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> Hapus</a>
+            ';
             $data[] = $row;
         }
 

@@ -11,7 +11,9 @@ $(document).ready(function() {
         },
         "columns" : [
             { "width": "10%" },
-            { "width": "90%" },          
+            { "width": "40%" },   
+            { "width": "30%" },
+            { "width": "20%" },
         ]
     })
 })
