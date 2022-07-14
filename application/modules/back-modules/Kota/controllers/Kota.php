@@ -24,6 +24,7 @@ class Kota extends BackendController
 
     public function index()
     {
+        $this->app_data["provinsi"] = Modules::run("database/get_all", "provinces")->result();
         $this->app_data['page_title']     = "Master Kota / Kabupaten";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -56,5 +57,79 @@ class Kota extends BackendController
         );
 
         echo json_encode($ouput);
+    }
+
+    private function validate_save() {
+        Modules::run('security/is_ajax');
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+        // this validate if there is same file to be uploaded
+        $id = $this->input->post('id');
+
+        if ($this->input->post('name') == '') {
+            $data['error_string'][] = 'Kota/Kabupaten Harus Diisi';
+            $data['inputerror'][] = 'name';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('provinsi') == '') {
+            $data['error_string'][] = 'Provinsi Harus Diisi';
+            $data['inputerror'][] = 'provinsi';
+            $data['status'] = FALSE;
+        }
+        if ($data['status'] == FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function save() {
+        $this->validate_save();
+        $name   = $this->input->post("name");
+        $provinsi   = $this->input->post("provinsi");
+        
+        $array_insert = [
+            'name' => $name,
+            'province_id' => $provinsi
+
+        ];
+        Modules::run('database/insert', 'cities', $array_insert);
+
+        echo json_encode(['status' => true]);
+
+    }
+
+    public function get_data() {
+        Modules::run('security/is_ajax');
+        $id = $this->input->post('id');
+        $get_data = Modules::run('database/find', 'cities', ['id' => $id])->row();
+
+        echo json_encode(['data' => $get_data, 'status' => true]);
+    }
+
+    public function update() {
+        Modules::run('security/is_ajax');
+        $this->validate_save();
+
+        $id     = $this->input->post('id');
+        $name     = $this->input->post('name');
+        $provinsi   = $this->input->post("provinsi");
+
+        $array_update = [
+            'name' => $name,
+            'province_id' => $provinsi
+        ];
+
+        Modules::run('database/update', 'cities', ['id' => $id], $array_update);
+        echo json_encode(['status' => true]);
+    }
+
+    public function delete_data() {
+        Modules::run('security/is_ajax');
+        $id = $this->input->post("id");
+
+        Modules::run('database/delete', 'cities', ['id' => $id]);
+        echo json_encode(['status' => true]);
     }
 }
