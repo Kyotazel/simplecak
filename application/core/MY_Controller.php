@@ -23,3 +23,12 @@ class BackendController extends CommonController
         parent::__construct();
     }
 }
+
+class ApiController extends CommonController
+{
+    public function __construct()
+    {
+        parent::__construct();
+    }
+}
+

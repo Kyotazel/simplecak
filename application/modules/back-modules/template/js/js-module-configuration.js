@@ -1,6 +1,7 @@
 var getUrl = window.location;
 var baseUrl =_base_url;
 var prefix_folder_admin = 'admin';
+var prefix_folder_api = 'api';
 
 
 $(document).ready(function () {
