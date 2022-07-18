@@ -599,8 +599,8 @@
                     </div>
                 </div>
                 <h4 class="h3 pt-sm-4 pt-3 mb-0 text-center">
-                    Do you want more?
-                    <a href="events-list.html" class="btn btn-lg btn-gradient btn-hover-shadow d-sm-inline-block d-block mt-sm-0 mt-4 ms-sm-4">Explore all events</a>
+                    Ingin cari tau lebih?
+                    <a href="events-list.html" class="btn btn-lg btn-gradient btn-hover-shadow d-sm-inline-block d-block mt-sm-0 mt-4 ms-sm-4">Explore semua pelatihan</a>
                 </h4>
             </div>
         </section>

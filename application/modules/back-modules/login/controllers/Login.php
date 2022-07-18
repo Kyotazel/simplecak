@@ -263,6 +263,8 @@ class Login extends BackendController
         ];
         $encrypt_key = $this->encrypt->encode(json_encode($array_key));
 
+        // echo $encrypt_key;
+
         Modules::run('emailing/forgot_password', $email, $encrypt_key);
 
         $html_respon = '
