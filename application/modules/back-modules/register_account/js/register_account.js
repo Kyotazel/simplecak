@@ -4,152 +4,167 @@ var id_use = 0;
 
 $('.btn_save').click(function (e) {
     e.preventDefault();
-    $(".form-group").removeClass('has-danger');
-    $('.help-block').empty();
-    var formData = new FormData($('.form_input')[0]);
-    var url;
-    var status;
-    if(save_method == 'add') {
-        url = 'save';
-        status = "Ditambahkan";
-    } else {
-        url = 'update';
-        status = "Diubah";
-        formData.append('id', id_use);
-    }
-
+    $(".form-control").removeClass("is-invalid");
+    $(".invalid-feedback").empty();
+    var formData = new FormData($('#form-input')[0]);
+    var url = "save";
     $.ajax({
-        url: url_controller+url+'?token'+_token_user,
+        url: url_controller + url + '?token' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
         processData: false,
         dataType: "JSON",
-        success: function(data) {
-            if(data.status) {
-                notif({
-                    msg: `<b>Sukses : </b> Data berhasil ${status}`,
-                    type: "success"
-                })
-                table.ajax.reload(null, false);
-                $("#modal_form").modal("hide");
+        success: function (data) {
+            if (data.status) {
+                swal("Data Berhasil Ditambahkan!", "Silahkan Cek Email untuk Konfirmasi", "success");
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
-                    $('[name="'+data.inputerror[i]+'"]').parent().addClass("has-danger");
-                    $('[name="'+data.inputerror[i]+'"]').next().html(data.error_string[i]);
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             $('.btn_save_group').button('reset');
         }
     })
 })
 
-$("#provinsi_asal").on("change", function() {
+$(".btn-reset-password").on("click", function () {
+    $(".form-control").removeClass("is-invalid");
+    $(".invalid-feedback").empty();
+    var id = $(this).data('id');
+    var formData = new FormData($('#form-reset')[0]);
+    formData.append('id', id);
+    $.ajax({
+        url: url_controller + "do_reset_password" + '?token=' + _token_user,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function (data) {
+            console.log(data);
+            if (data.status) {
+                swal("Berhasil", "Kaya Sandi berhasil diubah", "success");
+                location.href = url_controller;
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++)
+                {
+                    $('[name="'+data.inputerror[i]+'"]').addClass('is-invalid');
+                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                }
+            }
+        }
+    })
+}
+)
+
+$("#id_province").on("change", function () {
     var provinsi = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_kota"+"?token="+_token_user,
+        url: url_controller + "get_kota" + "?token=" + _token_user,
         type: "POST",
-        data: {provinsi: provinsi},
+        data: { provinsi: provinsi },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Kota Asal -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#kota_asal").html(html);
+            $("#id_city").html(html);
         }
     });
 })
 
-$("#kota_asal").on("change", function() {
+$("#id_city").on("change", function () {
     var kota = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_kecamatan"+"?token="+_token_user,
+        url: url_controller + "get_kecamatan" + "?token=" + _token_user,
         type: "POST",
-        data: {kota: kota},
+        data: { kota: kota },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Kecamatan Asal -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#kecamatan_asal").html(html);
+            $("#id_regency").html(html);
         }
     });
 })
 
-$("#kecamatan_asal").on("change", function() {
+$("#id_regency").on("change", function () {
     var kecamatan = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_desa"+"?token="+_token_user,
+        url: url_controller + "get_desa" + "?token=" + _token_user,
         type: "POST",
-        data: {kecamatan: kecamatan},
+        data: { kecamatan: kecamatan },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Desa Asal -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#desa_asal").html(html);
+            $("#id_village").html(html);
         }
     });
 })
 
-$("#provinsi_sekarang").on("change", function() {
+$("#id_province_current").on("change", function () {
     var provinsi = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_kota"+"?token="+_token_user,
+        url: url_controller + "get_kota" + "?token=" + _token_user,
         type: "POST",
-        data: {provinsi: provinsi},
+        data: { provinsi: provinsi },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Kota Sekarang -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#kota_sekarang").html(html);
+            $("#id_city_current").html(html);
         }
     });
 })
 
-$("#kota_sekarang").on("change", function() {
+$("#id_city_current").on("change", function () {
     var kota = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_kecamatan"+"?token="+_token_user,
+        url: url_controller + "get_kecamatan" + "?token=" + _token_user,
         type: "POST",
-        data: {kota: kota},
+        data: { kota: kota },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Kecamatan Sekarang -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#kecamatan_sekarang").html(html);
+            $("#id_regency_current").html(html);
         }
     });
 })
 
-$("#kecamatan_sekarang").on("change", function() {
+$("#id_regency_current").on("change", function () {
     var kecamatan = $(this).val();
 
     $.ajax({
-        url: url_controller+"get_desa"+"?token="+_token_user,
+        url: url_controller + "get_desa" + "?token=" + _token_user,
         type: "POST",
-        data: {kecamatan: kecamatan},
+        data: { kecamatan: kecamatan },
         dataType: "JSON",
-        success: function(data) {
+        success: function (data) {
             var html = '<option value="">-- Pilih Desa Sekarang -- </option>';
-            for(i = 0; i < data.length; i++) {
+            for (i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
-            $("#desa_sekarang").html(html);
+            $("#id_village_current").html(html);
         }
     });
 })

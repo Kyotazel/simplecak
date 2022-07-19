@@ -310,6 +310,22 @@ class Emailing extends BackendController
         $this->send_email($subject, $content, $email);
     }
 
+    public function confirm_email($email, $encrypt_key, $username, $no_kk) {
+        $data["encrypt_key"] = $encrypt_key;
+        $data["username"] = $username;
+        $data["password"] = $no_kk;
+        $html_content = $this->load->view('_partials/content_confirm_email', $data, TRUE);
+
+        $subject = "KONFIRMASI EMAIL";
+        $get_template = Modules::run("database/find", 'tb_email_template', ['keyword' => 'email_confirm'])->row();
+        $email = $email;
+        $content        = $get_template->template;
+        $content        = str_replace('{content}', $html_content, $content);
+        $content        = str_replace('{username}', $email, $content);
+
+        $this->send_email($subject, $content, $email);
+    }
+
     public function forgot_password($email, $encrypt_key)
     {
         $data['encrypt_key'] = $encrypt_key;
