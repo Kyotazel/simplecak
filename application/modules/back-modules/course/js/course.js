@@ -12,13 +12,14 @@ $(document).ready(function() {
         "columns" : [
             { "width": "10%" },
             { "width": "20%" },
-            { "width": "40%" },
+            { "width": "25%" },
+            { "width": "15%" },
             { "width": "15%" },
             { "width": "15%" }
         ],
         "columnDefs" : [
             {
-                "targets": 4,
+                "targets": 5,
                 "className": "text-center"
             }            
         ]
@@ -94,6 +95,7 @@ $(document).on('click', '.btn_edit', function () {
             if (data.status) {
                 $('[name="name"]').val(data.course.name);
                 $('[name="description"]').val(data.course.description);
+                $('[name="id_category_course"]').val(data.course.id_category_course);
                 $('[name="skill"]').val(data.skill.id_skill);
                 $('#modal_form').modal('show');
             }

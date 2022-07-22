@@ -32,6 +32,7 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/skins.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/dark-style.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/colors/default.css" rel="stylesheet" />
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/sweetalert.css" rel="stylesheet">
 
     <!-- Color css-->
     <link id="theme" rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets/themes/spruhha/') ?>css/colors/color.css" />
@@ -88,6 +89,9 @@
     <!-- Bootstrap js-->
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap/js/popper.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap/js/bootstrap.min.js"></script>
+
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/sweetalert.min.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/jquery.sweet-alert.js"></script>
 
     <!-- Select2 js-->
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/select2/js/select2.min.js"></script>

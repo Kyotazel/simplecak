@@ -35,14 +35,12 @@ $(".btn-reset-password").on("click", function () {
     $(".form-control").removeClass("is-invalid");
     $(".invalid-feedback").empty();
     var id = $(this).data('id');
-    var formData = new FormData($('#form-reset')[0]);
-    formData.append('id', id);
+    var password = $("#password").val();
+    var re_password = $("#re_password").val();
     $.ajax({
         url: url_controller + "do_reset_password" + '?token=' + _token_user,
         type: "POST",
-        data: formData,
-        contentType: false,
-        processData: false,
+        data: {id: id, password: password, re_password: re_password},
         dataType: "JSON",
         success: function (data) {
             console.log(data);

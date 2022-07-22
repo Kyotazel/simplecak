@@ -26,6 +26,7 @@ class Course extends BackendController
     {
 
         $this->app_data['get_skill']     = Modules::run('database/get_all', 'tb_skill')->result();
+        $this->app_data['get_course_category']     = Modules::run('database/get_all', 'tb_course_category')->result();
         $this->app_data['page_title']    = "Daftar Pelatihan";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -41,12 +42,14 @@ class Course extends BackendController
 
             $get_course = Modules::run('database/find', 'tb_course', ['id' => $data_table->id_course])->row();
             $get_skill = Modules::run('database/find', 'tb_skill', ['id' => $data_table->id_skill])->row();
+            $get_category = Modules::run('database/find', 'tb_course_category', ['id' => $get_course->id_category_course])->row();
 
             $no++;
             $row = array();
             $row[] = $no;
             $row[] = $get_course->name;
             $row[] = $get_course->description;
+            $row[] = $get_category->name;
             $row[] = $get_skill->name;
             $row[] = '
                     <a href="javascript:void(0)" data-id="' . $data_table->id_course . '" class="btn btn-sm btn-info btn_edit"><i class="fas fa-pen"></i> Edit</a>
@@ -86,6 +89,11 @@ class Course extends BackendController
             $data['inputerror'][] = 'skill';
             $data['status'] = FALSE;
         }
+        if ($this->input->post('id_category_course') == '') {
+            $data['error_string'][] = 'Kategori Keahlian Harus Diisi';
+            $data['inputerror'][] = 'id_category_course';
+            $data['status'] = FALSE;
+        }
         if ($data['status'] == FALSE) {
             echo json_encode($data);
             exit();
@@ -97,10 +105,12 @@ class Course extends BackendController
         $name          = $this->input->post("name");
         $description   = $this->input->post("description");
         $skill         = $this->input->post("skill");
+        $id_category_course         = $this->input->post("id_category_course");
         
         $array_insert = [
             'name' => $name,
-            'description' => $description
+            'description' => $description,
+            'id_category_course' => $id_category_course
         ];
         Modules::run('database/insert', 'tb_course', $array_insert);
 
@@ -135,10 +145,12 @@ class Course extends BackendController
         $name          = $this->input->post("name");
         $description   = $this->input->post("description");
         $skill         = $this->input->post("skill");
+        $id_category_course         = $this->input->post("id_category_course");
 
         $array_update_course = [
             'name' => $name,
-            'description' => $description
+            'description' => $description,
+            'id_category_course' => $id_category_course
         ];
 
         $array_update_skill = [

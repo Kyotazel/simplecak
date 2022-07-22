@@ -15,6 +15,7 @@
                                 <th><span>No</span></th>
                                 <th><span>Nama Pelatihan</span></th>
                                 <th><span>Deskripsi</span></th>
+                                <th><span>Kategori Pelatihan</span></th>
                                 <th><span>Keahlian</span></th>
                                 <th>Action</th>
                             </tr>
@@ -47,7 +48,21 @@
                             <span class="help-block"></span>
                         </div>
                         <div class="form-group">
-                            <label for="skill">Pilih Skill</label>
+                            <label for="id_category_course">Kategori Pelatihan</label>
+                            <select name="id_category_course" id="id_category_course" class="form-control select2">
+                                <option value="">-- Pilih Kategori Pelatihan --</option>
+                                <?php
+                                    foreach($get_course_category as $value) {
+                                        echo '
+                                            <option class="text-capitalize" value="' . $value->id . '">' . $value->name . '</option>
+                                        ';
+                                    }
+                                ?>
+                            </select>
+                            <span class="help-block"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="skill">Skill</label>
                             <select name="skill" id="skill" class="form-control select2">
                                 <option value="">-- Pilih Skill --</option>
                                 <?php
