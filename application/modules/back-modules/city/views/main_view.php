@@ -3,9 +3,9 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-3 row">
-                    <h3 class="col-md-8">Daftar Kategori Keahlian</h3>
+                    <h3 class="col-md-8">Daftar Kota / Kabupaten</h3>
                     <div class="col-md-4 text-right">
-                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Keahlian </a>') ?>
+                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Kota / Kabupaten </a>') ?>
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -13,8 +13,9 @@
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
-                                <th><span>Nama keahlian</span></th>
-                                <th>Action</th>
+                                <th><span>Kota / Kabupaten</span></th>
+                                <th><span>Provinsi</span></th>
+                                <th><span>Action</span></th>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -35,8 +36,20 @@
                 <form class="form_input">
                     <div>
                         <div class="form-group">
-                            <label for="name">Nama Kategori Keahlian</label>
-                            <input type="text" class="form-control" name="name" placeholder="Masukkan Kategori Keahlian...">
+                            <label for="name">Nama Kota / Kabupaten</label>
+                            <input type="text" class="form-control" name="name" placeholder="Masukkan kota / kabupaten...">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="provinsi">Nama Provinsi</label>
+                            <select name="provinsi" id="provinsi" class="form-control">
+                                <option value="">-- Pilih Provinsi --</option>
+                                <?php
+                                    foreach($provinsi as $value) {
+                                        echo "<option value=$value->id> $value->name </option>";
+                                    }
+                                ?>
+                            </select>
                             <span class="invalid-feedback"></span>
                         </div>
                     </div>

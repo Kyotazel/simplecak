@@ -194,12 +194,29 @@ function add_to_batch(account, batch) {
         type: "POST",
         dataType: "JSON",
         success: function(data) {
-            notif({
-                msg: `<b>Sukses : </b> Peserta berhasil ditambahkan`,
-                type: "success"
-            })
-            table.ajax.reload(null, false);
-            $("#modal_tambah").modal("hide");
+            if(data.status) {
+                notif({
+                    msg: `<b>Sukses : </b> Peserta berhasil ditambahkan`,
+                    type: "success"
+                })
+                table.ajax.reload(null, false);
+                $("#modal_tambah").modal("hide");
+            } else {
+                swal({
+                    title: "Gagal Menambah",
+                    text: "Tidak Bisa Menambahkan peserta karena akan melebihi total terdaftar",
+                    type: "warning",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "OK!",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        $("#modal_tambah").modal("hide");
+                    }
+                })
+            }
         }
     })
 }

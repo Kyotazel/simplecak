@@ -14,7 +14,6 @@
                             <tr>
                                 <th><span>No</span></th>
                                 <th><span>Nama Pelatihan</span></th>
-                                <th><span>Deskripsi</span></th>
                                 <th><span>Kategori Pelatihan</span></th>
                                 <th><span>Keahlian</span></th>
                                 <th>Action</th>

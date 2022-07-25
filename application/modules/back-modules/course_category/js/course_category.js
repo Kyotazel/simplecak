@@ -77,9 +77,9 @@ $('.btn_save').click(function (e) {
 })
 
 $(document).on('click', '.btn_edit', function () {
-    $(".form-control").removeClass('is-invalid');
-    $('.invalid-feedback').empty();
     $('.modal-title').text('EDIT DATA');
+    $('.invalid-feedback').empty();
+	$('.form-control').removeClass('is-invalid');
     id = $(this).data('id');
     id_use = id;
     save_method = 'edit';

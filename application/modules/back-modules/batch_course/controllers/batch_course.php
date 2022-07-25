@@ -136,6 +136,15 @@ class Batch_course extends BackendController
         $id_account = $this->input->post("id_account");
         $id_batch = $this->input->post("id_batch");
 
+        $target = Modules::run("database/find", "tb_batch_course", ["id" => $id_batch])->row();
+
+        $array_query = [
+            "select" => "count(*) as total",
+            "from" => "tb_batch_course_has_account",
+            "where" => "id_batch_course = $id_batch"
+        ];
+        $get_count  = Modules::run("database/get", $array_query)->row();
+
         $array_insert = [
             "id_account" => $id_account,
             "id_batch_course" => $id_batch,
@@ -144,6 +153,11 @@ class Batch_course extends BackendController
             "registration_code" => "MULL DULU",
             "is_confirm" => 1
         ];
+
+        if ($get_count->total >= $target->target_registrant) {
+            echo json_encode(["status" => false, "kesalahan" => "Tidak Bisa Melebihi Total"]);
+            exit();
+        }
 
         Modules::run("database/insert", "tb_batch_course_has_account", $array_insert);
 

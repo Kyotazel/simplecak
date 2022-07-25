@@ -11,12 +11,13 @@ $(document).ready(function() {
         },
         "columns" : [
             { "width": "10%" },
-            { "width": "60%" },
-            { "width": "20%" }
+            { "width": "40%" },   
+            { "width": "30%" },
+            { "width": "20%" },
         ],
         "columnDefs" : [
             {
-                "targets": 2,
+                "targets": 3,
                 "className": "text-center"
             }            
         ]
@@ -77,9 +78,9 @@ $('.btn_save').click(function (e) {
 })
 
 $(document).on('click', '.btn_edit', function () {
-    $(".form-control").removeClass('is-invalid');
-    $('.invalid-feedback').empty();
     $('.modal-title').text('EDIT DATA');
+    $('.invalid-feedback').empty();
+	$('.form-control').removeClass('is-invalid');
     id = $(this).data('id');
     id_use = id;
     save_method = 'edit';

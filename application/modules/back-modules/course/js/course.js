@@ -11,15 +11,14 @@ $(document).ready(function() {
         },
         "columns" : [
             { "width": "10%" },
-            { "width": "20%" },
             { "width": "25%" },
-            { "width": "15%" },
-            { "width": "15%" },
+            { "width": "30%" },
+            { "width": "20%" },
             { "width": "15%" }
         ],
         "columnDefs" : [
             {
-                "targets": 5,
+                "targets": 4,
                 "className": "text-center"
             }            
         ]

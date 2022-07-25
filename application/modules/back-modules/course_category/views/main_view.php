@@ -3,17 +3,17 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-3 row">
-                    <h3 class="col-md-8">Daftar Kategori Keahlian</h3>
+                    <h3 class="col-md-8">Daftar Kategori Pelatihan</h3>
                     <div class="col-md-4 text-right">
-                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Keahlian </a>') ?>
+                        <?= Modules::run("security/create_access", '<a href="javascript:void(0)" class="btn btn-primary btn_add"><i class="fa fa-plus-circle"></i> Tambah Kategori </a>') ?>
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_data" style="width: 100%;">
+                    <table class="table table-bordered" id="table_data" style="width: 100%">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
-                                <th><span>Nama keahlian</span></th>
+                                <th><span>Nama Kategori</span></th>
                                 <th>Action</th>
                             </tr>
                         </thead>
@@ -35,8 +35,8 @@
                 <form class="form_input">
                     <div>
                         <div class="form-group">
-                            <label for="name">Nama Kategori Keahlian</label>
-                            <input type="text" class="form-control" name="name" placeholder="Masukkan Kategori Keahlian...">
+                            <label for="name">Nama Kategori Pelatihan</label>
+                            <input type="text" class="form-control" name="name" placeholder="Masukkan Kategori Pelatihan...">
                             <span class="invalid-feedback"></span>
                         </div>
                     </div>

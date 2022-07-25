@@ -11,16 +11,36 @@ $(document).ready(function() {
         },
         "columns" : [
             { "width": "10%" },
-            { "width": "60%" },
-            { "width": "20%" }
+            { "width": "40%" },  
+            { "width": "20%" },  
+            { "width": "20%" },  
+            { "width": "10%" },  
         ],
         "columnDefs" : [
             {
-                "targets": 2,
+                "targets": 4,
                 "className": "text-center"
             }            
         ]
     })
+})
+
+$("#provinsi").on("change", function() {
+    var provinsi = $(this).val();
+
+    $.ajax({
+        url: url_controller+"get_kota"+"?token="+_token_user,
+        type: "POST",
+        data: {provinsi: provinsi},
+        dataType: "JSON",
+        success: function(data) {
+            var html = '<option value="">-- Pilih Kota -- </option>';
+            for(i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#kota").html(html);
+        }
+    });
 })
 
 $('.btn_add').click(function () {
@@ -76,10 +96,12 @@ $('.btn_save').click(function (e) {
     })
 })
 
+// $("#kota").select2();
+
 $(document).on('click', '.btn_edit', function () {
-    $(".form-control").removeClass('is-invalid');
-    $('.invalid-feedback').empty();
     $('.modal-title').text('EDIT DATA');
+    $('.invalid-feedback').empty();
+	$('.form-control').removeClass('is-invalid');
     id = $(this).data('id');
     id_use = id;
     save_method = 'edit';

@@ -48,7 +48,6 @@ class Course extends BackendController
             $row = array();
             $row[] = $no;
             $row[] = $get_course->name;
-            $row[] = $get_course->description;
             $row[] = $get_category->name;
             $row[] = $get_skill->name;
             $row[] = '
