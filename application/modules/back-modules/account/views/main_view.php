@@ -5,7 +5,7 @@
                 <div class="mb-3 row">
                     <h3 class="col-md-8">Daftar Member</h3>
                     <div class="col-md-4 text-right">
-                        <a href="javascript:void(0)" class="btn btn-primary btn_tambah"><i class="fa fa-plus-circle"></i> Tambah Member </a>
+                    <?= Modules::run('security/create_access', '<a href="' . Modules::run('helper/create_url', 'account/add') . '" class="btn btn-primary "> <i class="fa fa-plus-circle"></i> Tambah Akun</a>'); ?>
                     </div>
                 </div>
                 <div class="table-responsive">

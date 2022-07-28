@@ -35,25 +35,32 @@ class Course extends BackendController
     public function list_data()
     {
         Modules::run("security/is_ajax");
-        $get_all = Modules::run('database/get_all', 'tb_course_has_skill')->result();
+        $get_course = Modules::run('database/get_all', 'tb_course')->result();
         $no = 0;
-        $data = [];
-        foreach ($get_all as $data_table) {
+        $data = array();
+        foreach ($get_course as $data_table) {
+            $id_encrypt = $this->encrypt->encode($data_table->id);
 
-            $get_course = Modules::run('database/find', 'tb_course', ['id' => $data_table->id_course])->row();
-            $get_skill = Modules::run('database/find', 'tb_skill', ['id' => $data_table->id_skill])->row();
-            $get_category = Modules::run('database/find', 'tb_course_category', ['id' => $get_course->id_category_course])->row();
+            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'course/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
+            $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
+            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'course/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
 
+            $get_course_has_skill = Modules::run('database/find', 'tb_course_has_skill', ['id_course' => $data_table->id])->result();
+            $get_category = Modules::run('database/find', 'tb_course_category', ['id' => $data_table->id_category_course])->row();
+            
+            $skill = '';
+            foreach($get_course_has_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "- $get_skill->name<br> ";
+            }
+            
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $get_course->name;
+            $row[] = $data_table->name;
             $row[] = $get_category->name;
-            $row[] = $get_skill->name;
-            $row[] = '
-                    <a href="javascript:void(0)" data-id="' . $data_table->id_course . '" class="btn btn-sm btn-info btn_edit"><i class="fas fa-pen"></i> Edit</a>
-                    <a href="javascript:void(0)" data-id="' . $data_table->id_course . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> Hapus</a>
-            ';
+            $row[] = $skill;
+            $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
 
@@ -62,6 +69,39 @@ class Course extends BackendController
         );
 
         echo json_encode($ouput);
+    }
+
+    public function add() {
+        $this->app_data['get_skill']     = Modules::run('database/get_all', 'tb_skill')->result();
+        $this->app_data['get_course_category']     = Modules::run('database/get_all', 'tb_course_category')->result();
+        $this->app_data['method']     = 'add';
+        $this->app_data['page_title'] = "Tambah Pelatihan";
+        $this->app_data['view_file']  = 'form_add';
+        echo Modules::run('template/main_layout', $this->app_data);
+    }
+
+    public function edit() {
+        $id = $this->encrypt->decode($this->input->get('data'));
+        $get_skill = [
+            "select" => "id_skill",
+            "from" => "tb_course_has_skill",
+            "where" => "id_course = $id"
+        ];
+        $get_skill  = Modules::run('database/get', $get_skill)->result();
+
+        $data = [];
+        foreach($get_skill as $value) {
+            $data[] = $value->id_skill;
+        }
+
+        $this->app_data['data_detail']   = Modules::run('database/find', 'tb_course', ['id' => $id])->row();
+        $this->app_data['detail_skill']  = $data;
+        $this->app_data['get_skill']     = Modules::run('database/get_all', 'tb_skill')->result();
+        $this->app_data['get_course_category'] = Modules::run('database/get_all', 'tb_course_category')->result();
+        $this->app_data['method']        = 'update';
+        $this->app_data['page_title']    = 'Ubah Pelatihan';
+        $this->app_data['view_file']     = 'form_add';
+        echo Modules::run('template/main_layout', $this->app_data);
     }
 
     private function validate_save() {
@@ -102,8 +142,7 @@ class Course extends BackendController
     public function save() {
         $this->validate_save();
         $name          = $this->input->post("name");
-        $description   = $this->input->post("description");
-        $skill         = $this->input->post("skill");
+        $description   = $_POST["description"];
         $id_category_course         = $this->input->post("id_category_course");
         
         $array_insert = [
@@ -114,15 +153,19 @@ class Course extends BackendController
         Modules::run('database/insert', 'tb_course', $array_insert);
 
         $get_id_course = Modules::run('database/find', 'tb_course', ['name' => $name])->row();
+        foreach ($this->input->post("skill") as $skill) {
+            $array_insert = [
+                'id_skill' => $skill,
+                'id_course' => $get_id_course->id
+            ];
+    
+            Modules::run('database/insert', 'tb_course_has_skill', $array_insert);
+        }
 
-        $array_insert = [
-            'id_skill' => $skill,
-            'id_course' => $get_id_course->id
-        ];
+        
+        $redirect = Modules::run('helper/create_url', 'course');
 
-        Modules::run('database/insert', 'tb_course_has_skill', $array_insert);
-
-        echo json_encode(['status' => true]);
+        echo json_encode(['status' => true, 'redirect' => $redirect]);
 
     }
 
@@ -143,7 +186,6 @@ class Course extends BackendController
         $id            = $this->input->post('id');
         $name          = $this->input->post("name");
         $description   = $this->input->post("description");
-        $skill         = $this->input->post("skill");
         $id_category_course         = $this->input->post("id_category_course");
 
         $array_update_course = [
@@ -152,18 +194,37 @@ class Course extends BackendController
             'id_category_course' => $id_category_course
         ];
 
-        $array_update_skill = [
-            'id_skill' => $skill
-        ];
-
         Modules::run('database/update', 'tb_course', ['id' => $id], $array_update_course);
-        Modules::run('database/update', 'tb_course_has_skill', ['id_course' => $id], $array_update_skill);
-        echo json_encode(['status' => true]);
+
+        Modules::run('database/delete', 'tb_course_has_skill', ['id_course' => $id]);
+
+        foreach ($this->input->post("skill") as $skill) {
+            $array_insert = [
+                'id_skill' => $skill,
+                'id_course' => $id
+            ];
+    
+            Modules::run('database/insert', 'tb_course_has_skill', $array_insert);
+        }
+
+        $redirect = Modules::run('helper/create_url', 'course');
+        echo json_encode(['status' => true, 'redirect' => $redirect]);
+    }
+
+    public function detail()
+    {
+        $id = $this->encrypt->decode($this->input->get('data'));
+        $get_data = Modules::run('database/find', 'tb_course', ['id' => $id])->row();
+
+        $this->app_data['data_detail'] = $get_data;
+        $this->app_data['page_title'] = "Detail";
+        $this->app_data['view_file'] = 'view_detail';
+        echo Modules::run('template/main_layout', $this->app_data);
     }
 
     public function delete_data() {
         Modules::run('security/is_ajax');
-        $id = $this->input->post("id");
+        $id = $this->encrypt->decode($this->input->post("id"));
 
         Modules::run('database/delete', 'tb_course', ['id' => $id]);
         Modules::run('database/delete', 'tb_course_has_skill', ['id_course' => $id]);

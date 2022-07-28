@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/dropzone.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/basic.min.css') ?>">
     <link href="<?= base_url('assets/plugin/'); ?>notify/css/notifIt.css" rel="stylesheet" />
+    <link rel="stylesheet" href="<?= base_url('assets/plugin/bootstrap-datepicker/bootstrap-datepicker3.min.css') ?>">
     <!-- Internal Sweet-Alert css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/sweetalert.css" rel="stylesheet">
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -402,6 +403,7 @@
 
     <!-- Select2 js-->
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/select2/js/select2.min.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>js/select2.js"></script>
 
     <!-- Sticky js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>js/sticky.js"></script>

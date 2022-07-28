@@ -38,6 +38,10 @@ class Batch_course extends BackendController
         foreach($get_all as $data_table) {
             $id_encrypt = $this->encrypt->encode($data_table->id);
 
+            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
+            $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
+            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
+
             $get_course = Modules::run("database/find", "tb_course", ["id" => $data_table->id_course])->row();
             $array_query = [
                 "select" => "count(*) as total",
@@ -50,14 +54,10 @@ class Batch_course extends BackendController
             $row = [];
             $row[] = $no;
             $row[] = $data_table->title;
-            $row[] = $get_course->name;
-            $row[] = $data_table->description;
+            $row[] = "$get_course->name";
             $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
             '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $get_count->total . " / " . $data_table->target_registrant . " peserta</a>";
-            $row[] = '
-                    <a href="javascript:void(0)" data-id="' . $data_table->id . '" class="btn btn-sm btn-info btn_edit"><i class="fas fa-pen"></i> Edit</a>
-                    <a href="javascript:void(0)" data-id="' . $data_table->id . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> Hapus</a>
-            ';
+            $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
 
@@ -66,6 +66,14 @@ class Batch_course extends BackendController
         ];
 
         echo json_encode($ouput);
+    }
+
+    public function add() {
+        $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
+        $this->app_data["method"]       = "add";
+        $this->app_data["page_title"] = "Tambah Batch Course";
+        $this->app_data["view_file"] = "form_add";
+        echo Modules::run("template/main_layout", $this->app_data);
     }
 
     public function get_data() {
@@ -79,19 +87,24 @@ class Batch_course extends BackendController
         Modules::run("security/is_ajax");
         $id_batch_course = $this->input->post("id_batch_course");
 
-        $get_all = Modules::run("database/get_all", "tb_account_has_skill")->result();
+        $get_all = Modules::run("database/get_all", "tb_account")->result();
         $no = 0;
         $data = [];
         foreach($get_all as $data_table) {
-            $get_account = Modules::run("database/find", "tb_account", ["id" => $data_table->id_account])->row();
-            $get_skill = Modules::run("database/find", "tb_skill", ["id" => $data_table->id_skill])->row();
+            $get_account_has_skill = Modules::run('database/find', 'tb_account_has_skill', ['id_account' => $data_table->id])->result();
+            
+            $skill = '';
+            foreach($get_account_has_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "- $get_skill->name<br> ";
+            }
 
             $no++;
             $row = [];
             $row[] = $no;
-            $row[] = $get_account->name;
-            $row[] = $get_skill->name;
-            $row[] = '<button class="btn btn-primary" onclick="add_to_batch('. "'$data_table->id_account'," . "'$id_batch_course'" .')"><i class="fa fa-check"></i> Pilih</button>';
+            $row[] = $data_table->name;
+            $row[] = $skill;
+            $row[] = '<button class="btn btn-primary" onclick="add_to_batch('. "'$data_table->id'," . "'$id_batch_course'" .')"><i class="fa fa-check"></i> Pilih</button>';
             $data[] = $row;
         }
 

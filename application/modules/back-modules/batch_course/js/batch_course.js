@@ -16,25 +16,15 @@ $(document).ready(function () {
             { "width": "15%" },
             { "width": "20%" },
             { "width": "30%" },
-            { "width": "10%" },
-            { "width": "15%" },
+            { "width": "25%" },
         ],
         "columnDefs": [
             {
-                "targets": 5,
+                "targets": 4,
                 "className": "text-center"
             }
         ]
     })
-})
-
-$(".btn_tambah").on("click", function () {
-    save_method = 'add';
-    $('.form-control').removeClass('is-invalid');
-    $('.invalid-feedback').empty();
-    $('.form-input')[0].reset();
-    $('.modal-title').text('TAMBAH DATA');
-    $('#modal_form').modal('show');
 })
 
 $(document).on('click', '.btn_edit', function () {
@@ -74,13 +64,14 @@ $('.btn_save').click(function (e) {
     var formData = new FormData($('.form-input')[0]);
     var url;
     var status;
-    if (save_method == 'add') {
+    save_method = $(this).data('method');
+    if(save_method == 'add') {
         url = 'save';
         status = "Ditambahkan";
     } else {
         url = 'update';
         status = "Diubah";
-        formData.append('id', id_use);
+        formData.append('id', $(this).data('id'));
     }
 
     $.ajax({

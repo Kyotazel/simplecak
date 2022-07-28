@@ -35,33 +35,39 @@ class Account extends BackendController
     public function list_data()
     {
         Modules::run("security/is_ajax");
-        $get_all = Modules::run('database/get_all', 'tb_account_has_skill')->result();
+        $get_all = Modules::run('database/get_all', 'tb_account')->result();
         $no = 0;
         $data = [];
         foreach ($get_all as $data_table) {
-            $id_encrypt = $this->encrypt->encode($data_table->id_account);
+            $id_encrypt = $this->encrypt->encode($data_table->id);
 
-            $get_account = Modules::run("database/find", "tb_account", ["id" => $data_table->id_account])->row();
-            $get_skill = Modules::run("database/find", "tb_skill", ["id" => $data_table->id_skill])->row();
+            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'account/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
+            $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
+            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'account/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
+            
+            $get_account_has_skill = Modules::run('database/find', 'tb_account_has_skill', ['id_account' => $data_table->id])->result();
+            
+            $skill = '';
+            foreach($get_account_has_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "- $get_skill->name<br> ";
+            }
 
-            if ($get_account->status == 1) {
+            if ($data_table->status == 1) {
                 $status = "<span class='badge badge-success'>Sudah Dikonfirmasi</span>";
-            } else if ($get_account->status == 0) {
+            } else if ($data_table->status == 0) {
                 $status = "<span class='badge badge-warning'>Belum Dikonfirmasi</span>
-                        <br><a href=# data-id='$get_account->id' id='confirm_account'><span class='badge badge-primary'>Konfirmasi Akun</span></a>";
+                        <br><a href=# data-id='$data_table->id' id='confirm_account'><span class='badge badge-primary'>Konfirmasi Akun</span></a>";
             }
 
             $no++;
             $row = [];
             $row[] = $no;
-            $row[] = $get_account->name;
-            $row[] = $get_account->email;
-            $row[] = $get_skill->name;
+            $row[] = $data_table->name;
+            $row[] = $data_table->email;
+            $row[] = $skill;
             $row[] = $status;
-            $row[] = '
-                    <a href="javascript:void(0)" data-id="' . $data_table->id_account . '" class="btn btn-sm btn-info btn_edit"><i class="fas fa-pen"></i> Edit</a>
-                    <a href="javascript:void(0)" data-id="' . $data_table->id_account . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> Hapus</a>
-            ';
+            $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
 
@@ -77,37 +83,74 @@ class Account extends BackendController
         $this->app_data["provinsi"] = Modules::run("database/get_all", "provinces")->result();
         $this->app_data["last_education"] = Modules::run("database/get_all", "tb_education")->result();
         $this->app_data["skill"] = Modules::run("database/get_all", "tb_skill")->result();
-
+        $this->app_data["religion"] = Modules::run("database/find", "app_module_setting", ["params" => "religion"])->result();
+        $this->app_data["gender"] = Modules::run("database/find", "app_module_setting", ["params" => "gender"])->result();
+        $this->app_data["married"] = Modules::run("database/find", "app_module_setting", ["params" => "married"])->result();
         $this->app_data['page_title'] = "Tambah Member";
-        $this->app_data['view_file']  = 'add';
+        $this->app_data['view_file']  = 'form_add';
+        $this->app_data["method"]  = 'add';
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    // public function edit()
-    // {
-    //     $id = $this->encrypt->decode($this->input->get('data'));
+    public function edit() {
+        $id = $this->encrypt->decode($this->input->get('data'));
+        $get_skill = [
+            "select" => "id_skill",
+            "from" => "tb_account_has_skill",
+            "where" => "id_account = $id"
+        ];
+        $get_skill  = Modules::run('database/get', $get_skill)->result();
 
-    //     $this->app_data["provinsi"] = Modules::run("database/get_all", "provinces")->result();
-    //     $this->app_data["last_education"] = Modules::run("database/get_all", "tb_education")->result();
-    //     $this->app_data["skill"] = Modules::run("database/get_all", "tb_skill")->result();
-    //     $this->app_data['module_js']  = ["edit"];
+        $data = [];
+        foreach($get_skill as $value) {
+            $data[] = $value->id_skill;
+        }
 
-    //     $account = Modules::run("database/find", "tb_account", ["id" => $id])->row();
-    //     $this->app_data["get_account"] = $account;
-    //     $this->app_data["get_skill"] = Modules::run("database/find", "tb_account_has_skill", ["id_account" => $id])->row();
+        $this->app_data['data_detail']      = Modules::run('database/find', 'tb_account', ['id' => $id])->row();
+        $this->app_data['detail_skill']     = $data;
+        $this->app_data['get_skill']        = Modules::run('database/get_all', 'tb_skill')->result();
+        $this->app_data["provinsi"]         = Modules::run("database/get_all", "provinces")->result();
+        $this->app_data["last_education"]   = Modules::run("database/get_all", "tb_education")->result();
+        $this->app_data["skill"]            = Modules::run("database/get_all", "tb_skill")->result();
+        $this->app_data["religion"]         = Modules::run("database/find", "app_module_setting", ["params" => "religion"])->result();
+        $this->app_data["gender"]           = Modules::run("database/find", "app_module_setting", ["params" => "gender"])->result();
+        $this->app_data["married"]          = Modules::run("database/find", "app_module_setting", ["params" => "married"])->result();
+        $this->app_data['page_title']       = "Tambah Member";
+        $this->app_data['view_file']        = 'form_add';
+        $this->app_data["method"]           = 'update';
+        echo Modules::run('template/main_layout', $this->app_data);
+    }
 
-    //     $this->app_data['page_title'] = "Update Member";
-    //     $this->app_data['view_file']  = 'edit';
-    //     echo Modules::run('template/main_layout', $this->app_data);
-    // }
+    public function detail() {
+        $id = $this->encrypt->decode($this->input->get("data"));
 
-    // public function get_data()
-    // {
-    //     $id = $this->encrypt->decode($this->input->get('data'));
-    //     var_dump($id);
-    //     $account = Modules::run("database/find", "tb_account", ["id" => $id])->row();
-    //     echo json_encode(["data" => $account]);
-    // }
+        $get_account_has_skill = Modules::run('database/find', 'tb_account_has_skill', ['id_account' => $id])->result();
+            
+            $skill = '';
+            foreach($get_account_has_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "- $get_skill->name<br> ";
+            }
+
+        $data_detail = Modules::run("database/find", "tb_account", ["id" => $id])->row();
+
+        $this->app_data["data_detail"]      = $data_detail;
+        $this->app_data["skill"]            = $skill;
+        $this->app_data["education"]        = Modules::run("database/find", "tb_education", ["id" => $data_detail->id_last_education])->row();
+        $this->app_data["gender"]           = Modules::run("database/find", "app_module_setting", ["params" => "gender", "value" => $data_detail->gender])->row();
+        $this->app_data["religion"]         = Modules::run("database/find", "app_module_setting", ["params" => "religion", "value" => $data_detail->religion])->row();
+        $this->app_data["province"]         = Modules::run("database/find", "provinces", ["id" => $data_detail->id_province])->row();
+        $this->app_data["city"]             = Modules::run("database/find", "cities", ["id" => $data_detail->id_city])->row();
+        $this->app_data["regency"]          = Modules::run("database/find", "regencies", ["id" => $data_detail->id_regency])->row();
+        $this->app_data["village"]          = Modules::run("database/find", "villages", ["id" => $data_detail->id_village])->row();
+        $this->app_data["province_current"] = Modules::run("database/find", "provinces", ["id" => $data_detail->id_province_current])->row();
+        $this->app_data["city_current"]     = Modules::run("database/find", "cities", ["id" => $data_detail->id_city_current])->row();
+        $this->app_data["regency_current"]  = Modules::run("database/find", "regencies", ["id" => $data_detail->id_regency_current])->row();
+        $this->app_data["village_current"]  = Modules::run("database/find", "villages", ["id" => $data_detail->id_village_current])->row();
+        $this->app_data['page_title']       = "Detail Member";
+        $this->app_data["view_file"]        = "view_detail";
+        echo Modules::run('template/main_layout', $this->app_data);
+    }
 
     public function update_confirm()
     {
@@ -146,11 +189,6 @@ class Account extends BackendController
         if ($this->input->post('no_kk') == '') {
             $data['error_string'][] = 'No. KK Harus Diisi';
             $data['inputerror'][] = 'no_kk';
-            $data['status'] = FALSE;
-        }
-        if ($this->input->post('id_skill') == '') {
-            $data['error_string'][] = 'keahlian Harus Diisi';
-            $data['inputerror'][] = 'id_skill';
             $data['status'] = FALSE;
         }
         if ($this->input->post('name') == '') {
@@ -288,7 +326,7 @@ class Account extends BackendController
         $is_confirm = 0;
 
         $image = $this->upload_image();
-        $image = ($image == '') ? 'default.png' : $image;
+        $image = ($image === '') ? 'default.png' : $image;
 
         $array_insert = [
             'no_ktp' => $no_ktp,
@@ -324,12 +362,14 @@ class Account extends BackendController
 
         $get_id_account = Modules::run("database/find", "tb_account", ["no_ktp" => $no_ktp])->row();
 
-        $array_insert = [
-            "id_account" => $get_id_account->id,
-            "id_skill" => $id_skill
-        ];
-
-        Modules::run("database/insert", "tb_account_has_skill", $array_insert);
+        foreach ($this->input->post("skill") as $skill) {
+            $array_insert = [
+                'id_skill' => $skill,
+                'id_account' => $get_id_account->id
+            ];
+    
+            Modules::run('database/insert', 'tb_account_has_skill', $array_insert);
+        }
 
         $array_key = [
             'email' => $email
@@ -339,7 +379,9 @@ class Account extends BackendController
 
         Modules::run('emailing/confirm_email', $email, $encrypt_key, $username, $password);
 
-        echo json_encode(["status" => true]);
+        $redirect = Modules::run('helper/create_url', 'account');
+
+        echo json_encode(["status" => true, "redirect" => $redirect]);
     }
 
     public function get_data() {
@@ -353,11 +395,11 @@ class Account extends BackendController
 
 
     public function update() {
-        $this->validate_save();
+        // $this->validate_save();
         $id                     = $this->input->post("id");
         $no_ktp                 = $this->input->post('no_ktp');
         $no_kk                  = $this->input->post('no_kk');
-        $id_skill                  = $this->input->post('id_skill');
+        $id_skill               = $this->input->post('id_skill');
         $name                   = $this->input->post('name');
         $id_last_education      = $this->input->post('id_last_education');
         $last_school            = $this->input->post('last_school');
@@ -385,9 +427,6 @@ class Account extends BackendController
         // $status = 0;
         // $is_confirm = 0;
 
-        $image = $this->upload_image();
-        $image = ($image == '') ? 'default.png' : $image;
-
         $array_update = [
             'no_ktp' => $no_ktp,
             'no_kk' => $no_kk,
@@ -410,27 +449,38 @@ class Account extends BackendController
             'id_regency_current' => $id_regency_current,
             'id_village_current' => $id_village_current,
             'address_current' => $address_current,
-            'image' => $image,
         ];
+
+        // var_dump($array_update); return;
+
+        $image = $this->upload_image();
+        if ($image !== '') {
+            $image = ["image" => $image];
+            $array_update = array_merge($array_update, $image);
+        }
 
         Modules::run("database/update", "tb_account", ["id" => $id], $array_update);
 
-        $get_id_account = Modules::run("database/find", "tb_account", ["no_ktp" => $no_ktp])->row();
+        Modules::run('database/delete', 'tb_account_has_skill', ['id_account' => $id]);
 
-        $array_update = [
-            "id_account" => $get_id_account->id,
-            "id_skill" => $id_skill
-        ];
+        foreach ($this->input->post("skill") as $skill) {
+            $array_insert = [
+                'id_skill' => $skill,
+                'id_account' => $id
+            ];
+    
+            Modules::run('database/insert', 'tb_account_has_skill', $array_insert);
+        }
 
-        Modules::run("database/update", "tb_account_has_skill", ["id_account" => $id], $array_update);
+        $redirect = Modules::run('helper/create_url', 'account');
 
-        echo json_encode(["status" => true]);
+        echo json_encode(["status" => true, "redirect" => $redirect]);
     }
 
     public function delete_data()
     {
         Modules::run('security/is_ajax');
-        $id = $this->input->post("id");
+        $id = $this->encrypt->decode($this->input->post("id"));
 
         Modules::run('database/delete', 'tb_account', ['id' => $id]);
         Modules::run('database/delete', 'tb_account_has_skill', ['id_account' => $id]);
@@ -491,15 +541,11 @@ class Account extends BackendController
         $this->load->library('upload', $config);
         if (!$this->upload->do_upload('image')) //upload and validate
         {
-            // $data['inputerror'][] = 'image';
-            // $data['error_string'][] = 'Upload error: ' . $this->upload->display_errors('', ''); //show ajax error
-            // $data['status'] = FALSE;
-            // echo json_encode($data);
-            // exit();
+            return '';
         } else {
+            $upload_data = $this->upload->data();
+            $image_name = $upload_data['file_name'];
+            return $image_name;
         }
-        $upload_data = $this->upload->data();
-        $image_name = $upload_data['file_name'];
-        return $image_name;
     }
 }

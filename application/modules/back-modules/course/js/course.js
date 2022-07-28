@@ -3,76 +3,70 @@ var save_method;
 var id_use = 0;
 var table;
 
-$(document).ready(function() {
+$(document).ready(function () {
     table = $('#table_data').DataTable({
         "ajax": {
-            "url": url_controller+"list_data"+"?token="+_token_user,
+            "url": url_controller + "list_data" + "?token=" + _token_user,
             "type": "POST",
         },
-        "columns" : [
+        "columns": [
             { "width": "10%" },
             { "width": "25%" },
             { "width": "30%" },
             { "width": "20%" },
             { "width": "15%" }
         ],
-        "columnDefs" : [
+        "columnDefs": [
             {
                 "targets": 4,
                 "className": "text-center"
-            }            
+            }
         ]
     })
 })
 
-$('.btn_add').click(function () {
-    save_method = 'add';
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
- 	$('.form_input')[0].reset();
-	$('.modal-title').text('TAMBAH DATA');
-    $('#modal_form').modal('show');
-});
-
 $('.btn_save').click(function (e) {
     e.preventDefault();
-    $(".form-group").removeClass('has-danger');
-    $('.help-block').empty();
+    $(".form-control").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
     var formData = new FormData($('.form_input')[0]);
     var url;
     var status;
-    if(save_method == 'add') {
+    save_method = $(this).data('method');
+    var description = CKEDITOR.instances['description'].getData();
+    if (save_method === 'add') {
         url = 'save';
         status = "Ditambahkan";
+        formData.append('description', description);
     } else {
         url = 'update';
         status = "Diubah";
-        formData.append('id', id_use);
+        formData.append('id', $(this).data('id'));
+        formData.append('description', description);
     }
 
     $.ajax({
-        url: url_controller+url+'?token'+_token_user,
+        url: url_controller + url + '?token' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
         processData: false,
         dataType: "JSON",
-        success: function(data) {
-            if(data.status) {
+        success: function (data) {
+            if (data.status) {
                 notif({
                     msg: `<b>Sukses : </b> Data berhasil ${status}`,
                     type: "success"
                 })
-                table.ajax.reload(null, false);
-                $("#modal_form").modal("hide");
+                location.href = data.redirect;
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
-                    $('[name="'+data.inputerror[i]+'"]').parent().addClass("has-danger");
-                    $('[name="'+data.inputerror[i]+'"]').next().html(data.error_string[i]);
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
                 }
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {
+        error: function (jqXHR, textStatus, errorThrown) {
             $('.btn_save_group').button('reset');
         }
     })
@@ -80,17 +74,17 @@ $('.btn_save').click(function (e) {
 
 $(document).on('click', '.btn_edit', function () {
     $('.modal-title').text('EDIT DATA');
-    $(".form-group").removeClass('has-danger');
-    $('.help-block').empty();
+    $(".form-group").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
     id = $(this).data('id');
     id_use = id;
     save_method = 'edit';
     $.ajax({
-        url: url_controller+'get_data'+'?token='+_token_user,
+        url: url_controller + 'get_data' + '?token=' + _token_user,
         type: "POST",
         dataType: "JSON",
-        data: {'id':id},
-        success: function(data) {
+        data: { 'id': id },
+        success: function (data) {
             if (data.status) {
                 $('[name="name"]').val(data.course.name);
                 $('[name="description"]').val(data.course.description);
@@ -99,12 +93,13 @@ $(document).on('click', '.btn_edit', function () {
                 $('#modal_form').modal('show');
             }
         },
-        error: function(jqXHR, textStatus, errorThrown) {}
+        error: function (jqXHR, textStatus, errorThrown) { }
     })
 })
 
 $(document).on('click', '.btn_delete', function () {
     id = $(this).data('id');
+    var redirect = $(this).data('redirect');
     swal({
         title: "Apakah anda yakin?",
         text: "data akan dihapus!",
@@ -116,27 +111,31 @@ $(document).on('click', '.btn_delete', function () {
         closeOnConfirm: true,
         closeOnCancel: true
     },
-    function(isConfirm) {
-        if (isConfirm) {
-            $.ajax({
-                url: url_controller+'delete_data'+'?token='+_token_user,
-                type: "POST",
-                dataType: "JSON",
-                data: {'id': id},
-                success: function(data) {
-                    if(data.status) {
-                        notif({
-                            msg: "<b>Sukses : </b> Data Berhasil Dihapus",
-                            type: "success"
-                        })
-                        table.ajax.reload(null, false);
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: url_controller + 'delete_data' + '?token=' + _token_user,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: { 'id': id },
+                    success: function (data) {
+                        if (data.status) {
+                            notif({
+                                msg: "<b>Sukses : </b> Data Berhasil Dihapus",
+                                type: "success"
+                            })
+
+                            if (redirect == 1) {
+                                location.href = url_controller;
+                            } else {
+                                table.ajax.reload(null, false);
+                            }
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
                     }
-                },
-                error:function(jqXHR, textStatus, errorThrown)
-                {
-                }
-            })
+                })
+            }
         }
-    }
     )
 })

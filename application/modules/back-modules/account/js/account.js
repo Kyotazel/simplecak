@@ -26,22 +26,6 @@ $(document).ready(function() {
     })
 })
 
-$(".btn_tambah").on("click", function() {
-    save_method = 'add';
-	$('.form-control').removeClass('is-invalid');
-    $('.invalid-feedback').empty();
- 	$('.form-input')[0].reset();
-	$('.modal-title').text('TAMBAH DATA');
-    $('#modal_form').modal('show');
-})
-
-$('.btn_add').click(function () {
-    save_method = 'add';
-	$('.form-control').removeClass('is-invalid');
-    $('.help-block').empty();
- 	$('.form_input')[0].reset();
-});
-
 $(document).on('click', '#confirm_account', function () {
     id = $(this).data('id');
     $.ajax({
@@ -68,13 +52,14 @@ $('.btn_save').click(function (e) {
     var formData = new FormData($('.form-input')[0]);
     var url;
     var status;
+    save_method = $(this).data('method');
     if(save_method == 'add') {
         url = 'save';
         status = "Ditambahkan";
     } else {
         url = 'update';
         status = "Diubah";
-        formData.append('id', id_use);
+        formData.append('id', $(this).data('id'));
     }
 
     $.ajax({
@@ -158,9 +143,10 @@ $(document).on('click', '.btn_edit', function () {
     })
 })
 
+
 $(document).on('click', '.btn_delete', function () {
     id = $(this).data('id');
-    console.log(id);
+    var redirect = $(this).data('redirect');
     swal({
         title: "Apakah anda yakin?",
         text: "data akan dihapus!",
@@ -172,28 +158,32 @@ $(document).on('click', '.btn_delete', function () {
         closeOnConfirm: true,
         closeOnCancel: true
     },
-    function(isConfirm) {
-        if (isConfirm) {
-            $.ajax({
-                url: url_controller+'delete_data'+'?token='+_token_user,
-                type: "POST",
-                dataType: "JSON",
-                data: {'id': id},
-                success: function(data) {
-                    if(data.status) {
-                        notif({
-                            msg: "<b>Sukses : </b> Data Berhasil Dihapus",
-                            type: "success"
-                        })
-                        table.ajax.reload(null, false);
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: url_controller + 'delete_data' + '?token=' + _token_user,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: { 'id': id },
+                    success: function (data) {
+                        if (data.status) {
+                            notif({
+                                msg: "<b>Sukses : </b> Data Berhasil Dihapus",
+                                type: "success"
+                            })
+
+                            if (redirect == 1) {
+                                location.href = url_controller;
+                            } else {
+                                table.ajax.reload(null, false);
+                            }
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
                     }
-                },
-                error:function(jqXHR, textStatus, errorThrown)
-                {
-                }
-            })
+                })
+            }
         }
-    }
     )
 })
 

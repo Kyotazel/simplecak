@@ -42,8 +42,7 @@
                         </div>
                         <div class="form-group">
                             <label for="provinsi">Nama Provinsi</label>
-                            <select name="provinsi" id="provinsi" class="form-control">
-                                <option value="">-- Pilih Provinsi --</option>
+                            <select name="provinsi" id="provinsi" class="form-control select2" style="width: 100%;">
                                 <?php
                                     foreach($provinsi as $value) {
                                         echo "<option value=$value->id> $value->name </option>";
