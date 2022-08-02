@@ -43,8 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label for="provinsi">Nama Provinsi</label>
-                            <select name="provinsi" id="provinsi" class="form-control">
-                                <option value="">-- Pilih Provinsi --</option>
+                            <select name="provinsi" id="provinsi" class="form-control select2">
                                 <?php
                                     foreach($provinsi as $value) {
                                         echo "<option value=$value->id> $value->name </option>";
@@ -55,7 +54,7 @@
                         </div>
                         <div class="form-group">
                             <label for="kota">Nama Kota</label>
-                            <select name="kota" id="kota" class="form-control">
+                            <select name="kota" id="kota" class="form-control select2">
                                 <option value="">-- Pilih Kota --</option>
                             </select>
                             <span class="invalid-feedback"></span>

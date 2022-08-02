@@ -16,6 +16,7 @@
                                 <th><span>Nama</span></th>
                                 <th><span>Email</span></th>
                                 <th><span>Keahlian</span></th>
+                                <th><span>Pendaftaran Akun</span></th>
                                 <th><span>Status Konfirmasi</span></th>
                                 <th><span>Action</span></th>
                             </tr>

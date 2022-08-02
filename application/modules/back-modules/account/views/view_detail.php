@@ -101,7 +101,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Tanggal Lahir</div>
-                    <div class="col-md-7 my-3"><?= $data_detail->birth_date ?></div>
+                    <div class="col-md-7 my-3"><?= Modules::run("helper/date_indo", $data_detail->birth_date, "-"); ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Jenis Kelamin</div>
@@ -150,6 +150,10 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Alamat Sekarang</div>
                     <div class="col-md-7 my-3"><?= $data_detail->address_current ?></div>
+                </div>
+                <div class="row border-bottom">
+                    <div class="col-md-5 my-3">Pendaftaran Akun</div>
+                    <div class="col-md-7 my-3"><?= Modules::run("helper/date_indo",$data_detail->registration_date, "-") ?></div>
                 </div>
             </div>
         </div>

@@ -25,7 +25,6 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                     <div>
                         <?= $data_detail->description; ?>
                     </div>
-                    <a class="btn ripple btn-primary" href="#">Read More<i class="fe fe-arrow-right ml-1"></i></a>
                 </div>
             </div>
         </div>

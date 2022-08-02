@@ -8,23 +8,23 @@ $(document).ready(function () {
 	$('.horizontal-mainwrapper').show();
     $('.datepicker').datepicker({
         autoclose: true,
-        format: 'dd-mm-yyyy'
+        format: 'yyyy-mm-dd'
     });
     $('.datepicker_form').datepicker({
         autoclose: true,
-        format: 'dd-mm-yyyy',
+        format: 'yyyy-mm-dd',
     });
 
     $('.datepicker_custom').datepicker({
         autoclose: true,
-        format: 'dd-mm-yyyy'
+        format: 'yyyy-mm-dd'
     });
 
     // var today = new Date('16-01-2022');
     // console.log(today.getFullYear(),today.getMonth(),today.getDate());
     $('.datepicker-today').datepicker({
         autoclose: true,
-        format: 'dd-mm-yyyy'
+        format: 'yyyy-mm-dd'
     });
 
     var path_current = getUrl.origin + getUrl.pathname;

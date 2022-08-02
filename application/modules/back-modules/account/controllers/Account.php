@@ -66,6 +66,7 @@ class Account extends BackendController
             $row[] = $data_table->name;
             $row[] = $data_table->email;
             $row[] = $skill;
+            $row[] = Modules::run("helper/date_indo", $data_table->registration_date, "-");
             $row[] = $status;
             $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
@@ -93,6 +94,7 @@ class Account extends BackendController
     }
 
     public function edit() {
+        Modules::run("security/is_axist_data", ['method' => 'get', 'name' => 'data', 'encrypt' => true]);
         $id = $this->encrypt->decode($this->input->get('data'));
         $get_skill = [
             "select" => "id_skill",
@@ -115,7 +117,7 @@ class Account extends BackendController
         $this->app_data["religion"]         = Modules::run("database/find", "app_module_setting", ["params" => "religion"])->result();
         $this->app_data["gender"]           = Modules::run("database/find", "app_module_setting", ["params" => "gender"])->result();
         $this->app_data["married"]          = Modules::run("database/find", "app_module_setting", ["params" => "married"])->result();
-        $this->app_data['page_title']       = "Tambah Member";
+        $this->app_data['page_title']       = "Edit Member";
         $this->app_data['view_file']        = 'form_add';
         $this->app_data["method"]           = 'update';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -395,11 +397,10 @@ class Account extends BackendController
 
 
     public function update() {
-        // $this->validate_save();
+        $this->validate_save();
         $id                     = $this->input->post("id");
         $no_ktp                 = $this->input->post('no_ktp');
         $no_kk                  = $this->input->post('no_kk');
-        $id_skill               = $this->input->post('id_skill');
         $name                   = $this->input->post('name');
         $id_last_education      = $this->input->post('id_last_education');
         $last_school            = $this->input->post('last_school');

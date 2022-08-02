@@ -24,7 +24,7 @@ class Batch_course extends BackendController
 
     public function index()
     {
-        $this->app_data['page_title']     = "Batch Course";
+        $this->app_data['page_title']     = "Gelombang Pelatihan";
         $this->app_data['view_file']     = 'main_view';
         $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
         echo Modules::run('template/main_layout', $this->app_data);
@@ -57,6 +57,7 @@ class Batch_course extends BackendController
             $row[] = "$get_course->name";
             $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
             '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $get_count->total . " / " . $data_table->target_registrant . " peserta</a>";
+            $row[] = Modules::run("helper/date_indo", $data_table->starting_date, "-") . " - <br>" . Modules::run("helper/date_indo", $data_table->ending_date, "-");
             $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
@@ -71,7 +72,7 @@ class Batch_course extends BackendController
     public function add() {
         $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
         $this->app_data["method"]       = "add";
-        $this->app_data["page_title"] = "Tambah Batch Course";
+        $this->app_data["page_title"] = "Tambah Gelombang Pelatihan";
         $this->app_data["view_file"] = "form_add";
         echo Modules::run("template/main_layout", $this->app_data);
     }
@@ -126,14 +127,18 @@ class Batch_course extends BackendController
         $data = [];
         foreach($get_all as $data_table) {
             $get_account = Modules::run("database/find", "tb_account", ["id" => $data_table->id_account])->row();
-            $get_account_skill = Modules::run("database/find", "tb_account_has_skill", ["id_account" => $data_table->id_account])->row();
-            $get_skill = Modules::run("database/find", "tb_skill", ["id" => $get_account_skill->id_skill])->row();
+            $get_account_skill = Modules::run("database/find", "tb_account_has_skill", ["id_account" => $data_table->id_account])->result();
+            $skill = '';
+            foreach($get_account_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "- $get_skill->name<br> ";
+            }
 
             $no++;
             $row = [];
             $row[] = $no;
             $row[] = $get_account->name;
-            $row[] = $get_skill->name;
+            $row[] = $skill;
             $row[] = "<button class='btn btn-danger btn-sm btn_delete_peserta' data-id=$data_table->id><i class='fa fa-trash'></i> Hapus</button>";
             $data[] = $row;
         }
@@ -158,12 +163,13 @@ class Batch_course extends BackendController
         ];
         $get_count  = Modules::run("database/get", $array_query)->row();
 
+        $code_reg = "SC" . $id_batch . $id_account;
+
         $array_insert = [
             "id_account" => $id_account,
             "id_batch_course" => $id_batch,
             "date" => date("Y-m-d"),
-            "description" => "NULL DULU",
-            "registration_code" => "MULL DULU",
+            "registration_code" => $code_reg,
             "is_confirm" => 1
         ];
 
@@ -185,21 +191,15 @@ class Batch_course extends BackendController
         echo json_encode(["status" => true]);
     }
 
-    // public function edit() {
-    //     Modules::run('security/is_axist_data', ['method' => 'get', 'name' => 'data', 'encrypt' => true]);
-    //     $id = $this->encrypt->decode($this->input->get('data'));
-
-    //     $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
-    //     $get_batch = Modules::run("database/find", "tb_batch_course", ["id" => $id])->row();
-    //     // $get_course = Modules::run("database/find", "tb_course", ["id" => $get_batch->id_course])->row();
-
-    //     $this->app_data["batch"] = $get_batch;
-    //     // $this->app_data["course"] = $get_course;
-
-    //     $this->app_data['page_title'] = "Edit Batch Course";
-    //     $this->app_data['view_file']  = 'edit';
-    //     echo Modules::run('template/main_layout', $this->app_data);
-    // }
+    public function edit() {
+        $id = $this->encrypt->decode($this->input->get("data"));
+        $this->app_data["method"]       = "update";
+        $this->app_data['data_detail']  = Modules::run('database/find', 'tb_batch_course', ['id' => $id])->row();
+        $this->app_data['page_title']   = "Edit Gelombang Pelatihan";
+        $this->app_data['view_file']    = 'form_add';
+        $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
+        echo Modules::run('template/main_layout', $this->app_data);
+    }
 
     public function validate_save()
     {
@@ -261,16 +261,16 @@ class Batch_course extends BackendController
         $this->validate_save();
         
         $title                      = $this->input->post("title");
-        $id_course                      = $this->input->post("id_course");
+        $id_course                  = $this->input->post("id_course");
         $description                = $this->input->post("description");
         $target_registrant          = $this->input->post("target_registrant");
         $opening_registration_date  = $this->input->post("opening_registration_date");
         $closing_registration_date  = $this->input->post("closing_registration_date");
-        $starting_date               = $this->input->post("starting_date");
+        $starting_date              = $this->input->post("starting_date");
         $ending_date                = $this->input->post("ending_date");
 
         $image = $this->upload_image();
-        $image = ($image == '') ? 'default.png' : $image;
+        $image = ($image === '') ? 'default.png' : $image;
 
         $array_insert = [
             "id_course" => $id_course,
@@ -286,7 +286,9 @@ class Batch_course extends BackendController
 
         Modules::run("database/insert", "tb_batch_course", $array_insert);
 
-        echo json_encode(["status" => true]);
+        $redirect = Modules::run('helper/create_url', 'batch_course');
+
+        echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
 
     public function update() 
@@ -304,8 +306,6 @@ class Batch_course extends BackendController
         $starting_date              = $this->input->post("starting_date");
         $ending_date                = $this->input->post("ending_date");
 
-        $image = $this->upload_image();
-
         $array_update = [
             "id_course" => $id_course,
             "title" => $title,
@@ -317,7 +317,8 @@ class Batch_course extends BackendController
             "ending_date" => $ending_date,
         ];
 
-        if($image != '') {
+        $image = $this->upload_image();
+        if ($image !== '') {
             $image = ["image" => $image];
             $array_update = array_merge($array_update, $image);
         }
@@ -325,36 +326,55 @@ class Batch_course extends BackendController
 
         Modules::run('database/update', 'tb_batch_course', ['id' => $id], $array_update);
 
-        echo json_encode(["status" => true]);
+        $redirect = Modules::run('helper/create_url', 'batch_course');
+
+        echo json_encode(['status' => true, 'redirect' => $redirect]);
+    }
+
+    public function detail()
+    {
+        $id = $this->encrypt->decode($this->input->get('data'));
+        $get_data = Modules::run('database/find', 'tb_batch_course', ['id' => $id])->row();
+
+        $array_query = [
+            "select" => "count(*) as total",
+            "from" => "tb_batch_course_has_account",
+            "where" => "id_batch_course = $id"
+        ];
+        $count = Modules::run("database/get", $array_query)->row();
+        $course    = Modules::run('database/find', 'tb_course', ["id" => $get_data->id_course])->row();
+        $category_course = Modules::run("database/find", "tb_course_category", ["id" => $course->id_category_course])->row();
+
+        $this->app_data['data_detail'] = $get_data;
+        $this->app_data["count"]       = $count;
+        $this->app_data["category"]    = $category_course;
+        $this->app_data['page_title'] = "Detail Gelombang Pelatihan";
+        $this->app_data['view_file'] = 'view_detail';
+        echo Modules::run('template/main_layout', $this->app_data);
     }
 
     private function upload_image()
     {
         $config['upload_path']          = realpath(APPPATH . '../upload/batch');
         $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        $file_name                      = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
-        $config['file_name']            = $file_name; //just milisecond timestamp fot unique name
+        $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
         $this->load->library('upload', $config);
-        if ($_FILES["image"]["name"] == '' OR !$this->upload->do_upload('image')) //upload and validate
+        if (!$this->upload->do_upload('image')) //upload and validate
         {
-            // $data['inputerror'][] = 'image';
-            // $data['error_string'][] = 'Upload error: ' . $this->upload->display_errors('', ''); //show ajax error
-            // $data['status'] = FALSE;
-            // echo json_encode($data);
-            // exit();
-            $image_name = '';
+            return '';
         } else {
-            $image_name = $file_name;
+            $upload_data = $this->upload->data();
+            $image_name = $upload_data['file_name'];
+            return $image_name;
         }
-        return $image_name;
-        // $upload_data = $this->upload->data();
     }
 
     public function delete_data() {
         Modules::run('security/is_ajax');
-        $id = $this->input->post("id");
+        $id = $this->encrypt->decode($this->input->post("id"));
 
         Modules::run('database/delete', 'tb_batch_course', ['id' => $id]);
         echo json_encode(['status' => true]);
     }
+    
 }

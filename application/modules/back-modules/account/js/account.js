@@ -13,13 +13,14 @@ $(document).ready(function() {
             { "width": "10%" },
             { "width": "15%" },
             { "width": "20%" },
-            { "width": "30%" },   
+            { "width": "15%" },   
+            { "width": "15%" },   
             { "width": "10%" },
             { "width": "15%" },
         ],
         "columnDefs" : [
             {
-                "targets": [4,5],
+                "targets": [5,6],
                 "className": "text-center"
             }            
         ]

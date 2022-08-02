@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-3 row">
-                    <h3 class="col-md-8">Daftar Batch Pelatihan</h3>
+                    <h3 class="col-md-8">Daftar Gelombang Pelatihan</h3>
                     <div class="col-md-4 text-right">
                     <?= Modules::run('security/create_access', '<a href="' . Modules::run('helper/create_url', 'batch_course/add') . '" class="btn btn-primary "> <i class="fa fa-plus-circle"></i> Tambah Batch Pelatihan</a>'); ?>
                     </div>
@@ -16,6 +16,7 @@
                                 <th><span>Judul Pelatihan</span></th>
                                 <th><span>Tipe Pelatihan</span></th>
                                 <th><span>Peserta Pelatihan</span></th>
+                                <th><span>Tanggal Pelatihan</span></th>
                                 <th><span>Action</span></th>
                             </tr>
                         </thead>
@@ -27,7 +28,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_tambah" aria-hidden="true">
+<div class="modal fade" id="modal_tambah" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
@@ -60,7 +61,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_peserta" aria-hidden="true">
+<div class="modal fade" id="modal_peserta" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">

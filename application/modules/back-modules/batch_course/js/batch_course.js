@@ -15,63 +15,70 @@ $(document).ready(function () {
             { "width": "10%" },
             { "width": "15%" },
             { "width": "20%" },
-            { "width": "30%" },
+            { "width": "15%" },
+            { "width": "15%" },
             { "width": "25%" },
         ],
         "columnDefs": [
             {
-                "targets": 4,
+                "targets": 5,
                 "className": "text-center"
             }
         ]
     })
-})
 
-$(document).on('click', '.btn_edit', function () {
-    $('.modal-title').text('EDIT DATA');
-    $('.help-block').empty();
-    $('.form-group').removeClass('has-danger');
-    id = $(this).data('id');
-    id_use = id;
-    save_method = 'edit';
-    $.ajax({
-        url: url_controller + 'get_data' + '?token=' + _token_user,
-        type: "POST",
-        dataType: "JSON",
-        data: { 'id': id },
-        success: function (data) {
-            if (data.status) {
-                $('[name="id_course"]').val(data.data.id_course);
-                $('[name="title"]').val(data.data.title);
-                $('[name="description"]').val(data.data.description);
-                $('[name="target_registrant"]').val(data.data.target_registrant);
-                $('[name="opening_registration_date"]').val(data.data.opening_registration_date);
-                $('[name="closing_registration_date"]').val(data.data.closing_registration_date);
-                $('[name="starting_date"]').val(data.data.starting_date);
-                $('[name="ending_date"]').val(data.data.ending_date);
-                $('#modal_form').modal('show');
+    end_date = $("#end_date").val()
+    var countDownDate = new Date(end_date).getTime();
 
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) { }
-    })
+    var x = setInterval(function() {
+
+        // Get today's date and time
+        var now = new Date().getTime();
+      
+        // Find the distance between now and the count down date
+        var distance = countDownDate - now;
+      
+        // Time calculations for days, hours, minutes and seconds
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      
+        // Display the result in the element with id="demo"
+        $(".day").html(days);
+        $(".hour").html(hours);
+        $(".minute").html(minutes);
+        $(".second").html(seconds);
+
+        if (distance < 0) {
+            clearInterval(x);
+            $(".expired").addClass("d-block")
+            $(".not_expired").addClass("d-none")
+            document.getElementById('daftar').disabled = true;
+          }
+      
+      }, 1000);
+
 })
 
 $('.btn_save').click(function (e) {
     e.preventDefault();
     $(".form-control").removeClass('is-invalid');
     $('.invalid-feedback').empty();
-    var formData = new FormData($('.form-input')[0]);
+    var formData = new FormData($('.form_input')[0]);
     var url;
     var status;
     save_method = $(this).data('method');
-    if(save_method == 'add') {
+    var description = CKEDITOR.instances['description'].getData();
+    if (save_method === 'add') {
         url = 'save';
         status = "Ditambahkan";
+        formData.append('description', description);
     } else {
         url = 'update';
         status = "Diubah";
         formData.append('id', $(this).data('id'));
+        formData.append('description', description);
     }
 
     $.ajax({
@@ -83,19 +90,11 @@ $('.btn_save').click(function (e) {
         dataType: "JSON",
         success: function (data) {
             if (data.status) {
-                swal({
-                    title: "Edit Berhasil",
-                    text: "Klik tombol dibawah untuk ke daftar member",
-                    type: "success",
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Halaman daftar",
-                    closeOnConfirm: true,
-                    closeOnCancel: true
-                },
-                    function (isConfirm) {
-                        location.href = url_controller;
-                    }
-                );
+                notif({
+                    msg: `<b>Sukses : </b> Data berhasil ${status}`,
+                    type: "success"
+                })
+                location.href = data.redirect;
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
                     $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");

@@ -34,7 +34,7 @@ $("#provinsi").on("change", function() {
         data: {provinsi: provinsi},
         dataType: "JSON",
         success: function(data) {
-            var html = '<option value="">-- Pilih Kota -- </option>';
+            var html = '';
             for(i = 0; i < data.length; i++) {
                 html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
             }
