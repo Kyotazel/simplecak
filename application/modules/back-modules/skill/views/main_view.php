@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_data" style="width: 100%;">
+                    <table class="table table-bordered table-hover" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
@@ -25,7 +25,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_form" aria-hidden="true">
+<div class="modal fade" id="modal_form" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">

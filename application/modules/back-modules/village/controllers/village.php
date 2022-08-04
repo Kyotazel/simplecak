@@ -25,6 +25,8 @@ class Village extends BackendController
     public function index()
     {
         $this->app_data["provinsi"] = Modules::run("database/get_all", "provinces")->result();
+        $this->app_data["city"] = Modules::run("database/get_all", "cities")->result();
+        $this->app_data["regency"] = Modules::run("database/get_all", "regencies")->result();
         $this->app_data['page_title']     = "Master Desa";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -36,7 +38,7 @@ class Village extends BackendController
         // $array_desa = [
         //     "select" => "*",
         //     "from" => "villages",
-        //     "limit" => "50"
+        //     "limit" => "1000"
         // ];
         // $get_all = Modules::run('database/get', $array_desa)->result();
 
@@ -125,8 +127,10 @@ class Village extends BackendController
         Modules::run('security/is_ajax');
         $id = $this->input->post('id');
         $get_data = Modules::run('database/find', 'villages', ['id' => $id])->row();
+        $city = Modules::run('database/find', 'regencies', ['id' => $get_data->regency_id])->row();
+        $province = Modules::run('database/find', 'cities', ['id' => $city->city_id])->row();
 
-        echo json_encode(['data' => $get_data, 'status' => true]);
+        echo json_encode(['data' => $get_data, 'status' => true, 'city_id' => $city->city_id, 'province_id' => $province->province_id]);
     }
 
     public function update() {

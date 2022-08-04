@@ -54,10 +54,10 @@ class Account extends BackendController
             }
 
             if ($data_table->status == 1) {
-                $status = "<span class='badge badge-success'>Sudah Dikonfirmasi</span>";
+                $status = "<span class='badge badge-success'><i class='fa fa-check'></i> Sudah Dikonfirmasi</span>";
             } else if ($data_table->status == 0) {
-                $status = "<span class='badge badge-warning'>Belum Dikonfirmasi</span>
-                        <br><a href=# data-id='$data_table->id' id='confirm_account'><span class='badge badge-primary'>Konfirmasi Akun</span></a>";
+                $status = "<span class='badge badge-warning'><i class='fa fa-info'></i> Belum Dikonfirmasi</span>
+                        <br><a href=# data-id='$data_table->id' id='confirm_account'><span class='badge badge-primary'><i class='fa fa-check'></i> Konfirmasi Akun</span></a>";
             }
 
             $no++;
@@ -107,11 +107,15 @@ class Account extends BackendController
         foreach($get_skill as $value) {
             $data[] = $value->id_skill;
         }
+        $detail = Modules::run('database/find', 'tb_account', ['id' => $id])->row();
 
-        $this->app_data['data_detail']      = Modules::run('database/find', 'tb_account', ['id' => $id])->row();
+        $this->app_data['data_detail']      = $detail;
         $this->app_data['detail_skill']     = $data;
         $this->app_data['get_skill']        = Modules::run('database/get_all', 'tb_skill')->result();
         $this->app_data["provinsi"]         = Modules::run("database/get_all", "provinces")->result();
+        $this->app_data["kota"]             = Modules::run("database/get_all", "cities")->result();
+        $this->app_data["kecamatan"]        = Modules::run("database/find", "regencies", ["id" => $detail->id_regency])->result();
+        $this->app_data["desa"]             = Modules::run("database/find", "villages", ["id" => $detail->id_village])->result();
         $this->app_data["last_education"]   = Modules::run("database/get_all", "tb_education")->result();
         $this->app_data["skill"]            = Modules::run("database/get_all", "tb_skill")->result();
         $this->app_data["religion"]         = Modules::run("database/find", "app_module_setting", ["params" => "religion"])->result();
@@ -160,7 +164,8 @@ class Account extends BackendController
 
         $array_update = [
             "status" => 1,
-            "is_confirm" => 1
+            "is_confirm" => 1,
+            "confirm_by" => $this->session->userData('us_id')
         ];
 
         Modules::run("database/update", "tb_account", ["id" => $id], $array_update);
@@ -358,6 +363,7 @@ class Account extends BackendController
             'status' => $status,
             'is_confirm' => $is_confirm,
             'image' => $image,
+            'created_by' => $this->session->userdata('us_id')
         ];
 
         Modules::run("database/insert", "tb_account", $array_insert);
@@ -367,7 +373,8 @@ class Account extends BackendController
         foreach ($this->input->post("skill") as $skill) {
             $array_insert = [
                 'id_skill' => $skill,
-                'id_account' => $get_id_account->id
+                'id_account' => $get_id_account->id,
+                'created_by' => $this->session->userdata('us_id')
             ];
     
             Modules::run('database/insert', 'tb_account_has_skill', $array_insert);
@@ -450,6 +457,8 @@ class Account extends BackendController
             'id_regency_current' => $id_regency_current,
             'id_village_current' => $id_village_current,
             'address_current' => $address_current,
+            'updated_date' => date('Y-m-d h:i:sa'),
+            'updated_by' => $this->session->userdata('us_id')
         ];
 
         // var_dump($array_update); return;
@@ -467,7 +476,8 @@ class Account extends BackendController
         foreach ($this->input->post("skill") as $skill) {
             $array_insert = [
                 'id_skill' => $skill,
-                'id_account' => $id
+                'id_account' => $id,
+                'created_by' => $this->session->userdata('us_id')
             ];
     
             Modules::run('database/insert', 'tb_account_has_skill', $array_insert);

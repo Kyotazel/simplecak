@@ -57,7 +57,10 @@ class Batch_course extends BackendController
             $row[] = "$get_course->name";
             $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
             '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $get_count->total . " / " . $data_table->target_registrant . " peserta</a>";
-            $row[] = Modules::run("helper/date_indo", $data_table->starting_date, "-") . " - <br>" . Modules::run("helper/date_indo", $data_table->ending_date, "-");
+            $row[] = "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Dimulai</i></p><b>"
+             . Modules::run("helper/date_indo", $data_table->starting_date, "-") . "</b>" . 
+             "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Selesai</i></p><b>"
+             . Modules::run("helper/date_indo", $data_table->ending_date, "-") . "</b>";
             $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
@@ -170,7 +173,9 @@ class Batch_course extends BackendController
             "id_batch_course" => $id_batch,
             "date" => date("Y-m-d"),
             "registration_code" => $code_reg,
-            "is_confirm" => 1
+            "is_confirm" => 1,
+            'confirm_by' => $this->session->userdata('us_id'),
+            'crated_by' => $this->session->userdata('us_id')
         ];
 
         if ($get_count->total >= $target->target_registrant) {
@@ -281,7 +286,9 @@ class Batch_course extends BackendController
             "closing_registration_date" => $closing_registration_date,
             "starting_date" => $starting_date,
             "ending_date" => $ending_date,
-            "image" => $image
+            "image" => $image,
+            'created_by' => $this->session->userdata('us_id'),
+            'created_date' => date('Y-m-d')
         ];
 
         Modules::run("database/insert", "tb_batch_course", $array_insert);
@@ -315,6 +322,8 @@ class Batch_course extends BackendController
             "closing_registration_date" => $closing_registration_date,
             "starting_date" => $starting_date,
             "ending_date" => $ending_date,
+            'updated_by' => $this->session->userdata('us_id'),
+            'updated_date' => date('Y-m-d')
         ];
 
         $image = $this->upload_image();
@@ -345,9 +354,24 @@ class Batch_course extends BackendController
         $course    = Modules::run('database/find', 'tb_course', ["id" => $get_data->id_course])->row();
         $category_course = Modules::run("database/find", "tb_course_category", ["id" => $course->id_category_course])->row();
 
+        $query_profile = [
+            'select' => '
+                tb_account.*,
+            ',
+            'from' => 'tb_batch_course_has_account',
+            'join' => [
+                'tb_account, tb_batch_course_has_account.id_account = tb_account.id, left'
+            ],
+            'where' => "tb_batch_course_has_account.id_batch_course = $id",
+            'order_by' => 'tb_batch_course_has_account.id, DESC'
+        ];
+        $get_profile = Modules::run('database/get', $query_profile)->result();
+
+        $this->app_data['data_profile'] = $get_profile;
         $this->app_data['data_detail'] = $get_data;
         $this->app_data["count"]       = $count;
-        $this->app_data["category"]    = $category_course;
+        $this->app_data["category_course"]    = $category_course;
+        $this->app_data["course"]    = $course;
         $this->app_data['page_title'] = "Detail Gelombang Pelatihan";
         $this->app_data['view_file'] = 'view_detail';
         echo Modules::run('template/main_layout', $this->app_data);

@@ -34,7 +34,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="opening_registration_date">Awal Pendaftaran</label>
-                            <input type="text" name="opening_registration_date" id="opening_registration_date" class="form-control datepicker" value="<?= isset($data_detail->opening_registration_date) ? $data_detail->opening_registration_date : '' ?>">
+                            <input type="text" name="opening_registration_date" id="opening_registration_date" class="form-control datepicker" placeholder="Awal pendaftaran" value="<?= isset($data_detail->opening_registration_date) ? $data_detail->opening_registration_date : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group col-md-6">
@@ -49,7 +49,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ending_date">Akhir Batch Pelatihan</label>
-                            <input type="text" name="ending_date" id="ending_date" class="form-control datepicker" value="<?= isset($data_detail->starting_date) ? $data_detail->starting_date : '' ?>">
+                            <input type="text" name="ending_date" id="ending_date" class="form-control datepicker" value="<?= isset($data_detail->ending_date) ? $data_detail->ending_date : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group col-md-12">

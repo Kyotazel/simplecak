@@ -20,7 +20,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-12 border">
+                        <div class="col-md-12 border text-left">
                             <div class="row p-2">
                                 <div class="col-md-4">
                                     <i class="fa fa-map-marker"></i> Alamat :
@@ -34,10 +34,10 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-12 border">
+                        <div class="col-md-12 border text-left">
                             <div class="row p-2">
                                 <div class="col-md-4">
-                                    <i class="fa fa-map-marker"></i> Email :
+                                    <i class="fa fa-envelope"></i> Email :
                                 </div>
                                 <div class="col-md-8">
                                     <div>
@@ -48,7 +48,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                         </div>
                     </div>
                     <div class="row mb-1">
-                        <div class="col-md-12 border">
+                        <div class="col-md-12 border text-left">
                             <div class="row p-2">
                                 <div class="col-md-4">
                                     <i class="fa fa-map-marker"></i> Skill :

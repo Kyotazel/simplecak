@@ -5,19 +5,11 @@ var table;
 
 $(document).ready(function() {
     table = $('#table_data').DataTable({
+        "responsive" : true,
         "ajax": {
             "url": url_controller+"list_data"+"?token="+_token_user,
             "type": "POST",
         },
-        "columns" : [
-            { "width": "10%" },
-            { "width": "15%" },
-            { "width": "20%" },
-            { "width": "15%" },   
-            { "width": "15%" },   
-            { "width": "10%" },
-            { "width": "15%" },
-        ],
         "columnDefs" : [
             {
                 "targets": [5,6],

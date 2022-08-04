@@ -215,9 +215,19 @@ class Course extends BackendController
     {
         $id = $this->encrypt->decode($this->input->get('data'));
         $get_data = Modules::run('database/find', 'tb_course', ['id' => $id])->row();
+        $get_category = Modules::run('database/find', 'tb_course_category', ['id' => $get_data->id_category_course])->row();
+        $get_course_has_skill = Modules::run('database/find', 'tb_course_has_skill', ['id_course' => $id])->result();
 
+        $skill = '';
+            foreach($get_course_has_skill as $value) {
+                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+                $skill .= "<h6>- $get_skill->name</h6> ";
+        }
+
+        $this->app_data['skill']       = $skill;
         $this->app_data['data_detail'] = $get_data;
-        $this->app_data['page_title'] = "Detail";
+        $this->app_data['category'] = $get_category;
+        $this->app_data['page_title'] = "Detail pelatihan";
         $this->app_data['view_file'] = 'view_detail';
         echo Modules::run('template/main_layout', $this->app_data);
     }

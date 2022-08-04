@@ -5,6 +5,7 @@ var table;
 
 $(document).ready(function() {
     table = $('#table_data').DataTable({
+        "responsive" : true,
         "ajax": {
             "url": url_controller+"list_data"+"?token="+_token_user,
             "type": "POST",
@@ -129,7 +130,12 @@ $(document).on('click', '.btn_edit', function () {
         data: {'id':id},
         success: function(data) {
             if (data.status) {
+                $(".select2-hidden-accessible").select2('destroy');
                 $('[name="name"]').val(data.data.name);
+                $('[name="provinsi"]').val(data.province_id);
+                $('[name="kota"]').val(data.city_id);
+                $('[name="kecamatan"]').val(data.data.regency_id);
+                $(".select2").select2();
                 $('#modal_form').modal('show');
             }
         },

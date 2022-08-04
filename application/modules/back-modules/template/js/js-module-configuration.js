@@ -28,7 +28,6 @@ $(document).ready(function () {
     });
 
     var path_current = getUrl.origin + getUrl.pathname;
-    console.log(path_current);
     $("a[data-url='" + path_current + "']").addClass('active');
     // main-parent-menu
     $("a[data-url='" + path_current + "']").closest('.main-parent-menu').addClass('is-expanded');

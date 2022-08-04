@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered" id="table_data" style="width: 100%;">
+                    <table class="table table-bordered table-hover" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
@@ -27,7 +27,7 @@
     </div>
 </div>
 
-<div class="modal" id="modal_form" aria-hidden="true">
+<div class="modal fade" id="modal_form" aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content modal-content-demo">
             <div class="modal-header">
@@ -43,7 +43,7 @@
                         </div>
                         <div class="form-group">
                             <label for="provinsi">Nama Provinsi</label>
-                            <select name="provinsi" id="provinsi" class="form-control select2">
+                            <select name="provinsi" id="provinsi" class="form-control select2" style="width: 100%;">
                                 <?php
                                     foreach($provinsi as $value) {
                                         echo "<option value=$value->id> $value->name </option>";
@@ -54,8 +54,13 @@
                         </div>
                         <div class="form-group">
                             <label for="kota">Nama Kota</label>
-                            <select name="kota" id="kota" class="form-control select2">
+                            <select name="kota" id="kota" class="form-control select2" style="width: 100%;">
                                 <option value="">-- Pilih Kota --</option>
+                                <?php
+                                    foreach($city as $value) {
+                                        echo "<option value=$value->id> $value->name </option>";
+                                    }
+                                ?>
                             </select>
                             <span class="invalid-feedback"></span>
                         </div>

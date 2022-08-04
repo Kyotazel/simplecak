@@ -204,7 +204,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_city" id="id_city" class="form-control select2">
-                                <option value="">-- Pilih Kota Asal -- </option>
+                                <?php
+                                foreach ($kota as $value) {
+                                    if (isset($data_detail->id_city)) {
+                                        $selected = ($value->id == $data_detail->id_city) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -216,7 +225,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_regency" id="id_regency" class="form-control select2">
-                                <option value="">-- Pilih Kecamatan Asal -- </option>
+                                <?php
+                                foreach ($kecamatan as $value) {
+                                    if (isset($data_detail->id_regency)) {
+                                        $selected = ($value->id == $data_detail->id_regency) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -228,7 +246,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_village" id="id_village" class="form-control select2">
-                                <option value="">-- Pilih Desa Asal -- </option>
+                                <?php
+                                foreach ($desa as $value) {
+                                    if (isset($data_detail->id_village)) {
+                                        $selected = ($value->id == $data_detail->id_village) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -268,7 +295,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_city_current" id="id_city_current" class="form-control select2">
-                                <option value="">-- Pilih Kota Sekarang -- </option>
+                                <?php
+                                foreach ($kota as $value) {
+                                    if (isset($data_detail->id_city_current)) {
+                                        $selected = ($value->id == $data_detail->id_city_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -280,7 +316,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_regency_current" id="id_regency_current" class="form-control select2">
-                                <option value="">-- Pilih Kecamatan Sekarang -- </option>
+                                <?php
+                                foreach ($kecamatan as $value) {
+                                    if (isset($data_detail->id_regency_current)) {
+                                        $selected = ($value->id == $data_detail->id_regency_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>
@@ -292,7 +337,16 @@
                         </div>
                         <div class="col-md-9">
                             <select name="id_village_current" id="id_village_current" class="form-control select2">
-                                <option value="">-- Pilih Desa Sekarang -- </option>
+                            <?php
+                                foreach ($desa as $value) {
+                                    if (isset($data_detail->id_village_current)) {
+                                        $selected = ($value->id == $data_detail->id_village_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
                             </select>
                             <div class="invalid-feedback"></div>
                         </div>

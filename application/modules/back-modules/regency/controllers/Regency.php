@@ -25,6 +25,7 @@ class Regency extends BackendController
     public function index()
     {
         $this->app_data["provinsi"] = Modules::run("database/get_all", "provinces")->result();
+        $this->app_data["city"] = Modules::run("database/get_all", "cities")->result();
         $this->app_data['page_title']     = "Master Kecamatan";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -110,8 +111,9 @@ class Regency extends BackendController
         Modules::run('security/is_ajax');
         $id = $this->input->post('id');
         $get_data = Modules::run('database/find', 'regencies', ['id' => $id])->row();
+        $province = Modules::run('database/find', 'cities', ['id' => $get_data->city_id])->row();
 
-        echo json_encode(['data' => $get_data, 'status' => true]);
+        echo json_encode(['data' => $get_data, 'status' => true, 'province_id' => $province->province_id]);
     }
 
     public function update() {
