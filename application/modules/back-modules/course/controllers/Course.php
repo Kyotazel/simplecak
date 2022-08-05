@@ -47,13 +47,13 @@ class Course extends BackendController
 
             $get_course_has_skill = Modules::run('database/find', 'tb_course_has_skill', ['id_course' => $data_table->id])->result();
             $get_category = Modules::run('database/find', 'tb_course_category', ['id' => $data_table->id_category_course])->row();
-            
+
             $skill = '';
-            foreach($get_course_has_skill as $value) {
+            foreach ($get_course_has_skill as $value) {
                 $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
                 $skill .= "- $get_skill->name<br> ";
             }
-            
+
             $no++;
             $row = array();
             $row[] = $no;
@@ -71,7 +71,8 @@ class Course extends BackendController
         echo json_encode($ouput);
     }
 
-    public function add() {
+    public function add()
+    {
         $this->app_data['get_skill']     = Modules::run('database/get_all', 'tb_skill')->result();
         $this->app_data['get_course_category']     = Modules::run('database/get_all', 'tb_course_category')->result();
         $this->app_data['method']     = 'add';
@@ -80,7 +81,8 @@ class Course extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = $this->encrypt->decode($this->input->get('data'));
         $get_skill = [
             "select" => "id_skill",
@@ -90,7 +92,7 @@ class Course extends BackendController
         $get_skill  = Modules::run('database/get', $get_skill)->result();
 
         $data = [];
-        foreach($get_skill as $value) {
+        foreach ($get_skill as $value) {
             $data[] = $value->id_skill;
         }
 
@@ -104,7 +106,8 @@ class Course extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    private function validate_save() {
+    private function validate_save()
+    {
         Modules::run('security/is_ajax');
         $data = array();
         $data['error_string'] = array();
@@ -139,16 +142,19 @@ class Course extends BackendController
         }
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate_save();
         $name          = $this->input->post("name");
         $description   = $_POST["description"];
         $id_category_course         = $this->input->post("id_category_course");
-        
+
         $array_insert = [
             'name' => $name,
             'description' => $description,
-            'id_category_course' => $id_category_course
+            'id_category_course' => $id_category_course,
+            'created_by' => $this->session->userdata('us_id'),
+            'created_date' => date('Y-m-d h:i:sa')
         ];
         Modules::run('database/insert', 'tb_course', $array_insert);
 
@@ -156,20 +162,22 @@ class Course extends BackendController
         foreach ($this->input->post("skill") as $skill) {
             $array_insert = [
                 'id_skill' => $skill,
-                'id_course' => $get_id_course->id
+                'id_course' => $get_id_course->id,
+                'created_by' => $this->session->userdata('us_id'),
+                'created_date' => date('Y-m-d h:i:sa')
             ];
-    
+
             Modules::run('database/insert', 'tb_course_has_skill', $array_insert);
         }
 
-        
+
         $redirect = Modules::run('helper/create_url', 'course');
 
         echo json_encode(['status' => true, 'redirect' => $redirect]);
-
     }
 
-    public function get_data() {
+    public function get_data()
+    {
         Modules::run('security/is_ajax');
         $id = $this->input->post('id');
         $get_skill = Modules::run('database/find', 'tb_course_has_skill', ['id_course' => $id])->row();
@@ -179,7 +187,8 @@ class Course extends BackendController
         echo json_encode(['skill' => $get_skill, 'course' => $get_course, 'status' => true]);
     }
 
-    public function update() {
+    public function update()
+    {
         Modules::run('security/is_ajax');
         $this->validate_save();
 
@@ -191,7 +200,9 @@ class Course extends BackendController
         $array_update_course = [
             'name' => $name,
             'description' => $description,
-            'id_category_course' => $id_category_course
+            'id_category_course' => $id_category_course,
+            'updated_by' => $this->session->userdata('us_id'),
+            'updated_date' => date('Y-m-d h:i:sa')
         ];
 
         Modules::run('database/update', 'tb_course', ['id' => $id], $array_update_course);
@@ -201,9 +212,11 @@ class Course extends BackendController
         foreach ($this->input->post("skill") as $skill) {
             $array_insert = [
                 'id_skill' => $skill,
-                'id_course' => $id
+                'id_course' => $id,
+                'updated_by' => $this->session->userdata('us_id'),
+                'updated_date' => date('Y-m-d h:i:sa')
             ];
-    
+
             Modules::run('database/insert', 'tb_course_has_skill', $array_insert);
         }
 
@@ -219,9 +232,9 @@ class Course extends BackendController
         $get_course_has_skill = Modules::run('database/find', 'tb_course_has_skill', ['id_course' => $id])->result();
 
         $skill = '';
-            foreach($get_course_has_skill as $value) {
-                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
-                $skill .= "<h6>- $get_skill->name</h6> ";
+        foreach ($get_course_has_skill as $value) {
+            $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
+            $skill .= "<h6>- $get_skill->name</h6> ";
         }
 
         $this->app_data['skill']       = $skill;
@@ -232,7 +245,8 @@ class Course extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function delete_data() {
+    public function delete_data()
+    {
         Modules::run('security/is_ajax');
         $id = $this->encrypt->decode($this->input->post("id"));
 

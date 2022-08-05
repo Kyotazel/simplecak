@@ -81,7 +81,9 @@ class Skill extends BackendController
         $name   = $this->input->post("name");
         
         $array_insert = [
-            'name' => $name
+            'name' => $name,
+            'created_by' => $this->session->userdata('us_id'),
+            'created_date' => date('Y-m-d h:i:sa')
         ];
         Modules::run('database/insert', 'tb_skill', $array_insert);
 
@@ -105,7 +107,9 @@ class Skill extends BackendController
         $name     = $this->input->post('name');
 
         $array_update = [
-            'name' => $name
+            'name' => $name,
+            'updated_by' => $this->session->userdata('us_id'),
+            'updated_date' => date('Y-m-d h:i:sa')
         ];
 
         Modules::run('database/update', 'tb_skill', ['id' => $id], $array_update);
