@@ -54,6 +54,12 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.bootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/custom.css" rel="stylesheet">
 
+    <style>
+        /* .btn {
+            background-image: linear-gradient(270deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))!important;
+        } */
+    </style>
+
 </head>
 
 <script>
