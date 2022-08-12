@@ -96,6 +96,16 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-md-3">
+                            <label for="phone_number">No HP / Whatsapp</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="628..." value="<?= isset($data_detail->phone_number) ? $data_detail->phone_number : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
                             <label for="birth_place">Tempat Lahir</label>
                         </div>
                         <div class="col-md-9">

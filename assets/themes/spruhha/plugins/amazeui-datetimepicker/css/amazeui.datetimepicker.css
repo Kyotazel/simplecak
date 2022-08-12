@@ -63,7 +63,6 @@
     font-weight: 700;
     font-size: 13px;
 }
-}
 .datetimepicker table th.next:hover, .datetimepicker table th.prev:hover, .datetimepicker table th.switch:hover {
 	color: #3b4863
 }

@@ -1,6 +1,6 @@
 <div class="row row-sm main-content-mail">
     <div class="col-md-12 container_list">
-        <div class="card">
+        <div class="card shadow-lg p-0 mb-5 bg-body rounded">
             <div class="card-body">
                 <div class="mb-3 row">
                     <h3 class="col-md-8">Daftar Kategori Pelatihan</h3>
@@ -20,6 +20,13 @@
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer row">
+                <div class="col-md-8"></div>
+                <div class="col-md-4 text-right">
+                        <?= Modules::run("security/create_access", '<a href="' . Modules::run('helper/create_url', 'course_category/export_pdf') . '" class="btn btn-outline-danger"><i class="fa fa-save"></i> Unduh Pdf </a>') ?>
+                        <?= Modules::run("security/create_access", '<a href="' . Modules::run('helper/create_url', 'course_category/export_excel') . '" class="btn btn-outline-success"><i class="fa fa-table"></i> Unduh Excel </a>') ?>
+                    </div>
             </div>
         </div>
     </div>

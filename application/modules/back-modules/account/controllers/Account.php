@@ -293,6 +293,11 @@ class Account extends BackendController
             $data['inputerror'][] = 'address_current';
             $data['status'] = FALSE;
         }
+        if ($this->input->post('phone_number') == '') {
+            $data['error_string'][] = 'No HP / Whatsapp';
+            $data['inputerror'][] = 'phone_number';
+            $data['status'] = FALSE;
+        }
         if ($data['status'] == FALSE) {
             echo json_encode($data);
             exit();
@@ -304,7 +309,6 @@ class Account extends BackendController
         $this->validate_save();
         $no_ktp                 = $this->input->post('no_ktp');
         $no_kk                  = $this->input->post('no_kk');
-        $id_skill                  = $this->input->post('id_skill');
         $name                   = $this->input->post('name');
         $id_last_education      = $this->input->post('id_last_education');
         $last_school            = $this->input->post('last_school');
@@ -324,6 +328,7 @@ class Account extends BackendController
         $id_regency_current     = $this->input->post('id_regency_current');
         $id_village_current     = $this->input->post('id_village_current');
         $address_current        = $this->input->post('address_current');
+        $phone_number           = $this->input->post('phone_number');
 
         $registration_date      = date("Y-m-d");
         $username               = $email;
@@ -331,6 +336,11 @@ class Account extends BackendController
         $hash_password          = hash('sha256', $password . config_item('encription_key'));
         $status = 0;
         $is_confirm = 0;
+
+        if(strpos(substr($phone_number,0,3), '08') !== false){
+        	$awal = str_replace("08", "628", substr($phone_number,0,3));
+        	$phone_number = $awal. substr($phone_number,3);
+        }
 
         $image = $this->upload_image();
         $image = ($image === '') ? 'default.png' : $image;
@@ -342,6 +352,7 @@ class Account extends BackendController
             'id_last_education' => $id_last_education,
             'last_school' => $last_school,
             'email' => $email,
+            'phone_number' => $phone_number,
             'birth_place' => $birth_place,
             'birth_date' => $birth_date,
             'gender' => $gender,
@@ -412,6 +423,7 @@ class Account extends BackendController
         $id_last_education      = $this->input->post('id_last_education');
         $last_school            = $this->input->post('last_school');
         $email                  = $this->input->post('email');
+        $phone_number           = $this->input->post('phone_number');
         $birth_place            = $this->input->post('birth_place');
         $birth_date             = $this->input->post('birth_date');
         $gender                 = $this->input->post('gender');
@@ -435,6 +447,11 @@ class Account extends BackendController
         // $status = 0;
         // $is_confirm = 0;
 
+        if(strpos(substr($phone_number,0,3), '08') !== false){
+        	$awal = str_replace("08", "628", substr($phone_number,0,3));
+        	$phone_number = $awal. substr($phone_number,3);
+        }
+
         $array_update = [
             'no_ktp' => $no_ktp,
             'no_kk' => $no_kk,
@@ -442,6 +459,7 @@ class Account extends BackendController
             'id_last_education' => $id_last_education,
             'last_school' => $last_school,
             'email' => $email,
+            'phone_number' => $phone_number,
             'birth_place' => $birth_place,
             'birth_date' => $birth_date,
             'gender' => $gender,

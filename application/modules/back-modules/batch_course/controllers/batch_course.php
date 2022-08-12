@@ -273,6 +273,7 @@ class Batch_course extends BackendController
         $closing_registration_date  = $this->input->post("closing_registration_date");
         $starting_date              = $this->input->post("starting_date");
         $ending_date                = $this->input->post("ending_date");
+        echo $opening_registration_date; return;
 
         $image = $this->upload_image();
         $image = ($image === '') ? 'default.png' : $image;

@@ -23,11 +23,11 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                         <div class="col-md-12 border text-left">
                             <div class="row p-2">
                                 <div class="col-md-4">
-                                    <i class="fa fa-map-marker"></i> Alamat :
+                                    <i class="fa fa-phone"></i> No HP :
                                 </div>
                                 <div class="col-md-8">
                                     <div>
-                                        <?= $city_current->name . ", " . $regency_current->name ?>
+                                        <?= $data_detail->phone_number?>
                                     </div>
                                 </div>
                             </div>

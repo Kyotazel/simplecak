@@ -8,7 +8,7 @@ $(document).ready(function () {
 	$('.horizontal-mainwrapper').show();
     $('.datepicker').datepicker({
         autoclose: true,
-        format: 'yyyy-mm-dd'
+        dateFormat: 'yy-mm-dd'
     });
     $('.datepicker_form').datepicker({
         autoclose: true,
@@ -19,6 +19,11 @@ $(document).ready(function () {
         autoclose: true,
         format: 'yyyy-mm-dd'
     });
+
+    $('.datetimepickera').datetimepicker({
+        autoclose: true,
+        format: 'yyyy-mm-dd hh:ii:00'
+    })
 
     // var today = new Date('16-01-2022');
     // console.log(today.getFullYear(),today.getMonth(),today.getDate());

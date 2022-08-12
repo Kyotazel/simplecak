@@ -17,10 +17,10 @@
 
     <!-- Title -->
     <title><?= $page_title; ?> </title>
-
+    
     <!-- Bootstrap css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-
+    
     <!-- Icons css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/web-fonts/icons.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/web-fonts/font-awesome/font-awesome.min.css" rel="stylesheet" />
@@ -31,7 +31,7 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/skins.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/dark-style.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/colors/default.css" rel="stylesheet" />
-
+    
     <!-- Color css-->
     <link id="theme" rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets/themes/spruhha/') ?>css/colors/color.css" />
 
@@ -42,11 +42,13 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/sidemenu/sidemenu.css" rel="stylesheet">
 
     <link rel="stylesheet" href="<?= base_url('assets/plugin/jquery.ui/') ?>css/jquery-ui.css">
-
+    
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/dropzone.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/basic.min.css') ?>">
     <link href="<?= base_url('assets/plugin/'); ?>notify/css/notifIt.css" rel="stylesheet" />
-    <link rel="stylesheet" href="<?= base_url('assets/plugin/bootstrap-datepicker/bootstrap-datepicker3.min.css') ?>">
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet">
+    
     <!-- Internal Sweet-Alert css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/sweetalert.css" rel="stylesheet">
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -435,6 +437,8 @@
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.html5.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.print.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.colVis.min.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
 
     <!-- jrsoftmedia setting -->
     <script src="<?= base_url('assets/plugin/'); ?>notify/js/notifIt.js"></script>
@@ -443,7 +447,6 @@
     <script src="<?php echo base_url('assets/plugin/'); ?>print_js/print.min.js"></script>
 
     <script src="<?= base_url('assets/plugin/'); ?>darggable/jquery-ui-darggable.min.js"></script>
-    <script src="<?= base_url('assets/plugin/'); ?>bootstrap-datepicker/bootstrap-datepicker.min.js"></script>
 
     <!--   ckeditor -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>ckeditor/ckeditor.js"></script>

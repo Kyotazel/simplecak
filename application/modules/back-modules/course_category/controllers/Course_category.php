@@ -123,4 +123,8 @@ class Course_category extends BackendController
         Modules::run('database/delete', 'tb_course_category', ['id' => $id]);
         echo json_encode(['status' => true]);
     }
+
+    public function export_pdf() {
+        $html = "<h1 style='text-align: center;'>Data Dosen Mengajar</h1><br><br>";
+    }
 }

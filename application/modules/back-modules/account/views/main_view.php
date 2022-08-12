@@ -9,7 +9,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped" id="table_data" style="width: 100%;">
+                    <table class="table table-hover table-bordered" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
@@ -24,6 +24,9 @@
                         <tbody></tbody>
                     </table>
                 </div>
+            </div>
+            <div class="card-footer">
+                <h2>Test</h2>
             </div>
         </div>
     </div>
