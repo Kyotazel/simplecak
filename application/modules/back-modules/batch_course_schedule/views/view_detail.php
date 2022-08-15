@@ -101,3 +101,27 @@ if (date($data_detail->starting_time) > date('Y-m-d H:i:sa')) {
         </div>
     <?php endif; ?>
 </div>
+
+<div class="modal fade" id="modal_absensi">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title">Absensi Peserta</h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">&times;</span></button>
+            </div>
+            <div class="modal-body">
+                <h6>Pilih Absensi</h6>
+                <!-- Select2 -->
+                <select class="form-control select2" id="status_attendance">
+                    <?php foreach($attendance as $value) : ?>
+                        <option value="<?= $value->value ?>"><?= $value->label ?></option>
+                    <?php endforeach; ?>
+                </select>
+                <!-- Select2 -->
+            </div>
+            <div class="modal-footer">
+                <button class="btn ripple btn-primary btn_save" type="button">Save changes</button>
+                <button class="btn ripple btn-secondary" data-dismiss="modal" type="button">Close</button>
+            </div>
+        </div>
+    </div>
+</div>

@@ -12,6 +12,7 @@ class Batch_course_schedule extends BackendController
     {
         parent::__construct();
         Modules::run('security/common_security');
+        $this->load->library('Ciqrcode');
         $this->_init();
     }
 
@@ -29,12 +30,13 @@ class Batch_course_schedule extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function list_data() {
+    public function list_data()
+    {
         Modules::run("security/is_ajax");
         $get_all = Modules::run('database/get_all', 'tb_batch_course_has_schedule')->result();
         $no = 0;
         $data = [];
-        foreach($get_all as $data_table) {
+        foreach ($get_all as $data_table) {
             $id_encrypt = $this->encrypt->encode($data_table->id);
 
             $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course_schedule/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
@@ -42,9 +44,9 @@ class Batch_course_schedule extends BackendController
             $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course_schedule/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
 
             $get_batch_course = Modules::run("database/find", "tb_batch_course", ["id" => $data_table->id_batch_course])->row();
-            
+
             $media = '';
-            if($data_table->media == 1) {
+            if ($data_table->media == 1) {
                 $media .= '<span class="badge badge-success">Online</span>';
             } else {
                 $media .= '<span class="badge badge-primary">Tatap Muka</span>';
@@ -68,7 +70,8 @@ class Batch_course_schedule extends BackendController
         echo json_encode($ouput);
     }
 
-    public function add() {
+    public function add()
+    {
         $this->app_data['batch_course'] = Modules::run('database/get_all', 'tb_batch_course')->result();
         $this->app_data['media']        = Modules::run('database/find', 'app_module_setting', ['params' => 'media'])->result();
         $this->app_data['method']       = 'add';
@@ -77,7 +80,8 @@ class Batch_course_schedule extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function edit() {
+    public function edit()
+    {
         $id = $this->encrypt->decode($this->input->get("data"));
         $this->app_data['batch_course'] = Modules::run('database/get_all', 'tb_batch_course')->result();
         $this->app_data['method']       = 'update';
@@ -88,19 +92,20 @@ class Batch_course_schedule extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function detail() {
+    public function detail()
+    {
         $id = $this->encrypt->decode($this->input->get("data"));
         $batch_course_schedule  = Modules::run('database/find', 'tb_batch_course_has_schedule', ['id' => $id])->row();
         $batch_course           = Modules::run('database/find', 'tb_batch_course', ['id' => $batch_course_schedule->id_batch_course])->row();
 
         $start_query    = [
-            'select'=> 'TIME(starting_time) as start',
+            'select' => 'TIME(starting_time) as start',
             'from'  => 'tb_batch_course_has_schedule',
             'where' => "id = $id"
         ];
 
         $end_query    = [
-            'select'=> 'TIME(ending_type) as end',
+            'select' => 'TIME(ending_type) as end',
             'from'  => 'tb_batch_course_has_schedule',
             'where' => "id = $id"
         ];
@@ -121,8 +126,9 @@ class Batch_course_schedule extends BackendController
         $starting_time                  = Modules::run('database/get', $start_query)->row();
         $ending_time                    = Modules::run('database/get', $end_query)->row();
         $this->app_data['data_profile'] = $get_profile;
+        $this->app_data['attendance']   = Modules::run('database/find', 'app_module_setting', ['field' => 'attendance'])->result();
         $this->app_data['data_detail']  = Modules::run('database/find', 'tb_batch_course_has_schedule', ['id' => $id])->row();
-        $this->app_data['starting_time']= $starting_time->start;
+        $this->app_data['starting_time'] = $starting_time->start;
         $this->app_data['ending_time']  = $ending_time->end;
         $this->app_data['module_js']  = ['absensi'];
         $this->app_data['page_title']   = "Detail Jadwal Pertemuan";
@@ -130,7 +136,8 @@ class Batch_course_schedule extends BackendController
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function list_peserta() {
+    public function list_peserta()
+    {
         Modules::run('security/is_ajax');
         $id = $this->input->post('id');
         $get_all  = Modules::run('database/find', 'tb_batch_course_has_schedule', ['id' => $id])->row();
@@ -140,11 +147,27 @@ class Batch_course_schedule extends BackendController
 
         $no = 0;
         $data = [];
-        foreach($get_batch_course as $data_table) {
+        foreach ($get_batch_course as $data_table) {
             $get_account = Modules::run("database/find", "tb_account", ["id" => $data_table->id_account])->row();
 
+            $status     = Modules::run('database/find', 'tb_batch_course_schedule_has_attendance', ['id_batch_course_schedule' => $id, 'id_batch_course_account' => $data_table->id])->row();
+
             $absensi    = '';
-            $absensi    .= '<button class="btn btn-sm btn-danger mb-1">Belum Absensi</button><br><button class="btn btn-sm btn-primary" onclick="setAbsen('. "'$data_table->id', '$id'" .')">Klik Untuk Absensi</button>';
+            if (isset($status)) {
+                $status_absensi = '';
+                if ($status->status_attendance == 0) {
+                    $status_absensi .= "Tidak Hadir";
+                } else if ($status->status_attendance == 1) {
+                    $status_absensi .= "Hadir";
+                } else if ($status->status_attendance == 2) {
+                    $status_absensi .= "Izin";
+                } else if ($status->status_attendance == 3) {
+                    $status_absensi .= "Sakit";
+                }
+                $absensi    .= '<button class="btn btn-sm btn-success">Sudah Absensi</button> <button class="btn btn-warning btn-sm">' . $status_absensi . '</button> <button class="btn btn-danger btn-sm btn_delete_absensi" data-idSchedule=' . $id . ' data-idAccount=' . $data_table->id . '><i class="fa fa-trash"></i></button>';
+            } else {
+                $absensi    .= '<button class="btn btn-sm btn-danger mb-1">Belum Absensi</button><br><button class="btn btn-sm btn-primary btn_absensi" data-idSchedule=' . $id . ' data-idAccount=' . $data_table->id . '>Klik Untuk Absensi</button>';
+            }
 
             $no++;
             $row = [];
@@ -161,7 +184,8 @@ class Batch_course_schedule extends BackendController
         echo json_encode($ouput);
     }
 
-    public function validate_save() {
+    public function validate_save()
+    {
         Modules::run('security/is_ajax');
         $data = array();
         $data['error_string'] = array();
@@ -209,7 +233,8 @@ class Batch_course_schedule extends BackendController
         }
     }
 
-    public function save() {
+    public function save()
+    {
         $this->validate_save();
         $title              = $this->input->post('title');
         $id_batch_course    = $this->input->post('id_batch_course');
@@ -238,7 +263,8 @@ class Batch_course_schedule extends BackendController
         echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
 
-    public function update() {
+    public function update()
+    {
         Modules::run("security/is_ajax");
         $this->validate_save();
         $id = $this->input->post("id");
@@ -263,14 +289,15 @@ class Batch_course_schedule extends BackendController
             'updated_date'       => date('Y-m-d')
         ];
 
-        Modules::run("database/update", "tb_batch_course_has_schedule", ['id' => $id] , $array_update);
+        Modules::run("database/update", "tb_batch_course_has_schedule", ['id' => $id], $array_update);
 
         $redirect = Modules::run('helper/create_url', 'batch_course_schedule');
 
         echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
 
-    public function delete_data() {
+    public function delete_data()
+    {
         Modules::run('security/is_ajax');
         $id = $this->encrypt->decode($this->input->post("id"));
 
@@ -278,19 +305,30 @@ class Batch_course_schedule extends BackendController
         echo json_encode(['status' => true]);
     }
 
-    private function upload_image()
+    public function add_attendance()
     {
-        $config['upload_path']          = realpath(APPPATH . '../upload/schedule');
-        $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('image')) //upload and validate
-        {
-            return '';
-        } else {
-            $upload_data = $this->upload->data();
-            $image_name = $upload_data['file_name'];
-            return $image_name;
-        }
+        $id_batch_course_account = $this->input->post("id_batch_course_account");
+        $id_batch_course_schedule = $this->input->post("id_batch_course_schedule");
+        $status = $this->input->post('status');
+
+        $array_insert = [
+            'id_batch_course_account'   => $id_batch_course_account,
+            'id_batch_course_schedule'  => $id_batch_course_schedule,
+            'status_attendance'         => $status,
+            'created_by'                => $this->session->userdata('us_id'),
+            'crated_date'              => date('Y-m-d')
+        ];
+
+        Modules::run('database/insert', 'tb_batch_course_schedule_has_attendance', $array_insert);
+        echo json_encode(['status' => true]);
+    }
+
+    public function delete_data_absensi()
+    {
+        $id_batch_course_account = $this->input->post("id_batch_course_account");
+        $id_batch_course_schedule = $this->input->post("id_batch_course_schedule");
+
+        Modules::run('database/delete', 'tb_batch_course_schedule_has_attendance', ['id_batch_course_account' => $id_batch_course_account, 'id_batch_course_schedule' => $id_batch_course_schedule]);
+        echo json_encode(['status' => true]);
     }
 }

@@ -40,22 +40,22 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="title">Judul Jadwal Pertemuan</label>
-                            <input type="text" id="title" name="title" class="form-control" placeholder="Masukkan Judul Pertemuan..." value="<?= isset($data_detail->title) ? $data_detail->title : '' ?>">
+                            <input type="text" autocomplete="off" id="title" name="title" class="form-control" placeholder="Masukkan Judul Pertemuan..." value="<?= isset($data_detail->title) ? $data_detail->title : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="date">Tanggal Jadwal</label>
-                            <input type="text" name="date" id="date" class="form-control datepicker" placeholder="Masukkan Tanggal Jadwal" value="<?= isset($data_detail->date) ? $data_detail->date : '' ?>">
+                            <input type="text" autocomplete="off" name="date" id="date" class="form-control datepicker" placeholder="Masukkan Tanggal Jadwal" value="<?= isset($data_detail->date) ? $data_detail->date : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="starting_time">Waktu Mulai</label>
-                            <input type="text" name="starting_time" class="form-control datetimepickera" value="<?= isset($data_detail->starting_time) ? $data_detail->starting_time : '' ?>">
+                            <input type="text" autocomplete="off" name="starting_time" class="form-control datetimepickera" value="<?= isset($data_detail->starting_time) ? $data_detail->starting_time : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="ending_type">Waktu Selesai</label>
-                            <input type="text" name="ending_type" id="ending_type" class="form-control datetimepickera" value="<?= isset($data_detail->ending_type) ? $data_detail->ending_type : '' ?>">
+                            <input type="text" autocomplete="off" name="ending_type" id="ending_type" class="form-control datetimepickera" value="<?= isset($data_detail->ending_type) ? $data_detail->ending_type : '' ?>">
                             <div class="invalid-feedback"></div>
                         </div>
                     </div>
