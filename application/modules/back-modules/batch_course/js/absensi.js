@@ -1,4 +1,4 @@
-var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '/';
+var url_controller = baseUrl + '/' + prefix_folder_admin + '/';
 var save_method;
 var id_batch_course_attendance = 0;
 var id_batch_course_account = 0;
@@ -10,7 +10,7 @@ $(document).ready(function () {
     table.destroy();
     table = $('#table_absensi').DataTable({
         "ajax": {
-            "url": url_controller + "list_peserta" + "?token=" + _token_user,
+            "url": url_controller + "batch_course/schedule/list_peserta" + "?token=" + _token_user,
             "type": "POST",
             "data": { 'id': $("#id").val() }
         },
@@ -40,7 +40,7 @@ $(document).on('click', '.btn_absensi', function () {
 
 $(".btn_save").on("click", function () {
     $.ajax({
-        'url': url_controller + "add_attendance" + "?token=" + _token_user,
+        'url': url_controller + "batch_course/schedule/add_attendance" + "?token=" + _token_user,
         type: "POST",
         dataType: "JSON",
         data: { id_batch_course_account: id_batch_course_account, id_batch_course_schedule: id_batch_course_schedule, status: $("#status_attendance").val() },
@@ -75,7 +75,7 @@ $(document).on('click', '.btn_delete_absensi', function () {
     function(isConfirm) {
         if (isConfirm) {
             $.ajax({
-                url: url_controller+'delete_data_absensi'+'?token='+_token_user,
+                url: url_controller+'batch_course/schedule/delete_data_absensi'+'?token='+_token_user,
                 type: "POST",
                 dataType: "JSON",
                 data: {'id_batch_course_schedule': id_batch_course_schedule, 'id_batch_course_account' : id_batch_course_account},

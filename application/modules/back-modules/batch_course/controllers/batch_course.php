@@ -22,9 +22,15 @@ class Batch_course extends BackendController
         $this->app_data['module_directory']  = $this->module_directory;
     }
 
-    public function index()
+    public function index($timeline = 'now')
     {
-        $this->app_data['page_title']     = "Gelombang Pelatihan";
+        if ($timeline == 'history') {
+            $this->app_data['timeline'] = 'list_history';
+            $this->app_data['page_title'] = 'Riwayat Pelatihan';
+        } else {
+            $this->app_data['timeline'] = 'list_data'; 
+            $this->app_data['page_title']     = "Gelombang Pelatihan";
+        }
         $this->app_data['view_file']     = 'main_view';
         $this->app_data["course"]       = Modules::run("database/get_all", "tb_course")->result();
         echo Modules::run('template/main_layout', $this->app_data);
@@ -32,7 +38,12 @@ class Batch_course extends BackendController
 
     public function list_data() {
         Modules::run("security/is_ajax");
-        $get_all = Modules::run('database/get_all', 'tb_batch_course')->result();
+        $array_get = [
+            "select" => "*",
+            "from" => "tb_batch_course",
+            "where" => "ending_date > '" . date('Y-m-d') . "'" 
+        ];
+        $get_all = Modules::run('database/get', $array_get)->result();
         $no = 0;
         $data = [];
         foreach($get_all as $data_table) {
@@ -41,22 +52,131 @@ class Batch_course extends BackendController
             $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
             $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
             $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
+            $btn_schedule   = " <a href='" . Modules::run('helper/create_url', 'batch_course/schedule/index/'. $data_table->id) . "' class='btn btn-sm btn-info text-light'><i class='fa fa-info-circle'></i> Detail</a>";
 
-            $get_course = Modules::run("database/find", "tb_course", ["id" => $data_table->id_course])->row();
-            $array_query = [
+            $array_peserta = [
                 "select" => "count(*) as total",
                 "from" => "tb_batch_course_has_account",
                 "where" => "id_batch_course = $data_table->id"
             ];
-            $get_count  = Modules::run("database/get", $array_query)->row();
+
+            $array_belum = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "starting_time > '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $array_sudah = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "ending_type < '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $array_berlangsung = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "starting_time < '" . date('Y-m-d H:i:s') . "' AND ending_type > '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $count_peserta      = Modules::run("database/get", $array_peserta)->row();
+            $count_belum        = Modules::run('database/get', $array_belum)->row();
+            $count_sudah        = Modules::run('database/get', $array_sudah)->row();
+            $count_berlangsung  = Modules::run('database/get', $array_berlangsung)->row();
 
             $no++;
             $row = [];
             $row[] = $no;
             $row[] = $data_table->title;
-            $row[] = "$get_course->name";
+            $row[] = "
+            <div class='row'>
+                <div class='col-md-6'>
+                    <span class='badge badge-primary'>Belum : $count_belum->total</span> <br> <span class='badge badge-warning text-light'>Berlangsung : $count_berlangsung->total</span> <br> <span class='badge badge-success'>Selesai : $count_sudah->total</span>
+                </div>
+                <div class='col-md-6 mt-3'>
+                    $btn_schedule
+                </div>
+            </div>
+            ";
             $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
-            '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $get_count->total . " / " . $data_table->target_registrant . " peserta</a>";
+            '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
+            $row[] = "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Dimulai</i></p><b>"
+             . Modules::run("helper/date_indo", $data_table->starting_date, "-") . "</b>" . 
+             "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Selesai</i></p><b>"
+             . Modules::run("helper/date_indo", $data_table->ending_date, "-") . "</b>";
+            $row[] = $btn_detail . $btn_edit . $btn_delete;
+            $data[] = $row;
+        }
+
+        $ouput = [
+            "data" => $data
+        ];
+
+        echo json_encode($ouput);
+    }
+
+    public function list_history() {
+        Modules::run("security/is_ajax");
+        $array_get = [
+            "select" => "*",
+            "from" => "tb_batch_course",
+            "where" => "ending_date < '" . date('Y-m-d') . "'" 
+        ];
+        $get_all = Modules::run('database/get', $array_get)->result();
+        $no = 0;
+        $data = [];
+        foreach($get_all as $data_table) {
+            $id_encrypt = $this->encrypt->encode($data_table->id);
+
+            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
+            $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
+            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
+            $btn_schedule   = " <a href='" . Modules::run('helper/create_url', 'batch_course/schedule/index/'. $data_table->id) . "' class='btn btn-sm btn-info text-light'><i class='fa fa-info-circle'></i> Detail</a>";
+
+            $array_peserta = [
+                "select" => "count(*) as total",
+                "from" => "tb_batch_course_has_account",
+                "where" => "id_batch_course = $data_table->id"
+            ];
+
+            $array_belum = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "starting_time > '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $array_sudah = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "ending_type < '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $array_berlangsung = [
+                "select" => "count(*) as total",
+                "from"  => "tb_batch_course_has_schedule",
+                "where" => "starting_time < '" . date('Y-m-d H:i:s') . "' AND ending_type > '" . date('Y-m-d H:i:s') . "' AND id_batch_course = $data_table->id"
+            ];
+
+            $count_peserta      = Modules::run("database/get", $array_peserta)->row();
+            $count_belum        = Modules::run('database/get', $array_belum)->row();
+            $count_sudah        = Modules::run('database/get', $array_sudah)->row();
+            $count_berlangsung  = Modules::run('database/get', $array_berlangsung)->row();
+
+            $no++;
+            $row = [];
+            $row[] = $no;
+            $row[] = $data_table->title;
+            $row[] = "
+            <div class='row'>
+                <div class='col-md-6'>
+                    <span class='badge badge-primary'>Belum : $count_belum->total</span> <br> <span class='badge badge-warning text-light'>Berlangsung : $count_berlangsung->total</span> <br> <span class='badge badge-success'>Selesai : $count_sudah->total</span>
+                </div>
+                <div class='col-md-6 mt-3'>
+                    $btn_schedule
+                </div>
+            </div>
+            ";
+            $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
+            '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
             $row[] = "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Dimulai</i></p><b>"
              . Modules::run("helper/date_indo", $data_table->starting_date, "-") . "</b>" . 
              "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Selesai</i></p><b>"
@@ -124,24 +244,24 @@ class Batch_course extends BackendController
         Modules::run("security/is_ajax");
         $id_batch_course = $this->input->post("id_batch_course");
 
-        $get_all = Modules::run("database/find", "tb_batch_course_has_account", ["id_batch_course" => $id_batch_course, "is_confirm" => 1])->result();
+        $get_all = Modules::run("database/find", "tb_batch_course_has_account", ["id_batch_course" => $id_batch_course])->result();
 
         $no = 0;
         $data = [];
         foreach($get_all as $data_table) {
             $get_account = Modules::run("database/find", "tb_account", ["id" => $data_table->id_account])->row();
-            $get_account_skill = Modules::run("database/find", "tb_account_has_skill", ["id_account" => $data_table->id_account])->result();
-            $skill = '';
-            foreach($get_account_skill as $value) {
-                $get_skill = Modules::run('database/find', "tb_skill", ["id" => $value->id_skill])->row();
-                $skill .= "- $get_skill->name<br> ";
+
+            if($data_table->is_confirm == 1) {
+                $confirm = "<span class='badge badge-success'>Sudah Dikonfirmasi</span>";
+            } else {
+                $confirm = "<span class='badge badge-warning text-light'>Balum dikonfirmasi</span><br><a href='#' data-id='$data_table->id' id='confirm_account' class='text-light badge badge-primary'>Klik Untuk Konfirmasi</a>";
             }
 
             $no++;
             $row = [];
             $row[] = $no;
             $row[] = $get_account->name;
-            $row[] = $skill;
+            $row[] = $confirm;
             $row[] = "<button class='btn btn-danger btn-sm btn_delete_peserta' data-id=$data_table->id><i class='fa fa-trash'></i> Hapus</button>";
             $data[] = $row;
         }
@@ -173,8 +293,7 @@ class Batch_course extends BackendController
             "id_batch_course" => $id_batch,
             "date" => date("Y-m-d"),
             "registration_code" => $code_reg,
-            "is_confirm" => 1,
-            'confirm_by' => $this->session->userdata('us_id'),
+            "is_confirm" => 0,
             'crated_by' => $this->session->userdata('us_id')
         ];
 
@@ -184,6 +303,20 @@ class Batch_course extends BackendController
         }
 
         Modules::run("database/insert", "tb_batch_course_has_account", $array_insert);
+
+        echo json_encode(["status" => true]);
+    }
+
+    public function update_confirm()
+    {
+        $id = $this->input->post("id");
+
+        $array_update = [
+            "is_confirm" => 1,
+            "confirm_by" => $this->session->userData('us_id')
+        ];
+
+        Modules::run("database/update", "tb_batch_course_has_account", ["id" => $id], $array_update);
 
         echo json_encode(["status" => true]);
     }
@@ -267,13 +400,13 @@ class Batch_course extends BackendController
         
         $title                      = $this->input->post("title");
         $id_course                  = $this->input->post("id_course");
-        $description                = $this->input->post("description");
+        $description                = $_POST["description"];
         $target_registrant          = $this->input->post("target_registrant");
         $opening_registration_date  = $this->input->post("opening_registration_date");
         $closing_registration_date  = $this->input->post("closing_registration_date");
         $starting_date              = $this->input->post("starting_date");
         $ending_date                = $this->input->post("ending_date");
-        echo $opening_registration_date; return;
+        // echo $opening_registration_date; return;
 
         $image = $this->upload_image();
         $image = ($image === '') ? 'default.png' : $image;
@@ -307,7 +440,7 @@ class Batch_course extends BackendController
         
         $title                      = $this->input->post("title");
         $id_course                  = $this->input->post("id_course");
-        $description                = $this->input->post("description");
+        $description                = $_POST["description"];
         $target_registrant          = $this->input->post("target_registrant");
         $opening_registration_date  = $this->input->post("opening_registration_date");
         $closing_registration_date  = $this->input->post("closing_registration_date");
@@ -357,14 +490,14 @@ class Batch_course extends BackendController
 
         $query_profile = [
             'select' => '
-                tb_account.*,
+                tb_account.*, a.is_confirm as confirm_batch, a.id as batch_account_id
             ',
-            'from' => 'tb_batch_course_has_account',
+            'from' => 'tb_batch_course_has_account as a',
             'join' => [
-                'tb_account, tb_batch_course_has_account.id_account = tb_account.id, left'
+                'tb_account, a.id_account = tb_account.id, left'
             ],
-            'where' => "tb_batch_course_has_account.id_batch_course = $id",
-            'order_by' => 'tb_batch_course_has_account.id, DESC'
+            'where' => "a.id_batch_course = $id",
+            'order_by' => 'a.id, DESC'
         ];
         $get_profile = Modules::run('database/get', $query_profile)->result();
 

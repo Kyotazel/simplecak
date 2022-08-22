@@ -194,7 +194,7 @@ class Course extends BackendController
 
         $id            = $this->input->post('id');
         $name          = $this->input->post("name");
-        $description   = $this->input->post("description");
+        $description   = $_POST["description"];
         $id_category_course         = $this->input->post("id_category_course");
 
         $array_update_course = [

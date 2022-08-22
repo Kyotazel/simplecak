@@ -1,8 +1,4 @@
-<?php
-$btn_edit   = "<button class='btn btn-block btn-success'><i class='fa fa-check'></i> Sudah Dikonfirmasi</button>";
-?>
-
-<div class="container">
+<div class="container" id="here">
     <!-- Detail Batch Course -->
     <div class="row">
         <div class="card" style="width: 100%;">
@@ -155,6 +151,16 @@ $btn_edit   = "<button class='btn btn-block btn-success'><i class='fa fa-check'>
     <!-- Peserta Batch Course -->
     <div class="row my-3">
         <?php foreach ($data_profile as $value) : ?>
+            <?php
+            if ($value->confirm_batch == 1) {
+                $btn_confirm    = "<button class='btn btn-block btn-success'><i class='fa fa-check'></i> Sudah Dikonfirmasi</button>";
+            } else if($value->confirm_batch == 0) {
+                $btn_confirm    = "<button class='btn btn-block btn-warning'><i class='fa fa-clock'></i> Belum Dikonfimasi</button>
+                <button class='btn btn-block btn-primary' data-id='$value->batch_account_id' id='confirm_detail'><i class='fa fa-check'></i> Klik Untuk Konfirmasi</button>
+                ";
+            }
+            ?>
+
             <div class="col-md-4 my-2">
                 <div class="card">
                     <div class="card-header">
@@ -183,7 +189,7 @@ $btn_edit   = "<button class='btn btn-block btn-success'><i class='fa fa-check'>
                             </div>
                             <div class="row mb-1 mt-3">
                                 <div class="col-md-12">
-                                    <?= $btn_edit ?>
+                                    <?= $btn_confirm ?>
                                 </div>
                             </div>
                         </div>

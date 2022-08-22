@@ -55,7 +55,7 @@
                                 <span class="invalid-feedback"></span>
                             </div>
                             <div class="text-right">
-                                <a href="<?= Modules::run('helper/create_url', 'course'); ?>" class="btn btn-rounded btn-light font-weight-bold">Kembali</a>
+                                <a href="<?= Modules::run('helper/create_url', 'course'); ?>" class="btn btn-rounded btn-light font-weight-bold mt-3">Kembali</a>
                                 <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save" data-id="<?= isset($data_detail->id) ? $data_detail->id : ''; ?>" data-method="<?= $method ?>"><i class="fa fa-save"></i> Simpan Data</button>
                             </div>
                         </div>

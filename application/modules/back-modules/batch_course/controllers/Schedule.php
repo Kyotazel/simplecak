@@ -1,18 +1,17 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Batch_course_schedule extends BackendController
+class Schedule extends BackendController
 {
-    var $module_name = 'batch_course_schedule';
-    var $module_directory = 'batch_course_schedule';
-    var $module_js = ['batch_course_schedule'];
+    var $module_name = 'batch_course';
+    var $module_directory = 'batch_course';
+    var $module_js = ['schedule'];
     var $app_data = [];
 
     public function __construct()
     {
         parent::__construct();
         Modules::run('security/common_security');
-        $this->load->library('Ciqrcode');
         $this->_init();
     }
 
@@ -23,27 +22,28 @@ class Batch_course_schedule extends BackendController
         $this->app_data['module_directory']  = $this->module_directory;
     }
 
-    public function index()
+    public function index($id)
     {
-        $this->app_data['page_title']     = "Penjadwalan Pertemuan";
-        $this->app_data['view_file']     = 'main_view';
+        $batch_course               = Modules::run('database/find', 'tb_batch_course', ['id' => $id])->row();
+        $this->app_data['id']       = $id;
+        $this->app_data['name']     = $batch_course->title;
+        $this->app_data['page_title']     = "Jadwal Pertemuan";
+        $this->app_data['view_file']     = 'schedule_view';
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function list_data()
+    public function list_data($id)
     {
         Modules::run("security/is_ajax");
-        $get_all = Modules::run('database/get_all', 'tb_batch_course_has_schedule')->result();
+        $get_all = Modules::run('database/find', 'tb_batch_course_has_schedule', ['id_batch_course' => $id])->result();
         $no = 0;
         $data = [];
         foreach ($get_all as $data_table) {
             $id_encrypt = $this->encrypt->encode($data_table->id);
 
-            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course_schedule/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
+            $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', "batch_course/schedule/edit/$id?data=" . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
             $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
-            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course_schedule/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
-
-            $get_batch_course = Modules::run("database/find", "tb_batch_course", ["id" => $data_table->id_batch_course])->row();
+            $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course/schedule/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
 
             $media = '';
             if ($data_table->media == 1) {
@@ -55,16 +55,14 @@ class Batch_course_schedule extends BackendController
             $no++;
             $row = [];
             $row[] = $no;
-            $row[] = $get_batch_course->title;
             $row[] = $data_table->title;
             $row[] = "<i class='fa fa-calendar-alt mb-2'></i> <b>" . Modules::run('helper/date_indo', $data_table->date, '-') . "</b><br><b>"
             . date('H:i:s', strtotime($data_table->starting_time)) . "</b>" . 
             "<p style='color: gray; margin-top: 0px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-clock'> S/D</i></p><b>"
-            . date('H:i:s', strtotime($data_table->ending_type)) . "</b>"
-            ;
+            . date('H:i:s', strtotime($data_table->ending_type)) . "</b>";
             $row[] = $media;
             $row[] =
-            '<img src="' . base_url("upload/barcode/$data_table->id" . ".png") . '" class="img-fluid popupqrcode">';
+            '<img src="' . base_url("upload/barcode/$data_table->id" . ".png") . '" style="width: 55%;" class="img-fluid popupqrcode">';
             $row[] = $btn_detail . $btn_edit . $btn_delete;
             $data[] = $row;
         }
@@ -76,26 +74,26 @@ class Batch_course_schedule extends BackendController
         echo json_encode($ouput);
     }
 
-    public function add()
+    public function add($id_batch)
     {
-        $this->app_data['batch_course'] = Modules::run('database/get_all', 'tb_batch_course')->result();
+        $this->app_data['batch_course'] = Modules::run('database/find', 'tb_batch_course', ['id' => $id_batch])->row();   
         $this->app_data['media']        = Modules::run('database/find', 'app_module_setting', ['params' => 'media'])->result();
         $this->app_data['method']       = 'add';
         $this->app_data['page_title']   = 'Tambah Jadwal';
-        $this->app_data['view_file']   = 'form_add';
+        $this->app_data['view_file']   = 'schedule_add';
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
-    public function edit()
+    public function edit($id_batch)
     {
         Modules::run('security/is_axist_data', ['method' => 'get', 'name' => 'data', 'encrypt' => true, "redirect" => Modules::run('helper/create_url', "/batch_course_schedule")]);
         $id = $this->encrypt->decode($this->input->get("data"));
-        $this->app_data['batch_course'] = Modules::run('database/get_all', 'tb_batch_course')->result();
+        $this->app_data['batch_course'] = Modules::run('database/find', 'tb_batch_course', ['id' => $id_batch])->row();
         $this->app_data['method']       = 'update';
         $this->app_data['data_detail']  = Modules::run('database/find', 'tb_batch_course_has_schedule', ['id' => $id])->row();
         $this->app_data['media']        = Modules::run('database/find', 'app_module_setting', ['params' => 'media'])->result();
         $this->app_data['page_title']   = 'Edit Jadwal';
-        $this->app_data['view_file']    = 'form_add';
+        $this->app_data['view_file']    = 'schedule_add';
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
@@ -155,7 +153,7 @@ class Batch_course_schedule extends BackendController
         $this->app_data['ending_time']  = $ending_time->end;
         $this->app_data['module_js']  = ['absensi'];
         $this->app_data['page_title']   = "Detail Jadwal Pertemuan";
-        $this->app_data['view_file']    = 'view_detail';
+        $this->app_data['view_file']    = 'schedule_detail';
         echo Modules::run('template/main_layout', $this->app_data);
     }
 
@@ -292,7 +290,7 @@ class Batch_course_schedule extends BackendController
 
         $qrcode = $this->create_qr_code($get_id->id);
 
-        $redirect = Modules::run('helper/create_url', 'batch_course_schedule');
+        $redirect = Modules::run('helper/create_url', "batch_course/schedule/index/$id_batch_course");
 
         echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
@@ -325,7 +323,7 @@ class Batch_course_schedule extends BackendController
 
         Modules::run("database/update", "tb_batch_course_has_schedule", ['id' => $id], $array_update);
 
-        $redirect = Modules::run('helper/create_url', 'batch_course_schedule');
+        $redirect = Modules::run('helper/create_url', "batch_course/schedule/index/$id_batch_course");
 
         echo json_encode(['status' => true, 'redirect' => $redirect]);
     }

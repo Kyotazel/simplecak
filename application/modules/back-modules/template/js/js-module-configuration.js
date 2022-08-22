@@ -21,8 +21,9 @@ $(document).ready(function () {
     });
 
     $('.datetimepickera').datetimepicker({
+        setDatesDisabled: true,
         autoclose: true,
-        format: 'yyyy-mm-dd hh:ii:00'
+        format: 'hh:ii:00'
     })
 
     // var today = new Date('16-01-2022');

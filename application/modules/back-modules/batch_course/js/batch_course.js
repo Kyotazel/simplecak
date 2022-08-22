@@ -2,6 +2,7 @@ var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '
 var save_method;
 var id_use = 0;
 var table;
+var list = $("#timeline").val();
 table_add = $('#table_add').DataTable({});
 table_peserta = $('#table_peserta').DataTable({});
 
@@ -9,17 +10,9 @@ $(document).ready(function () {
     table = $('#table_data').DataTable({
         "responsive": true,
         "ajax": {
-            "url": url_controller + "list_data" + "?token=" + _token_user,
+            "url": url_controller + list + "?token=" + _token_user,
             "type": "POST",
         },
-        "columns": [
-            { "width": "10%" },
-            { "width": "15%" },
-            { "width": "20%" },
-            { "width": "15%" },
-            { "width": "15%" },
-            { "width": "25%" },
-        ],
         "columnDefs": [
             {
                 "targets": 5,
@@ -171,7 +164,7 @@ function modal_peserta(batch_course) {
         },
         "columnDefs": [
             {
-                "targets": 3,
+                "targets": [2, 3],
                 "className": "text-center"
             }
         ]
@@ -226,6 +219,40 @@ $(document).on('click', '.btn_delete_peserta', function () {
             })
             table_peserta.ajax.reload(null, false);
             table.ajax.reload(null, false);
+        }
+    })
+})
+
+$(document).on('click', '#confirm_account', function () {
+    id = $(this).data('id');
+    $.ajax({
+        url: url_controller + "update_confirm" + "?token=" + _token_user,
+        type: "POST",
+        data: {id: id},
+        dataType: "JSON",
+        success: function(data) {
+            if(data.status) {
+                notif({
+                    msg: `<b>Sukses : </b> Data berhasil Dikonfirmasi`,
+                    type: "success"
+                })
+                table_peserta.ajax.reload(null, false);
+            }
+        }
+    })
+})
+
+$(document).on('click', '#confirm_detail', function () {
+    id = $(this).data('id');
+    $.ajax({
+        url: url_controller + "update_confirm" + "?token=" + _token_user,
+        type: "POST",
+        data: {id: id},
+        dataType: "JSON",
+        success: function(data) {
+            if(data.status) {
+                $( "#here" ).load(window.location.href + " #here" ); 
+            }
         }
     })
 })

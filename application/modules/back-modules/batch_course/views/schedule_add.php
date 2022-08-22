@@ -11,17 +11,8 @@
                             <label for="id_batch_course">Tipe Gelombang Pelatihan</label>
                         </div>
                         <div class="col-md-9">
-                            <select name="id_batch_course" id="id_batch_course" class="form-control select2">
-                                <?php
-                                foreach ($batch_course as $value) {
-                                    if (isset($data_detail->id_batch_course)) {
-                                        $selected = ($value->id == $data_detail->id_batch_course) ? 'selected' : '';
-                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->title . '</option>';
-                                    } else {
-                                        echo "<option value='$value->id'>$value->title</option>";
-                                    }
-                                }
-                                ?>
+                            <select name="id_batch_course" id="id_batch_course" class="form-control select2" readonly>
+                                <option value="<?= $batch_course->id ?>"><?= $batch_course->title ?></option>
                             </select>
                         </div>
                     </div>

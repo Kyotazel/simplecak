@@ -1,21 +1,23 @@
-var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '/';
+var url_controller = baseUrl + '/' + prefix_folder_admin + '/';
 var save_method;
 var id_use = 0;
 var table;
+var id_batch = $("#id_batch").val();
 table = $('#table_data').DataTable({})
 
 $(document).ready(function () {
+    
     table.destroy();
     table = $('#table_data').DataTable({
         "ajax": {
-            "url": url_controller + "list_data" + "?token=" + _token_user,
+            "url": url_controller + "batch_course/schedule/list_data/" + id_batch + "?token=" + _token_user,
             "type": "POST",
         },
         "columnDefs": [
-            // {
-            //     "targets": [2, 3, 5],
-            //     "className": "text-center"
-            // }
+            {
+                "targets": [2, 3, 4, 5],
+                "className": "text-center"
+            }
         ]
     })
 })
@@ -48,7 +50,7 @@ $('.btn_save').click(function (e) {
     }
 
     $.ajax({
-        url: url_controller + url + '?token' + _token_user,
+        url: url_controller + "batch_course/schedule/" + url + '?token' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
@@ -91,7 +93,7 @@ $(document).on('click', '.btn_delete', function () {
         function (isConfirm) {
             if (isConfirm) {
                 $.ajax({
-                    url: url_controller + 'delete_data' + '?token=' + _token_user,
+                    url: url_controller + "batch_course/schedule/"  + 'delete_data' + '?token=' + _token_user,
                     type: "POST",
                     dataType: "JSON",
                     data: { 'id': id },

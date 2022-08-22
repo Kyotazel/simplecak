@@ -7,14 +7,15 @@
                     <div class="col-md-4 text-right">
                     <?= Modules::run('security/create_access', '<a href="' . Modules::run('helper/create_url', 'batch_course/add') . '" class="btn btn-primary "> <i class="fa fa-plus-circle"></i> Tambah Batch Pelatihan</a>'); ?>
                     </div>
+                    <input type="hidden" id="timeline" value="<?= $timeline ?>">
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-bordered table-responsive table-hover" id="table_data" style="width: 100%;">
+                    <table class="table table-bordered table-hover" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
                                 <th><span>Judul Pelatihan</span></th>
-                                <th><span>Tipe Pelatihan</span></th>
+                                <th><span>Resume Jadwal</span></th>
                                 <th><span>Peserta Pelatihan</span></th>
                                 <th><span>Tanggal Pelatihan</span></th>
                                 <th><span>Action</span></th>
@@ -81,7 +82,7 @@
                                 <tr>
                                     <th><span>No</span></th>
                                     <th><span>Nama Akun</span></th>
-                                    <th><span>keahlian</span></th>
+                                    <th><span>Konfirmasi</span></th>
                                     <th><span>Action</span></th>
                                 </tr>
                             </thead>
