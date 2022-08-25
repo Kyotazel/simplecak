@@ -54,6 +54,7 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/responsivebootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/summernote/summernote-bs4.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/custom.css" rel="stylesheet">
 
     <style>
@@ -416,8 +417,6 @@
     <!-- Sticky js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>js/sticky.js"></script>
 
-    <!-- Custom js -->
-    <script src="<?= base_url('assets/themes/spruhha/') ?>js/custom.js"></script>
     <!-- Switcher js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>switcher/js/switcher.js"></script>
 
@@ -439,7 +438,8 @@
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.colVis.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
-
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/summernote/summernote-bs4.js"></script>
+    
     <!-- jrsoftmedia setting -->
     <script src="<?= base_url('assets/plugin/'); ?>notify/js/notifIt.js"></script>
     <script src="<?= base_url('assets/plugin/'); ?>jQuery-Scanner/jquery.scannerdetection.js" type="text/javascript"></script>
@@ -447,6 +447,9 @@
     <script src="<?php echo base_url('assets/plugin/'); ?>print_js/print.min.js"></script>
 
     <script src="<?= base_url('assets/plugin/'); ?>darggable/jquery-ui-darggable.min.js"></script>
+
+    <!-- Custom js -->
+    <script src="<?= base_url('assets/themes/spruhha/') ?>js/custom.js"></script>
 
     <!--   ckeditor -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>ckeditor/ckeditor.js"></script>

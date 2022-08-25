@@ -24,7 +24,6 @@ class Package_question extends BackendController
 
     public function index()
     {
-
         $this->app_data['page_title']    = "Bank Soal";
         $this->app_data['view_file']     = 'main_view';
         echo Modules::run('template/main_layout', $this->app_data);
@@ -83,7 +82,8 @@ class Package_question extends BackendController
     {
         $id = $this->encrypt->decode($this->input->get('data'));
 
-        $this->app_data['data_detail']   = Modules::run('database/find', 'tb_package_category', ['id' => $id])->row();
+        $this->app_data['data_detail']   = Modules::run('database/find', 'tb_package_question', ['id' => $id])->row();
+        $this->app_data['type_package'] = Modules::run('database/get_all', 'tb_package_category')->result();
         $this->app_data['method']        = 'update';
         $this->app_data['page_title']    = 'Ubah Pelatihan';
         $this->app_data['view_file']     = 'form_add';
@@ -155,20 +155,26 @@ class Package_question extends BackendController
         Modules::run('security/is_ajax');
         $this->validate_save();
 
-        $id            = $this->input->post('id');
-        $name          = $this->input->post("name");
-        $description   = $_POST["description"];
+        $id                     = $this->input->post('id');
+        $code                   = $this->input->post('code');
+        $id_type_package        = $this->input->post('id_type_package');
+        $creator_name           = $this->input->post('creator_name');
+        $name                   = $this->input->post("name")    ;
+        $min_value_graduation   = $this->input->post('min_value_graduation');
 
         $array_update = [
-            'name' => $name,
-            'description' => $description,
-            'updated_by' => $this->session->userdata('us_id'),
-            'updated_date' => date('Y-m-d h:i:sa')
+            'code'                  => $code,
+            'id_type_package'       => $id_type_package,
+            'creator_name'          => $creator_name,
+            'name'                  => $name,
+            'min_value_graduation'  => $min_value_graduation,
+            'updated_by'            => $this->session->userdata('us_id'),
+            'updated_date'          => date('Y-m-d h:i:sa')
         ];
 
-        Modules::run('database/update', 'tb_package_category', ['id' => $id], $array_update);
+        Modules::run('database/update', 'tb_package_question', ['id' => $id], $array_update);
 
-        $redirect = Modules::run('helper/create_url', 'package_category');
+        $redirect = Modules::run('helper/create_url', 'package_question');
         echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
 
@@ -177,7 +183,7 @@ class Package_question extends BackendController
         Modules::run('security/is_ajax');
         $id = $this->encrypt->decode($this->input->post("id"));
 
-        Modules::run('database/delete', 'tb_package_category', ['id' => $id]);
+        Modules::run('database/delete', 'tb_package_question', ['id' => $id]);
         echo json_encode(['status' => true]);
     }
 }

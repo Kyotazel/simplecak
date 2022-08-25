@@ -108,6 +108,11 @@ if ($('.ckeditor_form').length) {
 
 }
 
+$('.summernote').summernote({
+    placeholder: "Masukkan Teks...",
+    height: 150
+});
+
 $(document).on('keyup', '.search_menu', function () {
     var value_current = $(this).val();
     autocomplete_search_menu();

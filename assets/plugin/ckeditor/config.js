@@ -32,6 +32,8 @@ CKEDITOR.editorConfig = function( config ) {
     config.apiKey = "F1LRDFLT";
     config.skin = "n1theme";
 
+	config.removePlugins = 'CreateDiv';
+
     // // config.removePlugins = "iframe";
 };
 

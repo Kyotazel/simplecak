@@ -130,9 +130,9 @@ $(function() {
 	// ______________Back-top-button
 	$(window).on("scroll", function(e) {
 		if ($(this).scrollTop() > 0) {
-			$('#back-to-top').fadeIn('slow');
+			$('#back-to-top').fadeIn('slim');
 		} else {
-			$('#back-to-top').fadeOut('slow');
+			$('#back-to-top').fadeOut('slim');
 		}
 	});
 	$(document).on("click", "#back-to-top", function(e) {
