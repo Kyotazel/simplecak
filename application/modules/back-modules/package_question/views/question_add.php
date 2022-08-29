@@ -14,28 +14,10 @@
                     <h3>Form Pembuatan Soal</h3>
                 </div>
                 <div class="card-body">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-12">
+                    <div class="row d-flex">
+                        <div class="col-md-12 mb-2">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Upload Gambar (Opsional)</span>
-                                <p></p>
-                            </div>
-                            <div class="row row-sm">
-                                <div class="col-sm-12 col-md-12 col-lg-12">
-                                    <div class="input-group file-browser">
-                                        <input type="text" class="form-control border-right-0 browse-file" placeholder="choose" readonly>
-                                        <label class="input-group-btn">
-                                            <span class="btn btn-primary">
-                                                Browse <input name="file_media" type="file" style="display: none;">
-                                            </span>
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-12 mt-3 mb-2">
-                            <div class="mg-b-5">
-                                <span class="badge badge-primary">Text Pertanyaan</span>
+                                <span class="btn btn-primary btn-sm">Text Pertanyaan</span>
                                 <p></p>
                             </div>
                             <div>
@@ -45,47 +27,47 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda A</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda 1</span>
                                 <p></p>
                             </div>
                             <div>
-                                <textarea name="result_a" id="result_a" class="ckeditor_forma" cols="30" rows="10"><?= isset($data_detail->text_question) ? $data_detail->text_question : ''; ?></textarea>
+                                <textarea name="result_1" id="result_1" class="ckeditor_forma" cols="30" rows="10"><?= isset($answer[1]) ? $answer[1] : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda B</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda 2</span>
                                 <p></p>
                             </div>
                             <div>
-                                <textarea name="result_b" id="result_b" class="ckeditor_forma" cols="30" rows="10"><?= isset($data_detail->text_question) ? $data_detail->text_question : ''; ?></textarea>
+                                <textarea name="result_2" id="result_2" class="ckeditor_forma" cols="30" rows="10"><?= isset($answer[2]) ? $answer[2] : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda C</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda 3</span>
                                 <p></p>
                             </div>
                             <div>
-                                <textarea name="result_c" id="result_c" class="ckeditor_forma" cols="30" rows="10"><?= isset($data_detail->text_question) ? $data_detail->text_question : ''; ?></textarea>
+                                <textarea name="result_3" id="result_3" class="ckeditor_forma" cols="30" rows="10"><?= isset($answer[3]) ? $answer[3] : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda D</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda 4</span>
                                 <p></p>
                             </div>
                             <div>
-                                <textarea name="result_d" id="result_d" class="ckeditor_forma" cols="30" rows="10"><?= isset($data_detail->text_question) ? $data_detail->text_question : ''; ?></textarea>
+                                <textarea name="result_4" id="result_4" class="ckeditor_forma" cols="30" rows="10"><?= isset($answer[4]) ? $answer[4] : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda E</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda 5</span>
                                 <p></p>
                             </div>
                             <div>
-                                <textarea name="result_e" id="result_e" class="ckeditor_forma" cols="30" rows="10"><?= isset($data_detail->text_question) ? $data_detail->text_question : ''; ?></textarea>
+                                <textarea name="result_5" id="result_5" class="ckeditor_forma" cols="30" rows="10"><?= isset($answer[5]) ? $answer[5] : ''; ?></textarea>
                             </div>
                         </div>
                         <div class="col-md-12">
@@ -93,30 +75,29 @@
                         </div>
                         <div class="col-md-12">
                             <div class="mg-b-5 mb-3">
-                                <span class="badge badge-primary">Jawaban</span>
+                                <span class="btn btn-primary btn-sm">Jawaban</span>
                             </div>
-                            <div class="row mg-t-10">
-                                <div class="col-lg-2">
-                                    <label class="rdiobox"><input name="answer" value="A" type="radio"> <span>Pilihan Ganda A</span></label>
+                            <div class="d-flex justify-content-around">
+                                <div class="p-2">
+                                    <label class="rdiobox"><input name="answer" <?= isset($data_detail->answer) ? ($data_detail->answer == 1 ? 'checked' : '') : '' ?> value="1" type="radio"> <span>Pilihan Ganda 1</span></label>
                                 </div>
-                                <div class="col-lg-2 mg-t-20 mg-lg-t-0">
-                                    <label class="rdiobox"><input name="answer" value="B" type="radio"> <span>Pilihan Ganda B</span></label>
+                                <div class="p-2 mg-t-20 mg-lg-t-0">
+                                    <label class="rdiobox"><input name="answer" <?= isset($data_detail->answer) ? ($data_detail->answer == 2 ? 'checked' : '') : '' ?> value="2" type="radio"> <span>Pilihan Ganda 2</span></label>
                                 </div>
-                                <div class="col-lg-2 mg-t-20 mg-lg-t-0">
-                                    <label class="rdiobox"><input name="answer" value="C" type="radio"> <span>Pilihan Ganda C</span></label>
+                                <div class="p-2 mg-t-20 mg-lg-t-0">
+                                    <label class="rdiobox"><input name="answer" <?= isset($data_detail->answer) ? ($data_detail->answer == 3 ? 'checked' : '') : '' ?> value="3" type="radio"> <span>Pilihan Ganda 3</span></label>
                                 </div>
-                                <div class="col-lg-2 mg-t-20 mg-lg-t-0">
-                                    <label class="rdiobox"><input name="answer" value="D" type="radio"> <span>Pilihan Ganda D</span></label>
+                                <div class="p-2 mg-t-20 mg-lg-t-0">
+                                    <label class="rdiobox"><input name="answer" <?= isset($data_detail->answer) ? ($data_detail->answer == 4 ? 'checked' : '') : '' ?> value="4" type="radio"> <span>Pilihan Ganda 4</span></label>
                                 </div>
-                                <div class="col-lg-2 mg-t-20 mg-lg-t-0 mb-3">
-                                    <label class="rdiobox"><input name="answer" value="E" type="radio"> <span>Pilihan Ganda E</span></label>
+                                <div class="p-2 mg-t-20 mg-lg-t-0 mb-3">
+                                    <label class="rdiobox"><input name="answer" <?= isset($data_detail->answer) ? ($data_detail->answer == 5 ? 'checked' : '') : '' ?> value="5" type="radio"> <span>Pilihan Ganda 5</span></label>
                                 </div>
                             </div>
-                            <hr>
                         </div>
                         <div class="col-md-12">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Penyelesaian (Opsional)</span>
+                                <span class="btn btn-primary btn-sm">Penyelesaian (Opsional)</span>
                                 <p></p>
                             </div>
                             <div>
@@ -147,7 +128,7 @@
                     <div class="row">
                         <div class="col-lg-6 col-md-12">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Upload Gambar (Opsional)</span>
+                                <span class="btn btn-primary btn-sm">Upload Gambar (Opsional)</span>
                                 <p></p>
                             </div>
                             <div class="row row-sm">
@@ -165,7 +146,7 @@
                         </div>
                         <div class="col-md-12 mt-3 mb-2">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Text Pertanyaan</span>
+                                <span class="btn btn-primary btn-sm">Text Pertanyaan</span>
                                 <p></p>
                             </div>
                             <div>
@@ -175,7 +156,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda A</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda A</span>
                                 <p></p>
                             </div>
                             <div>
@@ -184,7 +165,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda B</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda B</span>
                                 <p></p>
                             </div>
                             <div>
@@ -193,7 +174,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda C</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda C</span>
                                 <p></p>
                             </div>
                             <div>
@@ -202,7 +183,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda D</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda D</span>
                                 <p></p>
                             </div>
                             <div>
@@ -211,7 +192,7 @@
                         </div>
                         <div class="col-md-6 mt-3">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Pilihan Ganda E</span>
+                                <span class="btn btn-primary btn-sm">Pilihan Ganda E</span>
                                 <p></p>
                             </div>
                             <div>
@@ -223,7 +204,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="mg-b-5 mb-3">
-                                <span class="badge badge-primary">Jawaban</span>
+                                <span class="btn btn-primary btn-sm">Jawaban</span>
                             </div>
                             <div class="row mg-t-10">
                                 <div class="col-lg-2">
@@ -246,7 +227,7 @@
                         </div>
                         <div class="col-md-12">
                             <div class="mg-b-5">
-                                <span class="badge badge-primary">Penyelesaian (Opsional)</span>
+                                <span class="btn btn-primary btn-sm">Penyelesaian (Opsional)</span>
                                 <p></p>
                             </div>
                             <div>

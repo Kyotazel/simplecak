@@ -52,7 +52,7 @@ class Batch_course extends BackendController
             $btn_edit       = Modules::run('security/edit_access', ' <a href="' . Modules::run('helper/create_url', 'batch_course/edit?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" data-id="' . $id_encrypt . '" class="btn btn-sm btn-success"><i class="fas fa-edit"></i> </a>');
             $btn_delete     = Modules::run('security/delete_access', ' <a href="javascript:void(0)" data-id="' . $id_encrypt . '" class="btn btn-sm btn-danger btn_delete"><i class="fas fa-trash"></i> </a>');
             $btn_detail     = ' <a href="' . Modules::run('helper/create_url', 'batch_course/detail?data=' . urlencode($this->encrypt->encode($data_table->id))) . '" class="btn btn-sm btn-info"><i class="fa fa-tv"></i></a> ';
-            $btn_schedule   = " <a href='" . Modules::run('helper/create_url', 'batch_course/schedule/index/'. $data_table->id) . "' class='btn btn-sm btn-info text-light'><i class='fa fa-info-circle'></i> Detail</a>";
+            $btn_schedule   = " <a href='" . Modules::run('helper/create_url', 'batch_course/schedule/index/'. $data_table->id) . "' class='btn btn-sm btn-outline-info text-info'><i class='fa fa-info-circle'></i> Detail</a>";
 
             $array_peserta = [
                 "select" => "count(*) as total",

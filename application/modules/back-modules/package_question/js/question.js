@@ -2,20 +2,6 @@ var url_controller = baseUrl + "/" + prefix_folder_admin + "/";
 var save_method;
 var id_use = 0;
 var id_parent = $("#id_parent").val();
-var table = $("#table_question").DataTable({
-  ajax: {
-    url:
-      url_controller + "package_question/question/list_data/" + id_parent + "?token=" + _token_user,
-    type: "POST",
-  },
-  columns: [{ width: "10%" }, { width: "60%" }, { width: "20%" }],
-  columnDefs: [
-    {
-      targets: [0, 2],
-      className: "text-center",
-    },
-  ],
-});
 
 if ($(".ckeditor_forma").length) {
   $(".ckeditor_forma").ckeditor({
@@ -37,32 +23,32 @@ $(".btn_save").click(function (e) {
   var status;
   save_method = $(this).data("method");
   var text_question = CKEDITOR.instances["text_question"].getData();
-  var result_a = CKEDITOR.instances["result_a"].getData();
-  var result_b = CKEDITOR.instances["result_b"].getData();
-  var result_c = CKEDITOR.instances["result_c"].getData();
-  var result_d = CKEDITOR.instances["result_d"].getData();
-  var result_e = CKEDITOR.instances["result_e"].getData();
+  var result_1 = CKEDITOR.instances["result_1"].getData();
+  var result_2 = CKEDITOR.instances["result_2"].getData();
+  var result_3 = CKEDITOR.instances["result_3"].getData();
+  var result_4 = CKEDITOR.instances["result_4"].getData();
+  var result_5 = CKEDITOR.instances["result_5"].getData();
   var solution = CKEDITOR.instances["solution"].getData();
   if (save_method === "add") {
     url = "save";
     status = "Ditambahkan";
     formData.append("text_question", text_question);
-    formData.append("result_a", result_a);
-    formData.append("result_b", result_b);
-    formData.append("result_c", result_c);
-    formData.append("result_d", result_d);
-    formData.append("result_e", result_e);
+    formData.append("result_1", result_1);
+    formData.append("result_2", result_2);
+    formData.append("result_3", result_3);
+    formData.append("result_4", result_4);
+    formData.append("result_5", result_5);
     formData.append("solution", solution);
   } else {
     url = "update";
     status = "Diubah";
     formData.append("id", $(this).data("id"));
     formData.append("text_question", text_question);
-    formData.append("result_a", result_a);
-    formData.append("result_b", result_b);
-    formData.append("result_c", result_c);
-    formData.append("result_d", result_d);
-    formData.append("result_e", result_e);
+    formData.append("result_1", result_1);
+    formData.append("result_2", result_2);
+    formData.append("result_3", result_3);
+    formData.append("result_4", result_4);
+    formData.append("result_5", result_5);
     formData.append("solution", solution);
   }
 
@@ -119,6 +105,50 @@ $(document).on("click", ".btn_delete", function () {
       if (isConfirm) {
         $.ajax({
           url: url_controller + "package_question/" + "delete_data" + "?token=" +_token_user,
+          type: "POST",
+          dataType: "JSON",
+          data: { id: id },
+          success: function (data) {
+            if (data.status) {
+              notif({
+                msg: "<b>Sukses : </b> Data Berhasil Dihapus",
+                type: "success",
+              });
+
+              if (redirect == 1) {
+                location.href = url_controller + "package_question";
+              } else {
+                table.ajax.reload(null, false);
+              }
+            }
+          },
+          error: function (jqXHR, textStatus, errorThrown) {},
+        });
+      }
+    }
+  );
+});
+
+
+$(document).on("click", ".btn_delete_question", function () {
+  id = $(this).data("id");
+  var redirect = $(this).data("redirect");
+  swal(
+    {
+      title: "Apakah anda yakin?",
+      text: "data akan dihapus!",
+      type: "warning",
+      showCancelButton: true,
+      confirmButtonClass: "btn-danger",
+      confirmButtonText: "Ya , Lanjutkan",
+      cancelButtonText: "Batal",
+      closeOnConfirm: true,
+      closeOnCancel: true,
+    },
+    function (isConfirm) {
+      if (isConfirm) {
+        $.ajax({
+          url: url_controller + "package_question/question/" + "delete_data" + "?token=" +_token_user,
           type: "POST",
           dataType: "JSON",
           data: { id: id },

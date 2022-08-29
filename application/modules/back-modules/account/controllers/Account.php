@@ -54,10 +54,10 @@ class Account extends BackendController
             }
 
             if ($data_table->status == 1) {
-                $status = "<span class='badge badge-success'><i class='fa fa-check'></i> Sudah Dikonfirmasi</span>";
+                $status = "<span class='btn btn-sm btn-outline-success'><i class='fa fa-check'></i> Sudah Dikonfirmasi</span>";
             } else if ($data_table->status == 0) {
-                $status = "<span class='badge badge-warning'><i class='fa fa-info'></i> Belum Dikonfirmasi</span>
-                        <br><a href=# data-id='$data_table->id' id='confirm_account'><span class='badge badge-primary'><i class='fa fa-check'></i> Konfirmasi Akun</span></a>";
+                $status = "<span class='btn btn-sm btn-outline-warning text-warning mb-1'><i class='fa fa-info'></i> Belum Dikonfirmasi</span>
+                        <br><a href=# data-id='$data_table->id' id='confirm_account'><span class='btn btn-sm btn-outline-primary'><i class='fa fa-check'></i> Konfirmasi Akun</span></a>";
             }
 
             $no++;

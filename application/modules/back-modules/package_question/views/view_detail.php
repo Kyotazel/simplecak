@@ -30,36 +30,3 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
         </div>
     </div>
 </div>
-
- <!-- <input type="hidden" name="end_date" id="end_date" value="<?= $data_detail->closing_registration_date ?>">
-                                    <div class="row expired d-none">
-                                        <div class="text-center">
-                                            <h2 class="text-danger">E X P I R E D</h2>
-                                        </div>
-                                    </div>
-                                    <div class="row not_expired">
-                                        <div class="col-xl-3 col-lg-6 col-sm-6 p-0 border">
-                                            <div class="card-body py-1 text-center">
-                                                <h4 class="text-primary"><span class="day"></span></h4>
-                                                <h6 class="mb-0" style="font-size: 12px;">Hari</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-lg-6 col-sm-6 p-0 border">
-                                            <div class="card-body py-1 text-center">
-                                                <h4 class="text-primary"><span class="hour"></span></h4>
-                                                <h6 class="mb-0" style="font-size: 12px;">Jam</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-lg-6 col-sm-6 p-0 border">
-                                            <div class="card-body py-1 text-center">
-                                                <h4 class="text-primary"><span class="minute"></span></h4>
-                                                <h6 class="mb-0" style="font-size: 12px;">Menit</h6>
-                                            </div>
-                                        </div>
-                                        <div class="col-xl-3 col-lg-6 col-sm-6 p-0 border">
-                                            <div class="card-body py-1 text-center">
-                                                <h4 class="text-primary"><span class="second"></span></h4>
-                                                <h6 class="mb-0" style="font-size: 12px;">Detik</h6>
-                                            </div>
-                                        </div>
-                                    </div> -->

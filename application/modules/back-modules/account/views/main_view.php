@@ -26,7 +26,6 @@
                 </div>
             </div>
             <div class="card-footer">
-                <h2>Test</h2>
             </div>
         </div>
     </div>

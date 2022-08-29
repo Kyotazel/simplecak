@@ -1,3 +1,12 @@
+<style>
+    .borderless thead th,
+    .borderless tbody,
+    .borderless tbody tr,
+    .borderless tbody td {
+        border-style: none !important;
+    }
+</style>
+
 <div class="row row-sm main-content-mail">
     <div class="col-md-12 container_list">
         <div class="card">
@@ -9,7 +18,7 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table class="table table-borderless" id="table_data" style="width: 100%;">
+                    <table class="table borderless" id="table_data" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th><span>No</span></th>
