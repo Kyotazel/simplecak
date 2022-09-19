@@ -25,7 +25,7 @@ class Security extends CommonController
     {
         $token      = $this->session->userdata('member_token_login');
         $id_user    = $this->session->userdata('member_id');
-        $get_data   = Modules::run('database/find', 'mst_customer', ['id' => $id_user])->row();
+        $get_data   = Modules::run('database/find', 'tb_account', ['id' => $id_user])->row();
 
         if ($token == '' || !isset($get_data->token) || $get_data->token == '') {
             //create url

@@ -6,211 +6,220 @@ var table;
 $(document).ready(function () {
     $('.chosen').chosen();
    // show_chart_resume_invoice();
-    list_order(1);
-
-    if($('#table_unloading').length){
-        list_data_unloading(0);
-    }
-    if($('#table_return').length){
-        list_data_return(0);
-    }
+    show_resume_invoice();
+    show_resume_cost();
 
 });
 
-function list_order(status) {
-    showLoading();
-    var status_filter = 'proceed';
-    if ($('.status_booking_chosen.active').length) {
-        status_filter = $('.status_booking_chosen.active').data('value');
+$(document).on('click', '#btn_search_chart_resume_invoice', function (e) { 
+    e.preventDefault();
+    show_resume_invoice();
+});
+
+function show_resume_invoice() {
+    var formData = new FormData($('.form_resume_bs')[0]);
+    // showLoading();
+    $('#container_bar_invoice').html(`
+        <div class="text-center" style="padding:30px 0px;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    `);
+
+    $.ajax({
+        url: url_controller+'show_resume_invoice'+'/?token='+_token_user,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData : false,
+        dataType: "JSON",
+        success: function (data) {
+
+            $('#container_bar_invoice').html('');
+            console.log(data);
+            $('.text-invoice-freight').text('Rp.'+money_function(data.resume.freight.toString()));
+            $('.text-invoice-lc').text('Rp.'+money_function(data.resume.lc.toString()));
+            $('.text-invoice-thc').text('Rp.'+money_function(data.resume.thc.toString()));
+            $('.text-invoice-activity').text('Rp.' + money_function(data.resume.activity.toString()));
+            
+            console.log(data.data_chart);
+
+            show_chart_resume_invoice('#container_bar_invoice',data.label,data.data_chart);
+        },
+        error:function(jqXHR, textStatus, errorThrown)
+        {
+            $('#container_bar_invoice').html('');
+        }
+    });//end ajax
+}
+
+function show_chart_resume_invoice(container,label,data_chart) {
+    /* Apexcharts (#bar) */
+	var optionsBar = {
+        chart: {
+          height: 249,
+          type: 'bar',
+          toolbar: {
+             show: false,
+          },
+          fontFamily: 'Nunito, sans-serif',
+          // dropShadow: {
+          //   enabled: true,
+          //   top: 1,
+          //   left: 1,
+          //   blur: 2,
+          //   opacity: 0.2,
+          // }
+        },
+       colors: ["#0162e8", '#fbbc0b','#ee335e' ,'#22c03c'],
+       plotOptions: {
+                    bar: {
+                    dataLabels: {
+                        enabled: false
+                    },
+                        columnWidth: '42%',
+                        endingShape: 'rounded',
+                    }
+                },
+        dataLabels: {
+            enabled: false
+        },
+        stroke: {
+            show: true,
+            width: 2,
+            endingShape: 'rounded',
+            colors: ['transparent'],
+        },
+        responsive: [{
+            breakpoint: 576,
+            options: {
+                    stroke: {
+                    show: true,
+                    width: 1,
+                    endingShape: 'rounded',
+                    colors: ['transparent'],
+                },
+            },
+        }],
+        series: data_chart,
+        xaxis: {
+            categories: label,
+        },
+        fill: {
+            opacity: 0.8
+        },
+        legend: {
+            show: false,
+            floating: true,
+            position: 'top',
+            horizontalAlign: 'center',
+        },
+        tooltip: {
+            y: {
+                formatter: function (val) {
+                    return "Rp. " + money_function(val.toString()) 
+                }
+            }
+        }
     }
-    var formData = new FormData($('#form-search')[0]);
-    formData.append('status_search', status);
-    formData.append('status_filter',status_filter);
+    new ApexCharts(document.querySelector(container), optionsBar).render();
+      /* Apexcharts (#bar) closed */
+}
+
+$(document).on('click', '.btn_search_cost', function (e) { 
+    e.preventDefault();
+    show_resume_cost();
+});
+
+function show_resume_cost() {
+    var formData = new FormData($('.form_search_cost')[0]);
+    // showLoading();
+    $('.container_line_cost').html(`
+        <div class="text-center" style="padding:30px 0px;">
+            <div class="spinner-border" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+        </div>
+    `);
+
     $.ajax({
-        url: baseUrl + '/' + prefix_folder_admin + '/booking/list_data/?token='+_token_user,
+        url: url_controller+'show_resume_cost'+'/?token='+_token_user,
         type: "POST",
         data: formData,
         contentType: false,
         processData : false,
-        dataType :"JSON",
+        dataType: "JSON",
         success: function (data) {
-            hideLoading();
-            $('.html_respon_order').html(data.html_respon);
-            if ($(document).find('.countdown_ticket').length) {
-                countdown_timer_ticket();
-            }
+            $('.container_line_cost').html('');
+            $('.container_line_cost').append('<canvas id="line_cost"></canvas>');
+            console.log(data.data_chart);
+            show_chart_resume_cost('#line_cost',data.label,data.data_chart);
         },
         error:function(jqXHR, textStatus, errorThrown)
         {
-            hideLoading();
+            $('.container_line_cost').html('');
         }
-	});//end ajax
-}
-
-function list_data_unloading(status) {
-    showLoading();
-    var formData = new FormData($('#form-search-unloading')[0]);
-    formData.append('status_search', status);
-    $.ajax({
-        url: baseUrl + '/' + prefix_folder_admin + '/booking/list_data_unloading/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function (data) {
-            hideLoading();
-            if ($.fn.DataTable.isDataTable('#table_unloading')) {
-                table.destroy();
-            }
-            table = $('#table_unloading').DataTable({
-                data: data.list.data,
-                "columns": [
-                    { "width": "5%" },
-                    { "width": "20%" },
-                    { "width": "15%" },
-                    { "width": "15%" },
-                    { "width": "15%" },
-                    { "width": "30%" },
-                ]
-            });
-
-            countdown_timer_unloading();
-            countdown_up_unloading();
-
-            $(document).find('#cover-search').remove();
-            $('.form-print').append(`
-                <div id="cover-search"><input type="hidden" name="search" value="`+data.search+`"></div>
-            `);
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-            swal.close();
-        }
-	});//end ajax
-}
-
-function list_data_return(status) {
-    showLoading();
-    var formData = new FormData($('#form-search-return')[0]);
-    formData.append('status_search', status);
-    $.ajax({
-        url: baseUrl + '/' + prefix_folder_admin + '/booking/list_data_return/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function (data) {
-            hideLoading();
-            if ($.fn.DataTable.isDataTable('#table_return')) {
-                table.destroy();
-            }
-            table = $('#table_return').DataTable({
-                data: data.list.data,
-                "columns": [
-                    { "width": "5%" },
-                    { "width": "20%" },
-                    { "width": "15%" },
-                    { "width": "15%" },
-                    { "width": "15%" },
-                    { "width": "30%" },
-                ]
-            });
-
-            $(document).find('#cover-search').remove();
-            $('.form-print').append(`
-                <div id="cover-search"><input type="hidden" name="search" value="`+data.search+`"></div>
-            `);
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-            swal.close();
-        }
-	});//end ajax
+    });//end ajax
 }
 
 
-function countdown_timer_unloading() {
-    var x = setInterval(function() {
-        $('.countdown_unloading').each(function () {
-            type = $(this).data('type');
-            //alert(type);
-            
-            if (type == 'datetime') {
-                date_to = $(this).data('date-to');
-            } else {
-                date_to = $(this).data('date-to') + ' 00:00:00';
-            }
-            
-            selector = $(this);
-            console.log(date_to);
-            var countDownDate = new Date(date_to).getTime();
-            // Get today's date and time
-            var now = new Date().getTime();
-
-            // Find the distance between now and the count down date
-            var distance = countDownDate - now;
-
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            selector.find('.text_day').text(days);
-            selector.find('.text_hour').text(hours);
-            selector.find('.text_minute').text(minutes);
-            selector.find('.text_second').text(seconds);
-            // If the count down is finished, write some text
-            if (distance < 0) {
-                //clearInterval(x);
-                selector.parent().html(`
-                    <h3 class="text-muted text-center">EXPIRED</h3>
-                `);
-            }
-        });
-
-    }, 1000);
+function show_chart_resume_cost(container,label,data_chart) {
+    var ctx8 = $(document).find(container);
+	new Chart(ctx8, {
+		type: 'line',
+		data: {
+			labels: label,
+            datasets: [
+                {
+                    data: data_chart,
+                    borderColor: '#f7557a',
+                    borderWidth: 1,
+                    fill: false
+                }
+            ]
+		},
+		options: {
+			maintainAspectRatio: false,
+			legend: {
+				display: false,
+				labels: {
+					display: false
+				}
+			},
+			scales: {
+				yAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontSize: 10,
+						// max: 80,
+						fontColor: "rgba(171, 167, 167,0.9)",
+					},
+					gridLines: {
+						display: true,
+						color: 'rgba(171, 167, 167,0.2)',
+						drawBorder: false
+					},
+				}],
+				xAxes: [{
+					ticks: {
+						beginAtZero: true,
+						fontSize: 11,
+						fontColor: "rgba(171, 167, 167,0.9)",
+					},
+					gridLines: {
+						display: true,
+						color: 'rgba(171, 167, 167,0.2)',
+						drawBorder: false
+					},
+				}]
+			}
+		}
+	});
 }
 
-function countdown_up_unloading() {
-    var x = setInterval(function() {
-        $('.countup_unloading').each(function () {
-            type = $(this).data('type');
-            //alert(type);
-            
-            if (type == 'datetime') {
-                date_to = $(this).data('date-to');
-            } else {
-                date_to = $(this).data('date-to') + ' 00:00:00';
-            }
-            
-            selector = $(this);
-            console.log(date_to);
-            var countDownDate = new Date(date_to).getTime();
-            // Get today's date and time
-            var now = new Date().getTime();
 
-            // Find the distance between now and the count down date
-            var distance = now - countDownDate ;
 
-            // Time calculations for days, hours, minutes and seconds
-            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            selector.find('.text_day').text(days);
-            selector.find('.text_hour').text(hours);
-            selector.find('.text_minute').text(minutes);
-            selector.find('.text_second').text(seconds);
-        });
-
-    }, 1000);
-}
 
 $(document).on('keyup', '.rupiah', function () {
     var new_val = money_function($(this).val());

@@ -3,7 +3,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 class Schedule extends BackendController
 {
-    var $module_name = 'batch_course';
+    var $module_name = 'schedule';
     var $module_directory = 'batch_course';
     var $module_js = ['schedule'];
     var $app_data = [];

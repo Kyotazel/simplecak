@@ -1,86 +1,385 @@
-<div class="row row-sm">
-    <div class="col-lg-12 col-xl-12 col-md-12 col-sm-12">
-        <div class="card  box-shadow-0">
+<div class="row row-sm main-content-mail">
+    <div class="col-md-12 container_list">
+        <div class="card mb-5">
             <div class="card-header">
-                <h4 class="card-title mb-1">INPUT USER</h4>
-                <p class="mb-2">silahkan isi form dengan benar.</p>
+                <h2>Biodata</h2>
             </div>
-            <div class="card-body pt-0">
-                <form class="form-horizontal form-input">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Nama Lengkap</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="name" placeholder="nama lengkap..">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" name="email" placeholder="Email...">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Telp</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="phone_number" placeholder="telp..">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-1">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Alamat Lengkap</label>
-                                <div class="col-sm-10">
-                                    <textarea name="address" class="form-control" i cols="30" rows="10"></textarea>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
+            <div class="card-body">
+                <form class="form-input">
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label class for="no_ktp">NIK</label>
                         </div>
-                        <div class="col-md-6">
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-3 control-label text-right">Credential</label>
-                                <div class="col-sm-9">
-                                    <select name="credential" class="form-control">
-                                        <?php
-                                        foreach ($all_credential as $item_credential) {
-                                            echo '
-                                                    <option value="' . $item_credential->id . '">' . $item_credential->name . '</option>
-                                                ';
-                                        }
-                                        ?>
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-3 control-label text-right">username</label>
-                                <div class="col-sm-9">
-                                    <input type="text" name="username" class="form-control" id="inputEmail3" placeholder="username..">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label for="inputPassword3" class="col-sm-3 control-label text-right">Password</label>
-                                <div class="col-sm-9">
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2 ">
-                                <label for="inputPassword3" class="col-sm-3 control-label text-right">Ulangi Password</label>
-                                <div class="col-sm-9">
-                                    <input type="password" class="form-control" name="re_password" placeholder="Password">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group mb-2 text-right mt-3">
-                                <a href="<?= Modules::run('helper/create_url', 'app_user') ?>" class="btn btn-primary"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
-                                &nbsp;&nbsp;&nbsp;
-                                <button class="btn btn-primary btn_save" data-method="add"><i class="fa fa-save"></i> Simpan User</button>
-                            </div>
+                        <div class="col-md-9">
+                            <input type="number" id="no_ktp" name="no_ktp" class="form-control" placeholder="Masukkan No KTP..." value="<?= isset($data_detail->no_ktp) ? $data_detail->no_ktp : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="no_kk">No. KK</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="number" id="no_kk" name="no_kk" class="form-control" placeholder="Masukkan No KK..." value="<?= isset($data_detail->no_kk) ? $data_detail->no_kk : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="skill">Keahlian</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="skill[]" id="skill" class="form-control select2" multiple="multiple">
+                                <?php
+                                foreach ($skill as $value) {
+                                    $selected = (in_array($value->id, $detail_skill)) ? 'selected' : '';
+                                    echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="name">Nama Lengkap</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="name" name="name" class="form-control" placeholder="Masukkan Nama Lengkap" value="<?= isset($data_detail->name) ? $data_detail->name : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_last_education">Pendidikan</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_last_education" id="id_last_education" class="form-control select2">
+                                <?php
+                                foreach ($last_education as $value) {
+                                    if (isset($data_detail->id_last_education)) {
+                                        $selected = ($value->id == $data_detail->id_last_education) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="last_school">Asal Sekolah</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="last_school" name="last_school" class="form-control" placeholder="Masukkan Asal Sekolah" value="<?= isset($data_detail->last_school) ? $data_detail->last_school : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="email">Email</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="email" name="email" class="form-control" placeholder="Masukkan Email" value="<?= isset($data_detail->email) ? $data_detail->email : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="phone_number">No HP / Whatsapp</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="phone_number" name="phone_number" class="form-control" placeholder="628..." value="<?= isset($data_detail->phone_number) ? $data_detail->phone_number : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="birth_place">Tempat Lahir</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="birth_place" name="birth_place" class="form-control" placeholder="Tempat Lahir" value="<?= isset($data_detail->birth_place) ? $data_detail->birth_place : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="birth_date">Tanggal Lahir</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="birth_date" name="birth_date" class="form-control datepicker" placeholder="Tanggal Lahir" value="<?= isset($data_detail->birth_date) ? $data_detail->birth_date : '' ?>">
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="gender">Jenis Kelamin</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="gender" id="gender" class="form-control select2">
+                                <?php
+                                foreach ($gender as $value) {
+                                    if (isset($data_detail->gender)) {
+                                        $selected = ($value->value == $data_detail->gender) ? 'selected' : '';
+                                        echo '<option value="' . $value->value . '" ' . $selected . '>' . $value->label . '</option>';
+                                    } else {
+                                        echo "<option value='$value->value'>$value->label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="religion">Agama</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="religion" id="religion" class="form-control select2">
+                                <?php
+                                foreach ($religion as $value) {
+                                    if (isset($data_detail->religion)) {
+                                        $selected = ($value->value == $data_detail->religion) ? 'selected' : '';
+                                        echo '<option value="' . $value->value . '" ' . $selected . '>' . $value->label . '</option>';
+                                    } else {
+                                        echo "<option value='$value->value'>$value->label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="married_status">Status Menikah</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="married_status" id="married_status" class="form-control select2">
+                                <?php
+                                foreach ($married as $value) {
+                                    if (isset($data_detail->married_status)) {
+                                        $selected = ($value->value == $data_detail->married_status) ? 'selected' : '';
+                                        echo '<option value="' . $value->value . '" ' . $selected . '>' . $value->label . '</option>';
+                                    } else {
+                                        echo "<option value='$value->value'>$value->label</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_province">Provinsi Asal</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_province" id="id_province" class="form-control select2">
+                                <?php
+                                foreach ($provinsi as $value) {
+                                    if (isset($data_detail->id_province)) {
+                                        $selected = ($value->id == $data_detail->id_province) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_city">Kota Asal</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_city" id="id_city" class="form-control select2">
+                                <?php
+                                foreach ($kota as $value) {
+                                    if (isset($data_detail->id_city)) {
+                                        $selected = ($value->id == $data_detail->id_city) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_regency">Kecamatan Asal</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_regency" id="id_regency" class="form-control select2">
+                                <?php
+                                foreach ($kecamatan as $value) {
+                                    if (isset($data_detail->id_regency)) {
+                                        $selected = ($value->id == $data_detail->id_regency) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_village">Desa Asal</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_village" id="id_village" class="form-control select2">
+                                <?php
+                                foreach ($desa as $value) {
+                                    if (isset($data_detail->id_village)) {
+                                        $selected = ($value->id == $data_detail->id_village) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="address">Alamat Lengkap Asal</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="address" name="address" class="form-control" placeholder="Masukkan Alamat Lengkap Asal" value="<?= isset($data_detail->address) ? $data_detail->address : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_province_current">Provinsi Sekarang</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_province_current" id="id_province_current" class="form-control select2">
+                                <?php
+                                foreach ($provinsi as $value) {
+                                    if (isset($data_detail->id_province_current)) {
+                                        $selected = ($value->id == $data_detail->id_province_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_city_current">Kota Sekarang</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_city_current" id="id_city_current" class="form-control select2">
+                                <?php
+                                foreach ($kota as $value) {
+                                    if (isset($data_detail->id_city_current)) {
+                                        $selected = ($value->id == $data_detail->id_city_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_regency_current">Kecamatan Sekarang</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_regency_current" id="id_regency_current" class="form-control select2">
+                                <?php
+                                foreach ($kecamatan as $value) {
+                                    if (isset($data_detail->id_regency_current)) {
+                                        $selected = ($value->id == $data_detail->id_regency_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="id_village_current">Desa Sekarang</label>
+                        </div>
+                        <div class="col-md-9">
+                            <select name="id_village_current" id="id_village_current" class="form-control select2">
+                            <?php
+                                foreach ($desa as $value) {
+                                    if (isset($data_detail->id_village_current)) {
+                                        $selected = ($value->id == $data_detail->id_village_current) ? 'selected' : '';
+                                        echo '<option value="' . $value->id . '" ' . $selected . '>' . $value->name . '</option>';
+                                    } else {
+                                        echo "<option value='$value->id'>$value->name</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                            <div class="invalid-feedback"></div>
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="address_current">Alamat Lengkap Sekarang</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="text" id="address_current" name="address_current" class="form-control" placeholder="Masukkan Alamat Lengkap Asal" value="<?= isset($data_detail->address_current) ? $data_detail->address_current : '' ?>">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-3">
+                            <label for="image">Foto Profil</label>
+                        </div>
+                        <div class="col-md-9">
+                            <input type="file" id="image" class="form-control" name="image">
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-md-12 text-right">
+                            <button type="button" class="btn btn-success btn_save"><i class="fa fa-save"></i> Simpan Data</button>
                         </div>
                     </div>
                 </form>

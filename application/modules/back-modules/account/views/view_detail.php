@@ -27,7 +27,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                                 </div>
                                 <div class="col-md-8">
                                     <div>
-                                        <?= $data_detail->phone_number?>
+                                        <?= $data_detail->phone_number ?>
                                     </div>
                                 </div>
                             </div>
@@ -89,7 +89,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Pendidikan Terakhir</div>
-                    <div class="col-md-7 my-3"><?= $education->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($education->name) ? $education->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Asal Sekolah</div>
@@ -105,27 +105,27 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Jenis Kelamin</div>
-                    <div class="col-md-7 my-3"><?= $gender->label ?></div>
+                    <div class="col-md-7 my-3"><?= isset($gender->label) ? $gender->label : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Agama</div>
-                    <div class="col-md-7 my-3"><?= $religion->label ?></div>
+                    <div class="col-md-7 my-3"><?= isset($religion->label) ? $religion->label : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Provinsi Asal</div>
-                    <div class="col-md-7 my-3"><?= $province->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($province->name) ? $province->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Kota Asal</div>
-                    <div class="col-md-7 my-3"><?= $city->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($city->name) ? $city->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Kecamatan Asal</div>
-                    <div class="col-md-7 my-3"><?= $regency->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($city->name) ? $city->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Desa Asal</div>
-                    <div class="col-md-7 my-3"><?= $village->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($village->name) ? $village->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Alamat</div>
@@ -133,19 +133,19 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Provinsi Sekarang</div>
-                    <div class="col-md-7 my-3"><?= $province_current->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($province_current->name) ? $province_current->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Kota Sekarang</div>
-                    <div class="col-md-7 my-3"><?= $city_current->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($city_current->name) ? $city_current->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Kecamatan Sekarang</div>
-                    <div class="col-md-7 my-3"><?= $regency_current->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($regency_current->name) ? $regency_current->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Desa Sekarang</div>
-                    <div class="col-md-7 my-3"><?= $village_current->name ?></div>
+                    <div class="col-md-7 my-3"><?= isset($village_current->name) ? $village_current->name : '' ?></div>
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Alamat Sekarang</div>
@@ -153,7 +153,7 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                 </div>
                 <div class="row border-bottom">
                     <div class="col-md-5 my-3">Pendaftaran Akun</div>
-                    <div class="col-md-7 my-3"><?= Modules::run("helper/date_indo",$data_detail->registration_date, "-") ?></div>
+                    <div class="col-md-7 my-3"><?= Modules::run("helper/date_indo", $data_detail->registration_date, "-") ?></div>
                 </div>
             </div>
         </div>

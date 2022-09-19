@@ -97,8 +97,9 @@ class Batch_course extends BackendController
                 </div>
             </div>
             ";
-            $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
-            '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
+            $row[] = $data_table->target_registrant . ' Peserta';
+            // $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
+            // '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
             $row[] = "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Dimulai</i></p><b>"
              . Modules::run("helper/date_indo", $data_table->starting_date, "-") . "</b>" . 
              "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Selesai</i></p><b>"
@@ -175,8 +176,9 @@ class Batch_course extends BackendController
                 </div>
             </div>
             ";
-            $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
-            '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
+            $row[] = $data_table->target_registrant . ' Peserta';
+            // $row[] = '<button class="btn btn-outline-info btn-light btn-sm" onclick="modal_tambah(' . "'$data_table->id'" . ')"><i class="fa fa-plus text-info"></i></button> ' . 
+            // '<a href="javascript:void(0)" onclick="modal_peserta(' . "'$data_table->id'" . ')">' . $count_peserta->total . " / " . $data_table->target_registrant . " peserta</a>";
             $row[] = "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Dimulai</i></p><b>"
              . Modules::run("helper/date_indo", $data_table->starting_date, "-") . "</b>" . 
              "<p style='color: gray; margin-top: 4px; margin-bottom: 0px; font-size: 12px;font-family: Arial, Helvetica, sans-serif;'><i class='fa fa-calendar-alt'> Tanggal Selesai</i></p><b>"
@@ -313,7 +315,8 @@ class Batch_course extends BackendController
 
         $array_update = [
             "is_confirm" => 1,
-            "confirm_by" => $this->session->userData('us_id')
+            "confirm_by" => $this->session->userData('us_id'),
+            "status" => 1,
         ];
 
         Modules::run("database/update", "tb_batch_course_has_account", ["id" => $id], $array_update);

@@ -17,7 +17,7 @@ class Template extends BackendController
     public function main_layout($data)
     {
         $this->_init();
-        $id_credential_menu = $this->session->userdata('member_credential_menu');
+        $id_credential_menu = $this->session->userdata('us_credential_menu');
         $menu = $this->create_menu($id_credential_menu, 'sidebar');
         $data['html_main_menu'] = $menu;
         $data['breadcrumb'] = $this->_breadcrumb($data);
@@ -54,8 +54,8 @@ class Template extends BackendController
     public function login_layout($data)
     {
         $this->_init();
-        $data['login_background']   = Modules::run('database/find', 'app_setting', ['field' => 'member_login_background'])->row()->value;
-        $data['login_image']        = Modules::run('database/find', 'app_setting', ['field' => 'member_login_image'])->row()->value;
+        $data['login_background']   = Modules::run('database/find', 'app_setting', ['field' => 'admin_login_background'])->row()->value;
+        $data['login_image']        = Modules::run('database/find', 'app_setting', ['field' => 'admin_login_image'])->row()->value;
 
         $data['company_name'] = Modules::run('database/find', 'app_setting', ['field' => 'company_name'])->row()->value;
         $data['company_tagline'] = Modules::run('database/find', 'app_setting', ['field' => 'company_tagline'])->row()->value;
@@ -125,22 +125,24 @@ class Template extends BackendController
         $get_menu = Modules::run('database/get', $array_query)->result();
         $treeview_menu = '';
         foreach ($get_menu as $data_table) {
-
+            $icon = $data_table->icon;
             if ($data_table->id_parent == 0) {
                 $child_data         = $this->create_sub($get_menu, $data_table->id);
                 $status_has_child   = $this->has_child($get_menu, $data_table->id);
 
                 $toggle_property = '';
                 $additional_span = '';
+                $additional_class_parent = '';
                 if (!empty($child_data)) {
+                    $additional_class_parent = 'with-sub';
                     $toggle_property = 'data-toggle="slide"';
-                    $additional_span = '<i class="angle fe fe-chevron-down"></i>';
+                    $additional_span = '<i class="angle fe fe-chevron-right"></i>';
                 }
                 if ($data_table->is_devider) {
                     //devider
                     $treeview_menu .= '
-                        <li class="side-item side-item-category ' . $data_table->css_class . '">
-                            ' . $data_table->name . '
+                        <li class="nav-header ' . $data_table->css_class . '">
+                            <span class="nav-label">' . $data_table->name . '</span>
                             ' . $child_data . '
                         </li>
                     ';
@@ -155,10 +157,12 @@ class Template extends BackendController
 
                     //device class
                     $treeview_menu .= '
-                                    <li class="li-item-menu main-parent-menu slide ' . $data_table->css_class . '" data-id="' . $data_table->id . '">
-                                        <a class="side-menu__item" ' . $toggle_property . ' href="' . $url . '" data-url="' . $data_url . '">
-                                        ' . $data_table->icon  . '
-                                            <span class="side-menu__label">' . $data_table->name . '</span>
+                                    <li class="nav-item main-parent-menu slide ' . $data_table->css_class . '" data-id="' . $data_table->id . '">
+                                        <a class="nav-link ' . $additional_class_parent . '"  href="' . $url . '" data-url="' . $data_url . '">
+                                            <span class="shape1"></span>
+                                            <span class="shape2"></span>
+                                            ' . $icon . '
+                                            <span class="sidemenu-label">' . $data_table->name . '</span>
                                             ' . $additional_span . '
                                         </a>
                                         ' . $child_data . '
@@ -174,14 +178,14 @@ class Template extends BackendController
     private function create_sub($results, $parent_request)
     {
         $child_status = 0;
-        $menu = '<ul class="ul_' . $parent_request . ' slide-menu" data-position="sub_menu">';
+        $menu = '<ul class="ul_' . $parent_request . ' nav-sub" data-position="sub_menu">';
         for ($i = 0; $i < sizeof($results); $i++) {
             if ($results[$i]->id_parent == $parent_request) {
                 $class_devider = '';
                 if ($results[$i]->is_devider) {
                     $menu .= '
-                        <li class="side-item side-item-category ' . $results[$i]->css_class . '">
-                            ' .  $results[$i]->name . '
+                        <li class="nav-header ' . $results[$i]->css_class . '">
+                            <span class="nav-label">' .  $results[$i]->name . '</span>
                         </li>
                     ';
                 } else {
@@ -193,16 +197,17 @@ class Template extends BackendController
                     }
                     $data_url = base_url(PREFIX_CREDENTIAL_DIRECTORY . $clear_method);
 
+                    $icon = $results[$i]->icon;
+
                     if ($this->has_child($results, $results[$i]->id)) {
                         $sub_menu = $this->create_sub($results, $results[$i]->id);
                         $url = Modules::run('helper/create_url', $results[$i]->link);
 
                         $menu .= '
-                            <li class="li-item-menu slide ' . $results[$i]->css_class . '" data-id="' . $results[$i]->id . '">
-                                <a class="side-menu__item" data-toggle="slide" href="' . $url . '" data-url="' . $data_url . '">
-                                ' . $results[$i]->icon  . '
+                            <li class="nav-sub-item ' . $results[$i]->css_class . '" data-id="' . $results[$i]->id . '">
+                                <a class="nav-sub-link with-sub" data-toggle="slide" href="' . $url . '" data-url="' . $data_url . '">
                                     <span class="side-menu__label">' . $results[$i]->name . '</span>
-                                    <i class="angle fe fe-chevron-down"></i>
+                                    <i class="angle fe fe-chevron-right"></i>
                                 </a>
                                 ' . $sub_menu . '
                             </li>
@@ -210,9 +215,8 @@ class Template extends BackendController
                     } else {
                         $url = Modules::run('helper/create_url', $results[$i]->link);
                         $menu .= '
-                        <li class="li-item-menu ' . $results[$i]->css_class . '" data-id="' . $results[$i]->id . '">
-                            <a class="slide-item" href="' . $url . '" data-url="' . $data_url . '">
-                            ' . $results[$i]->icon  . '
+                        <li class="nav-sub-item ' . $results[$i]->css_class . '" data-id="' . $results[$i]->id . '">
+                            <a class="nav-sub-link" href="' . $url . '" data-url="' . $data_url . '">
                                 <span class="">' . $results[$i]->name . '</span>
                             </a>
                         </li>
@@ -248,24 +252,24 @@ class Template extends BackendController
         $get_menu = Modules::run('database/get', $array_query)->result();
         $treeview_menu = '';
         foreach ($get_menu as $data_table) {
-
+            $icon = $data_table->icon;
             if ($data_table->id_parent == 0) {
-                $child_data         = $this->create_sub_horizontal($get_menu, $data_table->id);
+                $child_data         = $this->create_sub($get_menu, $data_table->id);
                 $status_has_child   = $this->has_child($get_menu, $data_table->id);
 
                 $toggle_property = '';
                 $additional_span = '';
-                $sub_icon = '';
+                $additional_class_parent = '';
                 if (!empty($child_data)) {
+                    $additional_class_parent = 'with-sub';
                     $toggle_property = 'data-toggle="slide"';
-                    $additional_span = '<i class="angle fe fe-chevron-down"></i>';
-                    $sub_icon = 'sub-icon';
+                    $additional_span = '';
                 }
                 if ($data_table->is_devider) {
                     //devider
                     $treeview_menu .= '
-                        <li aria-haspopup="true" class="' . $data_table->css_class . '">
-                            ' . $data_table->name . '
+                        <li class="nav-header ' . $data_table->css_class . '">
+                            <span class="nav-label">' . $data_table->name . '</span>
                             ' . $child_data . '
                         </li>
                     ';
@@ -277,11 +281,16 @@ class Template extends BackendController
                         $clear_method = '/' . $clear_method;
                     }
                     $data_url = base_url(PREFIX_CREDENTIAL_DIRECTORY . $clear_method);
+
                     //device class
                     $treeview_menu .= '
-                                    <li aria-haspopup="true" class=" ' . $data_table->css_class . '" data-id="' . $data_table->id . '">
-                                        <a class="' . $sub_icon . '" ' . $toggle_property . ' href="' . $url . '" data-url="' . $data_url . '">
-                                        ' . $data_table->icon . $data_table->name  . $additional_span . '
+                                    <li class="nav-item main-parent-menu slide ' . $data_table->css_class . '" data-id="' . $data_table->id . '">
+                                        <a class="nav-link ' . $additional_class_parent . '"  href="' . $url . '" data-url="' . $data_url . '">
+                                            <span class="shape1"></span>
+                                            <span class="shape2"></span>
+                                            ' . $icon . '
+                                            <span class="sidemenu-label">' . $data_table->name . '</span>
+                                            ' . $additional_span . '
                                         </a>
                                         ' . $child_data . '
                                     </li>
@@ -351,7 +360,7 @@ class Template extends BackendController
         Modules::run('security/is_ajax');
         if (isset($_GET['term'])) {
             $term = $_GET['term'];
-            $id_menu = $this->session->userdata('member_credential_menu');
+            $id_menu = $this->session->userdata('us_credential_menu');
             $get_data = $this->db->like('name', $term, 'both')->where(['id_menu' => $id_menu, 'is_devider' => 0])->order_by('name')->limit(10)->get('app_menu')->result();
 
             if (!empty($get_data)) {
@@ -374,6 +383,12 @@ class Template extends BackendController
     }
 
     //================================================== custom module function =========================================================
+    public function count_transaction()
+    {
+        $count_data = Modules::run('database/find', 'tb_booking', ['is_confirm' => 0])->num_rows();
+        echo json_encode(['status' => TRUE, 'count' => $count_data]);
+    }
+
     public function load_data()
     {
         $load_notification = Modules::run('notification/load_data');
@@ -412,9 +427,8 @@ class Template extends BackendController
     public function mark_notification()
     {
         Modules::run('security/is_ajax');
-        $id = $this->session->userdata('member_id');
 
-        Modules::run('database/update', 'tb_notification', ['id_customer' => $id, 'is_open' => NULL], ['is_open' => 'Y']);
+        Modules::run('database/update', 'tb_notification', ['id_customer' => NULL, 'is_open' => NULL], ['is_open' => 'Y']);
         echo json_encode(['status' => TRUE]);
     }
 }

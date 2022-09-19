@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Login extends BackendController
+class Login extends CommonController
 {
     var $module_name        = 'login';
     var $module_directory   = 'login';
@@ -62,21 +62,20 @@ class Login extends BackendController
 
         $array_query = [
             'select' => '*',
-            'from' => 'mst_customer',
+            'from' => 'tb_account',
             'where' => [
                 'username' => $username,
-                'isDeleted' => 'N',
-                'isActive' => 'Y',
-                'is_active_account' => 1,
+                'status' => 1,
             ],
             'or_where' => [
                 'email' => $username
             ]
         ];
 
-        $get_data_user = Modules::run('database/get', $array_query)->row();
-        $hash_password = hash('sha512', $password . config_item('encryption_key'));
+        $get_data_user          = Modules::run('database/get', $array_query)->row();
+        $hash_password          = hash('sha256', $password . config_item('encription_key'));
 
+        // echo json_encode($hash_password); return;
 
         $status_login = TRUE;
         $html_respon = '';
@@ -89,7 +88,7 @@ class Login extends BackendController
 
                 // create token
                 $token_id = time();
-                Modules::run('database/update', 'mst_customer', ['id' => $get_data_user->id], ['token' => $token_id]);
+                Modules::run('database/update', 'tb_account', ['id' => $get_data_user->id], ['token' => $token_id]);
 
                 //create session
                 $get_group_menu = Modules::run('database/find', 'app_menu', ['is_member_menu' => 1])->row();
@@ -121,7 +120,7 @@ class Login extends BackendController
             $html_respon = '
                     <div class="alert alert-danger alert-dismissible">
                         <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-                        Username atau password salah!
+                        Username tidak ditemukan
                 </div>
                 ';
             $this->check_attempt();
@@ -132,7 +131,7 @@ class Login extends BackendController
 
     private function check_attempt()
     {
-        $limit_attempt = 4;
+        $limit_attempt = 10;
 
         $ip_address = $this->input->ip_address();
         $check_attemp = Modules::run('database/find', 'st_log_login', ['ip_address' => $ip_address])->num_rows();
@@ -163,7 +162,7 @@ class Login extends BackendController
         $token  = $this->input->get('token');
         $us_id  = $this->session->userdata('member_id');
 
-        Modules::run('database/update', 'mst_customer', ['id' => $us_id], ['token' => '']);
+        Modules::run('database/update', 'tb_account', ['id' => $us_id], ['token' => '']);
 
         $session_data = [
             'member_token_login',
@@ -205,7 +204,7 @@ class Login extends BackendController
             $data['status'] = FALSE;
         } else {
             $email = $this->input->post('email');
-            $check_data = Modules::run('database/find', 'mst_customer', ['email' => $email])->row();
+            $check_data = Modules::run('database/find', 'tb_account', ['email' => $email])->row();
             if (empty($check_data)) {
                 $data['error_string'][] = 'email tidak terdaftar';
                 $data['inputerror'][] = 'email';
@@ -224,11 +223,11 @@ class Login extends BackendController
         Modules::run('security/is_ajax');
         $this->_validate_send_email();
         $email = $this->input->post('email');
-        $check_data = Modules::run('database/find', 'mst_customer', ['email' => $email])->row();
+        $check_data = Modules::run('database/find', 'tb_account', ['email' => $email])->row();
 
         //update token
         $token      = time();
-        Modules::run('database/update', 'mst_customer', ['id' => $check_data->id], ['forgot_password' => $token]);
+        Modules::run('database/update', 'tb_account', ['id' => $check_data->id], ['forgot_password' => $token]);
         //send email
         $array_key = [
             'email' => $email,
@@ -236,7 +235,7 @@ class Login extends BackendController
         ];
         $encrypt_key = $this->encrypt->encode(json_encode($array_key));
 
-        Modules::run('emailing/forgot_password', $email, $encrypt_key);
+        Modules::run('emailing/forgot_password', $email, $encrypt_key, "member-area");
 
         $html_respon = '
             <div class="col-12 text-center">
@@ -254,7 +253,7 @@ class Login extends BackendController
         $key = $this->encrypt->decode($this->input->get('key'));
         $array_key = json_decode($key, TRUE);
 
-        $check_data = Modules::run('database/find', 'mst_customer', ['forgot_password' => $array_key['token']])->row();
+        $check_data = Modules::run('database/find', 'tb_account', ['forgot_password' => $array_key['token']])->row();
         if (empty($check_data)) { //expired on 30 minute
             redirect(Modules::run('helper/create_url', 'login'));
         }
@@ -311,10 +310,10 @@ class Login extends BackendController
         $this->_validate_do_reset_password();
         $password = $this->input->post('password');
         $id = $this->encrypt->decode($this->input->post('id'));
-        $hash_password = hash('sha512', $password . config_item('encryption_key'));
+        $hash_password = hash('sha256', $password . config_item('encription_key'));
 
         $array_update = ['password' => $hash_password, 'forgot_password' => ''];
-        Modules::run('database/update', 'mst_customer', ['id' => $id], $array_update);
+        Modules::run('database/update', 'tb_account', ['id' => $id], $array_update);
         echo json_encode(['status' => TRUE]);
     }
 
@@ -379,4 +378,93 @@ class Login extends BackendController
         }
         echo json_encode(['status' => true]);
     }
+
+    public function register()
+    {
+        $this->app_data['page_title'] = "Tambah Member";
+        $this->app_data['view_file']  = 'register';
+        $this->app_data["method"]  = 'add';
+        echo Modules::run('template/login_layout', $this->app_data);
+    }
+
+    public function validate_register()
+    {
+        Modules::run('security/is_ajax');
+        $data = array();
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+        // this validate if there is same file to be uploaded
+        $id = $this->input->post('id');
+
+        if ($this->input->post('email') == '') {
+            $data['error_string'][] = 'Email Harus Diisi';
+            $data['inputerror'][] = 'email';
+            $data['status'] = FALSE;
+        }
+        if ($data['status'] == FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function do_register()
+    {
+        $this->validate_register();
+        $email                  = $this->input->post('email');
+        $registration_date      = date("Y-m-d");
+        $username               = $email;
+        $password               = bin2hex(random_bytes(8));
+        $hash_password          = hash('sha256', $password . config_item('encription_key'));
+        $status                 = 0;
+        $is_confirm             = 0;
+
+        $array_insert = [
+            'email' => $email,
+            'registration_date' => $registration_date,
+            'username' => $username,
+            'password' => $hash_password,
+            'status' => $status,
+            'is_confirm' => $is_confirm,
+        ];
+
+        Modules::run("database/insert", "tb_account", $array_insert);
+
+        $array_key = [
+            'email' => $email
+        ];
+
+        $encrypt_key = $this->encrypt->encode(json_encode($array_key));
+
+        $tes = Modules::run('emailing/confirm_email', $email, $encrypt_key, $username, $password);
+
+        // var_dump($tes); return;
+
+        echo json_encode(["status" => true]);
+    }
+
+    public function confirm_email() {
+        $this->app_data['module_js']  = ["confirm"];
+        $key = $this->encrypt->decode($this->input->get('key'));
+        $array_key = json_decode($key, TRUE);
+
+        $check_data = Modules::run('database/find', 'tb_account', ['email' => $array_key['email']])->row();
+
+        if (empty($check_data)) { //expired on 30 minute
+            redirect(Modules::run('helper/create_url', 'login'));
+        }
+
+        $array_update = [
+            "status" => 1,
+            "is_confirm" => 1
+        ];
+
+        Modules::run('database/update', 'tb_account', ['email' => $array_key["email"]], $array_update);
+
+        $this->app_data['data_user'] = $check_data;
+        $this->app_data['page_title'] = "Reset Password";
+        $this->app_data['view_file'] = 'view_confirm';
+        echo Modules::run('template/login_layout', $this->app_data);
+    }
+
 }

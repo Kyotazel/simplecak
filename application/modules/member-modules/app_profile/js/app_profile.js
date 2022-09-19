@@ -1,224 +1,193 @@
-var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '/';
+var url_controller = baseUrl + '/' + "member-area" + '/' + _controller + '/';
 var save_method;
 var id_use = 0;
 
-$(document).ready(function () {
-    var type = $('.container_list').data('type');
-
-});
-
-$(document).on('change', '.upload_form', function () { 
-    var formData = new FormData($('.form_update_image_profile')[0]);
-    formData.append('id', $(this).data('id'));
-    $.ajax({
-        url: url_controller+'update_image'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                location.reload();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            // $('.btn_save_group').button('reset');
-        }
-	});//end ajax
-});
-
-
-// $('.btn_save').click(function (e) {
-//     e.preventDefault();
-// 	$('.form-group').removeClass('has-danger');
-//     $('.help-block').empty();
-//     save_method = $(this).data('method');
-// 	  //defined form
-//     var formData = new FormData($('.form-input')[0]);
-//     var url;
-//     if(save_method=='add'){
-//         url = 'save';
-//     }else{
-//         url = 'update';
-//         formData.append('id', id_use);
-//     }
-//     $.ajax({
-//         url: url_controller+url+'/?token='+_token_user,
-//         type: "POST",
-//         data: formData,
-//         contentType: false,
-//         processData : false,
-//         dataType :"JSON",
-//         success: function(data){
-//             if(data.status){
-//                 notif({
-//                     msg: "<b>Sukses :</b> Data berhasil disimpan",
-//                     type: "success"
-//                 });
-//                 location.href = url_controller+'/?token='+_token_user;
-//             } else{
-//                 for (var i = 0; i < data.inputerror.length; i++)
-//                 {
-//                     $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger');
-//                     $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
-//                 }
-//             }
-//         },
-//         error:function(jqXHR, textStatus, errorThrown)
-//         {
-//             $('.btn_save_group').button('reset');
-//         }
-// 	});//end ajax
-// });
-
-$('.btn_update_profile').click(function (e) {
+$('.btn_save').click(function (e) {
     e.preventDefault();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    var formData = new FormData($('.form-update-profile')[0]);
-    formData.append('id', $(this).data('id'));
+    $(".form-control").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
+    var formData = new FormData($('.form-input')[0]);
+
     $.ajax({
-        url: url_controller+'update_profile'+'/?token='+_token_user,
+        url: url_controller + "update" + '?token' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                location.reload();
-            } else{
-                for (var i = 0; i < data.inputerror.length; i++)
-                {
-                    $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger');
-                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
-                }
-            }
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            $('.btn_save_group').button('reset');
-        }
-	});//end ajax
-});
-
-$('.btn_save_login').click(function (e) {
-    e.preventDefault();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    var formData = new FormData($('.form-login')[0]);
-    formData.append('id', $(this).data('id'));
-    $.ajax({
-        url: url_controller+'update_login'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                location.reload();
-            } else{
-                for (var i = 0; i < data.inputerror.length; i++)
-                {
-                    $('[name="'+data.inputerror[i]+'"]').parent().parent().addClass('has-danger');
-                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
-                }
-            }
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            $('.btn_save_group').button('reset');
-        }
-	});//end ajax
-});
-
-// $(document).on('click', '.btn_delete', function () {
-//     id = $(this).data('id');
-//     swal({
-//         title: "Apakah anda yakin?",
-//         text: "data akan dihapus!",
-//         type: "warning",
-//         showCancelButton: true,
-//         confirmButtonClass: "btn-danger",
-//         confirmButtonText: "Ya , Lanjutkan",
-//         cancelButtonText: "Batal",
-//         closeOnConfirm: true,
-//         closeOnCancel: true
-//     },
-//     function(isConfirm) {
-//         if (isConfirm) {
-//             $.ajax({
-//                 url: url_controller+'delete_data'+'/?token='+_token_user,
-//                 type: "POST",
-//                 dataType: "JSON",
-//                 data:{'id':id,'status_group':true},
-//                 success: function(data){
-//                     if (data.status) {
-//                         notif({
-//                             msg: "<b>Sukses :</b> Data berhasil dihapus",
-//                             type: "success"
-//                         });
-//                         table.ajax.reload(null, false);
-//                     } 
-//                 },
-//                 error:function(jqXHR, textStatus, errorThrown)
-//                 {
-//                 }
-
-//             });//end ajax
-//         }
-//     });
-// });
-
-$(document).on('click', '.change_status', function () {
-    var selector = $(this);
-    $(this).toggleClass('on');
-    update_status(selector)
-    
-});
-$(document).on('click', '.change_status_detail', function () {
-    var selector = $(this);
-    $(this).toggleClass('on');
-    update_status(selector)
-    
-});
-
-function update_status(selector) {
-    var id = selector.data('id');
-    var field = selector.data('status');
-    active_status = selector.hasClass('on') ? 1 : 0;
-    $.ajax({
-        url: url_controller+'update_status'+'/?token='+_token_user,
-        type: "POST",
+        processData: false,
         dataType: "JSON",
-        data:{'id':id,'status':active_status,'field':field},
-        success: function(data){
+        success: function (data) {
             if (data.status) {
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil diupdate",
-                    type: "success"
-                });
-            } 
+                swal({
+                    title: "Edit Berhasil",
+                    text: "Klik tombol dibawah untuk ke Menu Profile",
+                    type: "success",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Halaman Profile",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        location.href = url_controller;
+                    }
+                );
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
+                }
+            }
         },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
+        error: function (jqXHR, textStatus, errorThrown) {
+            $('.btn_save_group').button('reset');
         }
+    })
+})
 
-    });//end ajax
-}
+$('.btn_save_password').click(function (e) {
+    e.preventDefault();
+    $(".form-control").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
+    var formData = new FormData($('.form-password')[0]);
 
+    $.ajax({
+        url: url_controller + "update_password" + '?token' + _token_user,
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function (data) {
+            if (data.status) {
+                swal({
+                    title: "Password Berhasil Diperbarui",
+                    text: "Klik tombol dibawah untuk ke Menu Profile",
+                    type: "success",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Halaman Profile",
+                    closeOnConfirm: true,
+                    closeOnCancel: true
+                },
+                    function (isConfirm) {
+                        location.href = url_controller;
+                    }
+                );
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
+                }
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            $('.btn_save_group').button('reset');
+        }
+    })
+})
+
+$("#id_province").on("change", function () {
+    var provinsi = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_kota" + "?token=" + _token_user,
+        type: "POST",
+        data: { provinsi: provinsi },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Kota Asal -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_city").html(html);
+        }
+    });
+})
+
+$("#id_city").on("change", function () {
+    var kota = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_kecamatan" + "?token=" + _token_user,
+        type: "POST",
+        data: { kota: kota },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Kecamatan Asal -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_regency").html(html);
+        }
+    });
+})
+
+$("#id_regency").on("change", function () {
+    var kecamatan = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_desa" + "?token=" + _token_user,
+        type: "POST",
+        data: { kecamatan: kecamatan },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Desa Asal -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_village").html(html);
+        }
+    });
+})
+
+$("#id_province_current").on("change", function () {
+    var provinsi = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_kota" + "?token=" + _token_user,
+        type: "POST",
+        data: { provinsi: provinsi },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Kota Sekarang -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_city_current").html(html);
+        }
+    });
+})
+
+$("#id_city_current").on("change", function () {
+    var kota = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_kecamatan" + "?token=" + _token_user,
+        type: "POST",
+        data: { kota: kota },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Kecamatan Sekarang -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_regency_current").html(html);
+        }
+    });
+})
+
+$("#id_regency_current").on("change", function () {
+    var kecamatan = $(this).val();
+
+    $.ajax({
+        url: url_controller + "get_desa" + "?token=" + _token_user,
+        type: "POST",
+        data: { kecamatan: kecamatan },
+        dataType: "JSON",
+        success: function (data) {
+            var html = '<option value="">-- Pilih Desa Sekarang -- </option>';
+            for (i = 0; i < data.length; i++) {
+                html += `<option value=${data[i]["id"]}>${data[i]["name"]}</option>`;
+            }
+            $("#id_village_current").html(html);
+        }
+    });
+})

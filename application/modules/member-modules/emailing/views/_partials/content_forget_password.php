@@ -9,5 +9,5 @@
         padding:10px 20px;
         border-radius:50px; 
         text-decoration:none;
-        " href="<?= base_url('member-area/login/reset_password?key=' . urlencode($encrypt_key)); ?>">RESET PASSWORD</a>
+        " href="<?= base_url("$modules/login/reset_password?key=" . urlencode($encrypt_key)); ?>">RESET PASSWORD</a>
 </div>
