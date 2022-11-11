@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Database extends CommonController
+class Database extends ApiController
 {
     var  $module = 'database';
     public function __construct()

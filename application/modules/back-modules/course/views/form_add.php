@@ -29,6 +29,7 @@
                             <div class="form-group">
                                 <label for="id_category_course">Kategori Pelatihan</label>
                                 <select name="id_category_course" id="id_category_course" class="form-control select2">
+                                    <option value="">Pilih Kategori Keahlian</option>
                                     <?php
                                     foreach ($get_course_category as $value) {
                                         if (isset($data_detail->id_category_course)) {

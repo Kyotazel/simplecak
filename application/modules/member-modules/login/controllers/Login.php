@@ -67,9 +67,6 @@ class Login extends CommonController
                 'username' => $username,
                 'status' => 1,
             ],
-            'or_where' => [
-                'email' => $username
-            ]
         ];
 
         $get_data_user          = Modules::run('database/get', $array_query)->row();
@@ -397,8 +394,15 @@ class Login extends CommonController
         // this validate if there is same file to be uploaded
         $id = $this->input->post('id');
 
+        $email = Modules::run('database/find', 'tb_account', ['email' => $this->input->post('email')])->row();
+
         if ($this->input->post('email') == '') {
             $data['error_string'][] = 'Email Harus Diisi';
+            $data['inputerror'][] = 'email';
+            $data['status'] = FALSE;
+        }
+        if (!empty($email)) {
+            $data['error_string'][] = 'Email Sudah Terdaftar';
             $data['inputerror'][] = 'email';
             $data['status'] = FALSE;
         }
@@ -436,7 +440,7 @@ class Login extends CommonController
 
         $encrypt_key = $this->encrypt->encode(json_encode($array_key));
 
-        $tes = Modules::run('emailing/confirm_email', $email, $encrypt_key, $username, $password);
+        Modules::run('emailing/confirm_email', $email, $encrypt_key, $username, $password);
 
         // var_dump($tes); return;
 

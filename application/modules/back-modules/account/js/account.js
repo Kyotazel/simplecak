@@ -80,7 +80,8 @@ $('.btn_save').click(function (e) {
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
                     $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
-                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
                 }
             }
         },

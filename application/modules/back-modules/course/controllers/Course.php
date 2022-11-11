@@ -128,7 +128,7 @@ class Course extends BackendController
         }
         if ($this->input->post('skill') == '') {
             $data['error_string'][] = 'Skill Harus Diisi';
-            $data['inputerror'][] = 'skill';
+            $data['inputerror'][] = 'skill[]';
             $data['status'] = FALSE;
         }
         if ($this->input->post('id_category_course') == '') {

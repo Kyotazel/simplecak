@@ -29,6 +29,7 @@ class ApiController extends CommonController
     public function __construct()
     {
         parent::__construct();
+        header("Content-Type: application/json");
     }
 }
 

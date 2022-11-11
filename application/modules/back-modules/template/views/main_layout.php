@@ -17,10 +17,10 @@
 
     <!-- Title -->
     <title><?= $page_title; ?> </title>
-    
+
     <!-- Bootstrap css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
-    
+
     <!-- Icons css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/web-fonts/icons.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/web-fonts/font-awesome/font-awesome.min.css" rel="stylesheet" />
@@ -31,7 +31,8 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/skins.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/dark-style.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/colors/default.css" rel="stylesheet" />
-    
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
     <!-- Color css-->
     <link id="theme" rel="stylesheet" type="text/css" media="all" href="<?= base_url('assets/themes/spruhha/') ?>css/colors/color.css" />
 
@@ -41,14 +42,14 @@
     <!-- Sidemenu css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/sidemenu/sidemenu.css" rel="stylesheet">
 
-    <link rel="stylesheet" href="<?= base_url('assets/plugin/jquery.ui/') ?>css/jquery-ui.css">
-    
+    <!-- <link rel="stylesheet" href="<?= base_url('assets/plugin/jquery.ui/') ?>css/jquery-ui.css"> -->
+
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/dropzone.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/basic.min.css') ?>">
     <link href="<?= base_url('assets/plugin/'); ?>notify/css/notifIt.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
-    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet">
-    
+    <!-- <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/css/amazeui.datetimepicker.css" rel="stylesheet"> -->
+
     <!-- Internal Sweet-Alert css-->
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/sweet-alert/sweetalert.css" rel="stylesheet">
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
@@ -58,9 +59,20 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/custom.css" rel="stylesheet">
 
     <style>
-        /* .btn {
-            background-image: linear-gradient(270deg, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0))!important;
-        } */
+        .page {
+            position: relative;
+        }
+
+        .main-footer {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+        }
+
+        .main-content {
+            margin-bottom: 60px;
+        }
     </style>
 
 </head>
@@ -373,7 +385,7 @@
         <!-- End Main Content-->
 
         <!-- Main Footer-->
-        <div class="main-footer text-center mt-5">
+        <footer class="main-footer text-center mt-5">
             <div class="container">
                 <div class="row row-sm">
                     <div class="col-md-12">
@@ -381,7 +393,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </footer>
         <!--End Footer-->
         <!-- Sidebar -->
         <?php
@@ -416,6 +428,7 @@
 
     <!-- Sticky js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>js/sticky.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>js/flatpickr.js"></script>
 
     <!-- Switcher js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>switcher/js/switcher.js"></script>
@@ -436,15 +449,18 @@
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.html5.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.print.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.colVis.min.js"></script>
-    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
-    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/jquery-ui/ui/widgets/datepicker.js"></script>
+    <!-- <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script> -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/summernote/summernote-bs4.js"></script>
-    
+
+    <!-- <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script> -->
+
     <!-- jrsoftmedia setting -->
     <script src="<?= base_url('assets/plugin/'); ?>notify/js/notifIt.js"></script>
     <script src="<?= base_url('assets/plugin/'); ?>jQuery-Scanner/jquery.scannerdetection.js" type="text/javascript"></script>
     <script src="<?= base_url('assets/plugin/'); ?>chosen.jquery.min.js"></script>
     <script src="<?php echo base_url('assets/plugin/'); ?>print_js/print.min.js"></script>
+
 
     <script src="<?= base_url('assets/plugin/'); ?>darggable/jquery-ui-darggable.min.js"></script>
 

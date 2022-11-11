@@ -2,7 +2,6 @@ var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '
 var save_method;
 var id_use = 0;
 var table;
-var list = $("#timeline").val();
 table_add = $('#table_add').DataTable({});
 table_peserta = $('#table_peserta').DataTable({});
 
@@ -10,12 +9,12 @@ $(document).ready(function () {
     table = $('#table_data').DataTable({
         "responsive": true,
         "ajax": {
-            "url": url_controller + list + "?token=" + _token_user,
+            "url": url_controller + "list_data" + "?token=" + _token_user,
             "type": "POST",
         },
         "columnDefs": [
             {
-                "targets": 5,
+                "targets": [2,3,4],
                 "className": "text-center"
             }
         ]
@@ -92,7 +91,8 @@ $('.btn_save').click(function (e) {
             } else {
                 for (var i = 0; i < data.inputerror.length; i++) {
                     $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
-                    $('[name="' + data.inputerror[i] + '"]').next().html(data.error_string[i]);
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
                 }
             }
         },
@@ -162,12 +162,6 @@ function modal_peserta(batch_course) {
             "type": "POST",
             "data": {id_batch_course: batch_course}
         },
-        "columnDefs": [
-            {
-                "targets": [2, 3],
-                "className": "text-center"
-            }
-        ]
     })
 }
 

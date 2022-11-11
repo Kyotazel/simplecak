@@ -38,6 +38,8 @@ $request_uri_custom = substr($request_uri_custom, 1, strlen($request_uri_custom)
 $explode_uri = explode('/', $request_uri_custom);
 $config['base_url'] .= '/' . $explode_uri[0] . '/';
 
+// $config['base_url'] = 'http://192.168.18.25/simplecak/';
+
 /*
 |--------------------------------------------------------------------------
 | Custom config
@@ -344,6 +346,7 @@ $config['cache_path'] = '';
 |
 */
 $config['cache_query_string'] = FALSE;
+
 
 /*
 |--------------------------------------------------------------------------

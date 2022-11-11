@@ -38,7 +38,7 @@ class Security extends CommonController
         $token      = $this->session->userdata('member_token_login');
         $token_query = $this->encrypt->decode($this->input->get('token'));
         $id_user    = $this->session->userdata('member_id');
-        $get_data   = Modules::run('database/find', 'st_user', ['id' => $id_user])->row();
+        $get_data   = Modules::run('database/find', 'tb_account', ['id' => $id_user])->row();
 
         if ($this->uri->segment(1) == '' && $this->input->get('token') == '') {
             redirect(Modules::run('helper/create_url', '/'));

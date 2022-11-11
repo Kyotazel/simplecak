@@ -6,9 +6,12 @@ var prefix_folder_api = 'api';
 
 $(document).ready(function () {
 	$('.horizontal-mainwrapper').show();
-    $('.datepicker').datepicker({
+    $('.datepickera').datepicker({
         autoclose: true,
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+		viewMode: "date",
     });
     $('.datepicker_form').datepicker({
         autoclose: true,
@@ -20,11 +23,11 @@ $(document).ready(function () {
         format: 'yyyy-mm-dd'
     });
 
-    $('.datetimepickera').datetimepicker({
-        setDatesDisabled: true,
-        autoclose: true,
-        format: 'hh:ii:00'
-    })
+    // $('.datetimepickera').datetimepicker({
+    //     setDatesDisabled: true,
+    //     autoclose: true,
+    //     format: 'hh:ii:00'
+    // })
 
     // var today = new Date('16-01-2022');
     // console.log(today.getFullYear(),today.getMonth(),today.getDate());
@@ -41,6 +44,18 @@ $(document).ready(function () {
     //========== custom data ============
     // show_count_confirm();
     // data_load();
+    $('.flatdate').flatpickr({
+        // enableTime: false,
+        altInput: true,
+        altFormat: "d-m-Y",
+        dateFormat: "Y-m-d",
+        static: true,
+        allowInput: true,
+        // time_24hr: false,
+        // defaultDate: Date.now(),
+        // disableMobile: "true",
+    })
+    $('.mb-3>.flatpickr-wrapper').css('width', '100%');
 });
 
 function showLoading() {
