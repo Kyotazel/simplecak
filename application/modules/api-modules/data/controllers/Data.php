@@ -54,4 +54,10 @@ class Data extends ApiController
         $response = Modules::run("database/get_all", "tb_education")->result();
         echo json_encode($response);
     }
+
+    public function skill()
+    {
+        $response = Modules::run("database/get_all", "tb_skill")->result();
+        echo json_encode($response);
+    }
 }

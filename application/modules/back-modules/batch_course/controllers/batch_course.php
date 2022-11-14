@@ -241,22 +241,22 @@ class Batch_course extends BackendController
             $data['inputerror'][] = 'id_course';
             $data['status'] = FALSE;
         }
-        if ($this->input->post('opening_registration_date') > date('Y-m-d')) {
+        if ($this->input->post('opening_registration_date') < date('Y-m-d')) {
             $data['error_string'][] = 'Tanggal Tidak Valid';
             $data['inputerror'][] = 'opening_registration_date';
             $data['status'] = FALSE;
         }
-        if ($this->input->post('closing_registration_date') > date('Y-m-d')) {
+        if ($this->input->post('closing_registration_date') < date('Y-m-d')) {
             $data['error_string'][] = 'Tanggal Tidak Valid';
             $data['inputerror'][] = 'closing_registration_date';
             $data['status'] = FALSE;
         }
-        if ($this->input->post('starting_date') > date('Y-m-d')) {
+        if ($this->input->post('starting_date') < date('Y-m-d')) {
             $data['error_string'][] = 'Tanggal Tidak Valid';
             $data['inputerror'][] = 'starting_date';
             $data['status'] = FALSE;
         }
-        if ($this->input->post('ending_date') > date('Y-m-d')) {
+        if ($this->input->post('ending_date') < date('Y-m-d')) {
             $data['error_string'][] = 'Tanggal Tidak Valid';
             $data['inputerror'][] = 'ending_date';
             $data['status'] = FALSE;
