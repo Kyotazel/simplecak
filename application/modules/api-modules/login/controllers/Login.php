@@ -431,4 +431,28 @@ class Login extends ApiController
 
         echo json_encode($response);
     }
+
+    public function logout()
+    {
+        $id  = $this->input->post('id');
+
+        $data = Modules::run('database/find', 'tb_account', ['id' => $id])->row();
+        Modules::run('database/update', 'tb_account', ['id' => $id], ['token' => '']);
+        if ($data) {
+            $response = [
+                "error" => FALSE,
+                "msg"   => [
+                    "Logout Berhasil"
+                ]
+            ];
+        } else {
+            $response = [
+                "error" => TRUE,
+                "msg"   => [
+                    "user tidak ditemukan"
+                ]
+            ];
+        }
+        echo json_encode($response);
+    }
 }
