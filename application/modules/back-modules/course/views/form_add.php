@@ -55,6 +55,13 @@
                                 </select>
                                 <span class="invalid-feedback"></span>
                             </div>
+                            <div class="form-group col-md-12">
+                                <label for="image">Thumbnail Course</label>
+                                <?php if (!empty($data_detail)) : ?>
+                                <img src="<?= base_url('upload/courses/') . $data_detail->image ?>" alt="" class="img-thumbnail">
+                                <?php endif;?>
+                                <input type="file" class="form-control" name="image" accept="image/png, image/jpeg, image/gif">
+                            </div>
                             <div class="text-right">
                                 <a href="<?= Modules::run('helper/create_url', 'course'); ?>" class="btn btn-rounded btn-light font-weight-bold mt-3">Kembali</a>
                                 <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save" data-id="<?= isset($data_detail->id) ? $data_detail->id : ''; ?>" data-method="<?= $method ?>"><i class="fa fa-save"></i> Simpan Data</button>

@@ -48,6 +48,9 @@ $btn_delete = Modules::run('security/delete_access', '<a href="javascript:void(0
                                         <?= $skill ?>
                                     </div>
                                 </div>
+                                <div class="col-md-12">
+                                    <img src="<?= base_url('upload/courses/') . $data_detail->image ?>" alt="thumnail" class="img-thumbnail">
+                                </div>
                             </div>
                         </div>
                     </div>
