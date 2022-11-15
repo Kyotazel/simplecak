@@ -33,10 +33,14 @@ class Export extends BackendController
     {
         $data = [];
         $html = $this->load->view('print', $data, TRUE);
-        $pdf = new Html2Pdf('L', 'A4', 'en', true, 'UTF-8', [20,10,20,20]);
-        $pdf->pdf->SetTitle("Laporan Dosen Mengajar");
+        $pdf = new \Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'en', true, 'UTF-8', [10,10,10,0]);
         $pdf->WriteHTML($html);
         $pdf->Output('laporan_dosen_mengajar.pdf', 'I');
+    }
+
+    public function check_pdf()
+    {
+        echo $this->load->view('print');
     }
 
 }
