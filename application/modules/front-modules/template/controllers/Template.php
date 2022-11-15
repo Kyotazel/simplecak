@@ -27,7 +27,7 @@ class Template extends FrontendController
         $menu = $this->create_menu($get_group_menu->id, 'sidebar');
         $data['html_main_menu'] = $menu;
 
-        $this->load->view('main_layout', $data);
+        $this->load->view('main_layout_cms', $data);
     }
 
     public function main_layout_dark($data)

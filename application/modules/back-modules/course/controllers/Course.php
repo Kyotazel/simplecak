@@ -148,14 +148,18 @@ class Course extends BackendController
         $name          = $this->input->post("name");
         $description   = $_POST["description"];
         $id_category_course         = $this->input->post("id_category_course");
+        $image = $this->upload_image();
+        $image = ($image === '') ? 'default.png' : $image;
 
         $array_insert = [
             'name' => $name,
             'description' => $description,
             'id_category_course' => $id_category_course,
+            'image' => $image,
             'created_by' => $this->session->userdata('us_id'),
             'created_date' => date('Y-m-d h:i:sa')
         ];
+
         Modules::run('database/insert', 'tb_course', $array_insert);
 
         $get_id_course = Modules::run('database/find', 'tb_course', ['name' => $name])->row();
@@ -205,6 +209,12 @@ class Course extends BackendController
             'updated_date' => date('Y-m-d h:i:sa')
         ];
 
+        $image = $this->upload_image();
+        if ($image !== '') {
+            $image = ["image" => $image];
+            $array_update_course = array_merge($array_update_course, $image);
+        }
+
         Modules::run('database/update', 'tb_course', ['id' => $id], $array_update_course);
 
         Modules::run('database/delete', 'tb_course_has_skill', ['id_course' => $id]);
@@ -243,6 +253,22 @@ class Course extends BackendController
         $this->app_data['page_title'] = "Detail pelatihan";
         $this->app_data['view_file'] = 'view_detail';
         echo Modules::run('template/main_layout', $this->app_data);
+    }
+
+    private function upload_image()
+    {
+        $config['upload_path']          = realpath(APPPATH . '../upload/courses');
+        $config['allowed_types']        = 'gif|jpg|png|jpeg';
+        $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
+        $this->load->library('upload', $config);
+        if (!$this->upload->do_upload('image')) //upload and validate
+        {
+            return '';
+        } else {
+            $upload_data = $this->upload->data();
+            $image_name = $upload_data['file_name'];
+            return $image_name;
+        }
     }
 
     public function delete_data()
