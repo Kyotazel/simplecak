@@ -1,40 +1,61 @@
-var url_controller = baseUrl + '/' + _controller + '/';
-var save_method;
-var id_use = 0;
-
+var list_courses = $('#list-courses');
+var list_batch_courses = $('#list-batch-courses');
 $(document).ready(function () {
-    $(document).on('click', '.btn_send', function (e) {
-        e.preventDefault();
-        $('.form-group').removeClass('has-danger');
-        $('.help-block').empty();
-          //defined form
-        var formData = new FormData($('.form-contact')[0]);
-        
-        $.ajax({
-            url: baseUrl+'/company/'+'save_message',
-            type: "POST",
-            data: formData,
-            contentType: false,
-            processData : false,
-            dataType :"JSON",
-            success: function(data){
-                if (data.status) {
-                    location.href = baseUrl+'/company/thanks';
-                } else{
-                    for (var i = 0; i < data.inputerror.length; i++)
-                    {
-                        $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-danger');
-                        $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
-                    }
+
+    $('#skill').select2({
+		placeholder: 'Pilih skill',
+		searchInputPlaceholder: 'Cari Skill',
+		 width: '100%'
+	});
+    $('#category').select2({
+		placeholder: 'Pilih kategori keahlian',
+		searchInputPlaceholder: 'Cari kategori',
+		 width: '100%'
+	});
+});
+$('.btn-filter').click(function (e) { 
+    e.preventDefault();
+    var formData = new FormData($('#filter-courses')[0]);
+    $.ajax({
+        type: "POST",
+        url: baseUrl + '/kursus-pelatihan-kerja',
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function (data) {
+            if (data.status) {
+                list_courses.html(data.data);
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
                 }
-                // $('.btn_send').button('reset');
-            },
-            error:function(jqXHR, textStatus, errorThrown)
-            {
-                // $('.btn_send').button('reset');
-                console.log('error process');
             }
-    
-        });//end ajax
+        }
+    });
+});
+$('#open_course').change(function (e) { 
+    e.preventDefault();
+    var formData = new FormData($('#filter-batch-courses')[0]);
+    $.ajax({
+        type: "POST",
+        url: baseUrl + '/pendaftaran-pelatihan',
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function (data) {
+            if (data.status) {
+                list_batch_courses.html(data.data);
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
+                }
+            }
+        }
     });
 });

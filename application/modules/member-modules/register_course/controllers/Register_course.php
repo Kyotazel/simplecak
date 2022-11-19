@@ -47,7 +47,7 @@ class Register_course extends CommonController
     public function detail()
     {
         $id = $this->encrypt->decode($this->input->get('data'));
-
+        $id = str_replace(' ', '+', $id);
         $get_data = Modules::run('database/find', 'tb_batch_course', ['id' => $id])->row();
 
         $course    = Modules::run('database/find', 'tb_course', ["id" => $get_data->id_course])->row();

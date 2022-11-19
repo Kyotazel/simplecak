@@ -12,4 +12,7 @@ if ($id_page_builder) {
 // var_dump($get_content);die;
 echo $get_content->description;
 $this->load->view('_partials/courses.php');
+$this->load->view('_partials/batch_course.php');
+$this->load->view('_partials/certificate.php');
+$this->load->view('_partials/structure.php');
 // $this->load->view('_partials/service_category');
