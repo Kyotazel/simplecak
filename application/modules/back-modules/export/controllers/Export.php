@@ -31,16 +31,11 @@ class Export extends BackendController
 
     public function print_pdf()
     {
-        $data = [];
+        $data['user'] = Modules::run('database/find', 'tb_account', ['id' => 28])->row();
         $html = $this->load->view('print', $data, TRUE);
         $pdf = new \Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'en', true, 'UTF-8', [10,10,10,0]);
         $pdf->WriteHTML($html);
         $pdf->Output('laporan_dosen_mengajar.pdf', 'I');
-    }
-
-    public function check_pdf()
-    {
-        echo $this->load->view('print');
     }
 
 }
