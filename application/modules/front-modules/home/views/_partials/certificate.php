@@ -16,7 +16,7 @@
                     </ul>
                 </div>
                 <div class="col-md-7 col-sm-6">
-                    <img src="<?= base_url('assets/themes/createx/'); ?>img/online-courses/home/certificate.jpg" alt="Certificate" class="mb-md-n5 mb-sm-0 mb-n4 rounded shadow-lg position-relative" style="z-index: 5;">
+                    <img src="<?= base_url('assets/themes/createx/'); ?>img/online-courses/courses/certificate.jpg" alt="Certificate" class="mb-md-n5 mb-sm-0 mb-n4 rounded shadow-lg position-relative" style="z-index: 5;">
                 </div>
             </div>
         </section>

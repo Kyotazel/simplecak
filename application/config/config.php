@@ -50,7 +50,7 @@ $config['base_url'] .= '/' . $explode_uri[0] . '/';
 | app admin module that only accesable by admin " is_admin = true "
 |
 */
-$config['common_module'] = ['home', 'login', 'app_profile'];
+$config['common_module'] = ['home', 'login', 'app_profile', 'notification', 'security', 'database', 'template', 'helper', 'tutorial'];
 $config['app_admin_module'] = [
     'app_menu' => 'pengaturan menu',
     'app_credential' => 'pengaturan hak akses',

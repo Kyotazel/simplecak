@@ -377,6 +377,20 @@
                     <?php
                     $this->load->view($module_directory . '/' . $view_file);
                     ?>
+                    <div class="modal fade" tabindex="-1" id="modal_print">
+                        <div class="modal-dialog" style="max-width: 90%;">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title"></h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="html_respon_print" style="min-height: 90%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- End Row -->
 
                 </div>

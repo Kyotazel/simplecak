@@ -2,59 +2,10 @@
 $type = $this->input->get('type');
 ?>
 
-<style>
-    #unregistered_module .card-body {
-        max-height: 300px;
-        overflow: auto;
-    }
-
-    #unregistered_module .card-body {
-        /* padding: 0; */
-    }
-
-    #unregistered_module .card-body ul {
-        padding: 0;
-    }
-
-    #unregistered_module .card-body li {
-        list-style: none;
-        padding: 5px;
-        border-bottom: 1px dashed #ccc;
-        font-size: 12px;
-    }
-</style>
-
 <div class="row row-sm main-content-mail">
     <div class="col-lg-4 col-xl-3 col-md-12">
-
-        <?php
-        if (!empty($list_unregistered_modul)) {
-            $html_list = '';
-            foreach ($list_unregistered_modul as $item_data) {
-                $html_list .= '
-                    <li><i class="bx bx-folder-open tx-14"></i> ' . $item_data . '</li>
-                ';
-            }
-
-            $html_data = '
-                    <div class="alert alert-info alert-dismissible fade show mb-2" role="alert">
-                        <strong class="text-red"><i class="fe fe-info"></i> <span class="tx-20">' . count($list_unregistered_modul) . '</span> Modul Belum Terdaftar ke System</strong>, 
-                        Tekan <a data-toggle="collapse" href="#unregistered_module" role="button" aria-expanded="false" class="btn btn-light btn-rounded btn-sm tx-12 font-weight-bold">Tombol ini</a> untuk melihat daftar modul.
-                        
-                    </div>
-                    <div class="collapse" id="unregistered_module">
-                        <div class="card card-body">
-                            <b> Daftar Modul Belum Terdaftar ke Database :</b>
-                            <ul>' . $html_list . '</ul>
-                        </div>
-                    </div>
-                ';
-
-            echo $html_data;
-        }
-        ?>
-
         <div class="card mg-b-20 mg-md-b-0">
+
             <div class="card-body">
                 <div class="">
                     <h3 class="mb-3">Kategori Module</h3>
@@ -77,21 +28,6 @@ $type = $this->input->get('type');
                 </div>
             </div>
         </div>
-
-        <div class="card mt-2">
-            <div class="card-body">
-                <div class="">
-                    <a href="javascript:void(0)" class="btn btn-lg btn-rounded btn-warning-gradient btn-block font-weight-bold btn_create_all_config"><i class="fa fa-sync"></i> Create All ( config.php )</a>
-                    <small class="d-block text-muted"><i class="fa fa-info-circle"></i> klik tombol untuk membuat file config.php pada masing-masing modul.</small>
-                </div>
-                <hr>
-                <div class="">
-                    <a href="javascript:void(0)" class="btn btn-lg btn-rounded btn-success-gradient btn-block font-weight-bold btn_sync_all_config"><i class="fa fa-sync"></i> Sync All ( config.php )</a>
-                    <small class="d-block text-muted"><i class="fa fa-info-circle"></i> klik tombol untuk melakukan sinkronisasi data konfigurasi pada semua modul.</small>
-                </div>
-            </div>
-        </div>
-
     </div>
     <div class="col-lg-8 col-xl-9 col-md-12 container_list" data-type="<?= $type ?>">
         <div class="card">
@@ -169,19 +105,6 @@ $type = $this->input->get('type');
                         <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save"><i class="fa fa-save"></i> Simpan Data</button>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal" id="modal_route" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document" style="min-width:60%;">
-        <div class="modal-content modal-content-demo">
-            <div class="modal-header">
-                <h6 class="modal-title"></h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
-            </div>
-            <div class="modal-body">
-                <div class="html_respon_route"></div>
             </div>
         </div>
     </div>

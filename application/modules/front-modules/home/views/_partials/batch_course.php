@@ -12,7 +12,7 @@
                         DATE_FORMAT(a.opening_registration_date, "%d %M %Y") opening_date,
                         DATE_FORMAT(a.closing_registration_date, "%d %M %Y") closing_date',
                 'from' => 'tb_batch_course a',
-                'where' => 'NOW() BETWEEN a.opening_registration_date AND a.closing_registration_date',
+                'where' => 'DATE(NOW()) BETWEEN a.opening_registration_date AND a.closing_registration_date',
                 'order_by' => 'a.created_date DESC'        
             ];
             $batch_courses = Modules::run('database/get', $q_batch_courses)->result();

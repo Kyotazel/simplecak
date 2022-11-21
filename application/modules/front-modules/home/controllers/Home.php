@@ -171,9 +171,9 @@ class Home extends FrontendController
             if ($open_course || $open_course === '0') {
                 $card = '';
                 if ($open_course == 1) {
-                    $q_batch_courses['where'] = 'NOW() < a.closing_registration_date';
+                    $q_batch_courses['where'] = 'DATE(NOW()) <= a.closing_registration_date';
                 } elseif ($open_course === '0') {
-                    $q_batch_courses['where'] = 'NOW() > a.closing_registration_date';
+                    $q_batch_courses['where'] = 'DATE(NOW()) > a.closing_registration_date';
                 } 
                     $batch_courses = Modules::run('database/get', $q_batch_courses)->result();
                 foreach ($batch_courses as $batch) {

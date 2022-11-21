@@ -91,7 +91,7 @@ class Batch_course extends BackendController
         $this->app_data["method"]       = "add";
         $this->app_data["page_title"] = "Tambah Gelombang Pelatihan";
         $this->app_data["view_file"] = "form_add";
-        echo Modules::run("template/main_layout", $this->app_data);
+        echo Modules::run("template/horizontal_layout", $this->app_data);
     }
 
     public function get_data() {
