@@ -1,10 +1,29 @@
-to configure this HMVC:
+- Sertifikat
+    1. List Batch Course (Order DESC)
+        - No
+        - Nama Batch Course
+        - Peserta Sudah Sertifikat
+            - Data Peserta Bersertifikat (New Page)
+                - Tombol Download
+                    - Download Sertifikat
+                - Table
+                    - Checklist
+                    - No
+                    - Nama Peserta
+                    - Sertifikat
+        - Peserta Belum Sertifikat
+            - Data Peserta Belum Sertifikat (New Page)
+                - Tombol Generate
+                    - Modal : Nomor Peserta, Nomor Surat Keputusan, JP, Kompeten, Tanggal Sertifikasi, Tanggal Expired -> generate
+                        - Input ke tb_account_has_certificate
+                        - Refresh Table
+                - Table
+                    - Checklist
+                    - No
+                    - Nama Peserta
+                    - Generate
 
-1. Make Base URL
-2. Set Base URL name in .htaccess
-3. set directory in each index.php
-4. front modules directory place at "aplication/modules/front-module"
-5. back modules directory place at "aplication/modules/back-module"
-
-
---- happy coding ---
+    2. Sertifikat Ku:
+        - Daftar Pelatihan yang diikuti
+        - Jika Sudah Bersertifikat : Ada Sertifikat, Bisa Cetak Certificate
+        - Jika Belum Bersertifikat : alert belum terdapat sertifikat

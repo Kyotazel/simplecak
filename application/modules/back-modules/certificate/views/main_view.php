@@ -1,0 +1,24 @@
+<div class="row row-sm main-content-mail">
+    <div class="col-md-12 container_list">
+        <div class="card">
+            <div class="card-body">
+                <div class="mb-3 row">
+                    <h3 class="col-md-8">Daftar Gelombang Pelatihan</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover" id="table_data" style="width: 100%;">
+                        <thead>
+                            <tr>
+                                <th><span>No</span></th>
+                                <th><span>Nama Pelatihan</span></th>
+                                <th><span>Sudah Sertifikat</span></th>
+                                <th><span>Belum Sertifikat</span></th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
