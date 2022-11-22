@@ -38,8 +38,8 @@ $('.btn-sign-in').click(function (e) {
                 
                 for (var i = 0; i < data.inputerror.length; i++)
                 {
-                    $('[name="'+data.inputerror[i]+'"]').parent().addClass('has-danger');
-                    $('[name="'+data.inputerror[i]+'"]').next().text(data.error_string[i]);
+                    $('[name="'+data.inputerror[i]+'"]').addClass("is-invalid");
+                    $('[name="'+data.inputerror[i]+'"]').next().next().html(data.error_string[i]);
                 }
 
                 
@@ -208,3 +208,19 @@ $(document).on('click', '.btn_remove_image', function () {
         }
 	});//end ajax
 });
+
+function password_show_hide() {
+    var x = document.getElementById("password");
+    var show_eye = document.getElementById("show_eye");
+    var hide_eye = document.getElementById("hide_eye");
+    hide_eye.classList.remove("d-none");
+    if (x.type === "password") {
+      x.type = "text";
+      show_eye.style.display = "none";
+      hide_eye.style.display = "block";
+    } else {
+      x.type = "password";
+      show_eye.style.display = "block";
+      hide_eye.style.display = "none";
+    }
+  }

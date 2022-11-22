@@ -5,7 +5,7 @@ class Course_category extends BackendController
 {
     var $module_name = 'course_category';
     var $module_directory = 'course_category';
-    var $module_js = ['course_category'];
+    var $module_js = ['course_category', 'print'];
     var $app_data = [];
 
     public function __construct()

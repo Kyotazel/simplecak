@@ -1,0 +1,149 @@
+<style type="text/css">
+    .body {
+        font-size: 9px;
+        font-family: Times, serif;
+    }
+
+    .jarak {
+        height: 25px;
+    }
+
+    .lebar {
+        width: 70px;
+    }
+
+    .lebar-kecil {
+        width: 40px;
+    }
+
+    /*table{
+                    width: 90%;
+                }*/
+    .table {
+        /*width: 100px;*/
+        border: 1px solid #000;
+        border-collapse: collapse;
+        padding-left: 8px;
+        padding-right: 8px;
+    }
+
+    th {
+        border: 1px solid #000;
+        border-collapse: collapse;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 11px;
+    }
+
+    .table tr td {
+        border: 1px solid #000;
+        border-collapse: separate;
+        padding-left: 8px;
+        padding-right: 8px;
+        padding-top: 5px;
+        padding-bottom: 5px;
+        font-size: 10px;
+        vertical-align: top;
+    }
+
+    .more_width {
+        width: 100px;
+    }
+
+    .small_width {
+        width: 3px;
+    }
+
+    .much_width {
+        width: 300px;
+    }
+
+    .width_200 {
+        width: 200px;
+    }
+
+    .more_than_width {
+        width: 150px;
+    }
+
+    /*hr{
+                    border-top: 0.1px solid #8c8b8b;
+                }*/
+    .hr_style {
+        border-top: 1px dashed #808080;
+        border-bottom: 1px dashed #fff;
+    }
+
+    .delivery_address {
+        /*background-color: red;*/
+        border: 1px dashed #808080;
+    }
+
+    .text-capitalize {
+        text-transform: capitalize;
+    }
+
+    .border-none {
+        border: none;
+    }
+
+    .border-bottom-none {
+        border-bottom: none;
+    }
+
+    .border-top-none {
+        border-top: none;
+    }
+
+    .border-right-none {
+        border-right: none;
+    }
+
+    .border-left-none {
+        border-left: none;
+    }
+
+    .border {
+        border: 1px solid #000;
+    }
+
+    .border-bottom {
+        border-bottom: 1px solid #000;
+    }
+
+    .border-top {
+        border-top: 1px solid #000;
+    }
+
+    .border-left {
+        border-left: 1px solid #000;
+    }
+
+    .border-right {
+        border-right: 1px solid #000;
+    }
+
+    label {
+        font-size: 10px;
+    }
+</style>
+<html>
+
+<head>
+    <title></title>
+</head>
+
+<body>
+    <table class="table" border="1">
+        <tr>
+            <td class="border-none" style="width:700px;padding:5px;text-align:center;">
+                <h4 style="margin:0;margin-bottom:10px;"><?= $company["name"]; ?></h4>
+                <label style="margin: 0px;text-align:center;">LAPORAN Modular Test</label><br>
+            </td>
+        </tr>
+    </table>
+</body>
+
+</html>

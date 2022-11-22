@@ -23,12 +23,24 @@
                     <div class="form-group text-left">
                         <label>Username atau Email</label>
                         <input class="form-control" name="username" autofocus placeholder="masukan username atau email.." type="text">
-                        <span class="help-block"></span>
+                        <span></span>
+                        <span class="invalid-feedback"></span>
                     </div>
                     <div class="form-group text-left">
                         <label>Password</label>
-                        <input class="form-control" name="password" placeholder="masukan password" type="password">
-                        <span class="help-block"></span>
+                        <!-- <input class="form-control" name="password" placeholder="masukan password" type="password"> -->
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Masukkan Password" type="password" name="password" id="password">
+                            <span class="input-group-btn" onclick="password_show_hide()">
+                                <button class="btn ripple btn-light" type="button">
+                                    <span class="input-group-btn">
+                                        <i class="fas fa-eye" id="show_eye"></i>
+                                        <i class="fas fa-eye-slash d-none" id="hide_eye"></i>
+                                    </span>
+                                </button>
+                            </span>
+                            <span class="invalid-feedback"></span>
+                        </div>
                     </div>
                     <button class="btn ripple btn-main-primary btn-block btn-sign-in">Login</button>
                 </form>
