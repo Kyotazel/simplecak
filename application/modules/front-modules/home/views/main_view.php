@@ -11,8 +11,12 @@ if ($id_page_builder) {
 }
 // var_dump($get_content);die;
 echo $get_content->description;
+$this->load->view('_partials/counter.php');
+$this->load->view('_partials/about_us.php');
 $this->load->view('_partials/courses.php');
 $this->load->view('_partials/batch_course.php');
 $this->load->view('_partials/certificate.php');
-$this->load->view('_partials/structure.php');
+$this->load->view('_partials/instructor.php');
+$this->load->view('_partials/testimony.php');
+$this->load->view('_partials/company.php');
 // $this->load->view('_partials/service_category');

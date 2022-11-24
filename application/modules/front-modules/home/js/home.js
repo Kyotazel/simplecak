@@ -3,7 +3,7 @@ var list_batch_courses = $('#list-batch-courses');
 $(document).ready(function () {
 
     $('#skill').select2({
-		placeholder: 'Pilih skill',
+		placeholder: 'Semua skill',
 		searchInputPlaceholder: 'Cari Skill',
 		 width: '100%'
 	});
@@ -59,3 +59,25 @@ $('#open_course').change(function (e) {
         }
     });
 });
+
+$('.form_newsletter').submit(function (e) {
+    e.preventDefault();
+    var formData = new FormData($(this)[0]);
+    $.ajax({
+        type: "POST",
+        url: baseUrl + '/home/newsletter',
+        data: formData,
+        contentType: false,
+        processData: false,
+        dataType: "JSON",
+        success: function (data) {
+            var icon = data.status ? 'success' : 'error';
+            Swal.fire({
+                icon: icon,
+                title: data.msg,
+                showConfirmButton: false,
+                timer: 1500
+            })
+        }
+    });
+})

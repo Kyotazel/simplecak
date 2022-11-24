@@ -264,8 +264,8 @@
                         <h2 class="h1 mb-lg-5 pb-md-2 text-center">Gabung bersama kami yuk dan kurangi angka pengangguran.</h2>
                     </div>
                     <div class="col-lg-6 col-md-8 col-sm-10">
-                        <form class="input-group needs-validation" novalidate>
-                            <input class="form-control rounded bg-light" type="email" placeholder="ketik emailmu..." required>
+                        <form class="input-group needs-validation form_newsletter" novalidate>
+                            <input class="form-control rounded bg-light" type="email" name="email" placeholder="ketik emailmu..." required>
                             <button class="btn btn-gradient btn-hover-shadow ms-md-4 ms-sm-3 ms-2 rounded" type="submit">Subscribe</button>
                         </form>
                     </div>
@@ -293,6 +293,7 @@
     <!-- Select2 js-->
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/select2/js/select2.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>js/select2.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Main theme script-->
     <script src="<?= base_url('assets/themes/createx/'); ?>js/theme.min.js"></script>
 
