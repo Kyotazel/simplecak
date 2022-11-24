@@ -30,7 +30,7 @@ class Template extends FrontendController
         $this->load->view('main_layout_cms', $data);
     }
 
-    public function main_layout_dark($data)
+    public function main_layout_extern($data)
     {
         $data['company_name'] = Modules::run('database/find', 'app_setting', ['field' => 'company_name'])->row()->value;
         $data['company_tagline'] = Modules::run('database/find', 'app_setting', ['field' => 'company_tagline'])->row()->value;
@@ -47,7 +47,7 @@ class Template extends FrontendController
         $menu = $this->create_menu($get_group_menu->id, 'sidebar');
         $data['html_main_menu'] = $menu;
 
-        $this->load->view('main_layout_dark', $data);
+        $this->load->view('main_layout_extern', $data);
     }
 
     public function horizontal_layout($data)
