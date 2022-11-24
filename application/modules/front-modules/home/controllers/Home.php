@@ -66,10 +66,12 @@ class Home extends FrontendController
                         'where' => [
                             'b.id' => $category,
                         ],
-                        'where_in' => [
-                            'c.id_skill' => $skill
-                        ]
                     ];
+                    if (!empty($skill)) {
+                        $q_course['where_in'] = [
+                            'c.id_skill' => $skill
+                        ];
+                    }
                     $courses = Modules::run('database/get', $q_course)->result();
                 }
                 foreach ($courses as $course) {
@@ -139,7 +141,7 @@ class Home extends FrontendController
                 'select' => 'a.id, a.title, a.description, a.target_registrant, 
                         DATE_FORMAT(a.opening_registration_date, "%d %M %Y") opening_date,
                         DATE_FORMAT(a.closing_registration_date, "%d %M %Y") closing_date,
-                        a.image, a.target_registrant',
+                        a.image, a.target_registrant, a.closing_registration_date',
                 'from' => 'tb_batch_course a',
                 'order_by' => 'a.created_date DESC',
                 'where' => [
@@ -155,7 +157,7 @@ class Home extends FrontendController
             $data = Modules::run('database/get', $q_batch_courses)->row();
             $this->app_data['batch_course'] = $data;
             $this->app_data['count_peserta'] = $count_peserta;
-            $this->app_data['page_title'] = "Penfdaftaran Pelatihan " . ucwords($data->title);
+            $this->app_data['page_title'] = "Pendaftaran Pelatihan " . ucwords($data->title);
             $this->app_data['view_file'] = '_partials/batch_course_detail';
             echo Modules::run('template/main_layout', $this->app_data);
         } else {
@@ -164,7 +166,7 @@ class Home extends FrontendController
                 'select' => 'a.id, a.title, a.description, a.target_registrant, 
                         DATE_FORMAT(a.opening_registration_date, "%d %M %Y") opening_date,
                         DATE_FORMAT(a.closing_registration_date, "%d %M %Y") closing_date,
-                        a.image, a.target_registrant',
+                        a.image, a.target_registrant, a.closing_registration_date',
                 'from' => 'tb_batch_course a',
                 'order_by' => 'a.created_date DESC'        
             ];
@@ -184,7 +186,7 @@ class Home extends FrontendController
                         "where" => "id_batch_course = $batch->id AND status = 5"
                     ];
                     $count_peserta      = Modules::run("database/get", $array_peserta)->row();
-                    if ($date > $batch->closing_date) {
+                    if ($date >= $batch->closing_registration_date) {
                         $badge_date = '<span class="badge bg-danger fw-bold">'.$batch->closing_date.' | ' . $count_peserta->total .'/'. $batch->target_registrant . ' Peserta</span>';
                     } else {
                         $badge_date = '<span class="badge bg-success fw-bold">'.$batch->closing_date.' | ' . $count_peserta->total .'/'. $batch->target_registrant . ' Peserta</span>';
@@ -217,6 +219,29 @@ class Home extends FrontendController
                 $this->app_data['view_file'] = 'register';
                 echo Modules::run('template/main_layout', $this->app_data);
             }
+        }
+    }
+
+    public function about_us()
+    {
+        $this->app_data['page_title'] = "Tentang Kami";
+        $this->app_data['view_file'] = '_partials/about_us';
+        echo Modules::run('template/main_layout', $this->app_data);
+    }
+
+    public function job_fair() 
+    {
+        redirect(base_url('member-area/jobfair'));
+    }
+
+    public function newsletter() 
+    {
+        $email = $this->input->post('email');
+        if (!empty($email)) {
+            Modules::run('database/insert', 'tb_newsletter', ['email' => $email]);
+            echo json_encode(['status' => TRUE, 'msg' => 'Subscribe berhasil']);
+        } else {
+            echo json_encode(['status' => FALSE, 'msg' => 'Email tidak boleh kosong']);
         }
     }
 

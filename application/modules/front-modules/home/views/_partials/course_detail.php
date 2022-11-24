@@ -4,13 +4,13 @@
             <div class="card-body h-100">
                 <div class="row">
                     <div class="col-xl-6 col-lg-6 col-md-6">
-                        <div class="product-carousel">
-                            <div id="carousel" class="carousel slide" data-bs-ride="false">
-                                <div class="carousel-inner">
-                                    <div class="carousel-item active">
-                                        <img src="<?= base_url('upload/courses/') . $course->image ?>" alt="course" class="img-fluid mx-auto d-block">
-                                    </div>
-                                </div>
+                        <div class="product-carousel" style="height: auto; width: 100%;">
+                            <!-- <div id="carousel" class="carousel slide" data-bs-ride="false" style="width: 100%; height: 100%;"> -->
+                                <!-- <div class="carousel-inner"> -->
+                                    <!-- <div class="carousel-item active"> -->
+                                        <img src="<?= base_url('upload/courses/') . $course->image ?>" alt="course" class="mx-auto" style="width: 100%;">
+                                    <!-- </div> -->
+                                <!-- </div> -->
                                 <!-- <div class="text-center mt-4 mb-4 btn-list">
                                     <a href="ecommerce-cart.html" class="btn ripple btn-primary">
                                         <i class="fe fe-shopping-cart"> </i> Add to cart
@@ -18,14 +18,14 @@
                                     <a href="#" class="btn ripple btn-secondary"><i class="fe fe-credit-card"> </i> Buy Now
                                     </a>
                                 </div> -->
-                            </div>
+                            <!-- </div> -->
                         </div>
                     </div>
                     <div class="col-xl-6 col-lg-6 col-md-6">
                         <div class="mt-4 mb-4">
                             <h2 class="mt-1 mb-3"><?= $course->name ?></h2>
                             <p class="h5 mb-2 pl-0 ml-0">Kategori keahlian:</p>
-                            <h6 class="text-success"><?= ucwords(Modules::run('database/find', 'tb_course_category', ['id' => $course->id_category_course])->row()->name); ?></h6>
+                            <h6 class="btn btn-outline-success"><?= ucwords(Modules::run('database/find', 'tb_course_category', ['id' => $course->id_category_course])->row()->name); ?></h6>
                             <h5 class="mb-2">Skill:</h5>
                             <p class="tx-13 text-muted">
                                 <?php
@@ -43,13 +43,15 @@
                                 $skills = Modules::run('database/get', $q_skill)->result();
                                 $i = 0;
                                 foreach ($skills as $skill) : ?>
-                                    <span class="fw-bold text-primary"><?= ucwords($skill->skill) ?></span>
+                                    <span class="fw-bold badge bg-info"><?= ucwords($skill->skill) ?></span>
                                     <?= $i > 0 ? '<span class="text-border px-1">|</span>' : '' ?>
                                     <?php $i++; ?>
                                 <?php endforeach; ?>
                             </p>
                             <h6 class="mt-4 fs-16">Deskripsi</h6>
-                            <?= $course->description ?>
+                            <div style="max-height: 35vh" data-simplebar data-simplebar-auto-hide="false">
+                                <?= $course->description ?>
+                            </div>
                         </div>
                         <!-- <div class="d-flex  mt-2">
                             <div class="mt-2 sizes">Quantity:</div>

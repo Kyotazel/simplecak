@@ -35,7 +35,7 @@
                     <h3 class="h5 mb-sm-1 mb-2">
                         <a href="<?= base_url('pendaftaran-pelatihan?data=') . $this->encrypt->encode($batch->id) ?>" class="nav-link"><?= $batch->title ?></a>
                     </h3>
-                    <span class="text-muted"><?= strip_tags($batch->description); ?></span>
+                    <span class="text-muted overflow-hidden d-inline-block" style="height: 46px"><?= strip_tags($batch->description); ?></span>
                 </div>
                 <div class="card-footer flex-shrink-0 my-sm-4 mt-5 me-sm-n2 py-sm-2 px-sm-0 border-0">
                     <a href="<?= base_url('pendaftaran-pelatihan?data=') . $this->encrypt->encode($batch->id) ?>" class="btn btn-outline-primary btn-hover-shadow d-sm-inline-block d-block">Detail</a>
@@ -77,10 +77,11 @@
                     "where" => "id_batch_course = $batch->id AND status = 5"
                 ];
                 $count_peserta      = Modules::run("database/get", $array_peserta)->row();
-                if ($date > $batch->closing_date) {
-                    $badge_date = '<span class="badge bg-danger fw-bold">'.$batch->closing_date.' | ' . $count_peserta->total .'/'. $batch->target_registrant . ' Peserta</span>';          
-                } else {
+                // echo $date . ' ' . $batch->closing_registration_date;
+                if ($date <= $batch->closing_registration_date) {
                     $badge_date = '<span class="badge bg-success fw-bold">'.$batch->closing_date.' | ' . $count_peserta->total .'/'. $batch->target_registrant . ' Peserta</span>';
+                } else {
+                    $badge_date = '<span class="badge bg-danger fw-bold">'.$batch->closing_date.' | ' . $count_peserta->total .'/'. $batch->target_registrant . ' Peserta</span>';          
                 }
             ?>
             <!-- Card horizontal -->
@@ -96,7 +97,7 @@
                         <h3 class="h5 mb-sm-1 mb-2">
                             <a href="<?= base_url('pendaftaran-pelatihan?data=') . $this->encrypt->encode($batch->id) ?>" class="nav-link"><?= $batch->title ?></a>
                         </h3>
-                        <span class="text-muted"><?= strip_tags($batch->description); ?></span>
+                        <span class="text-muted overflow-hidden d-inline-block" style="height: 70px"><?= strip_tags($batch->description); ?></span>
                     </div>
                     <div class="card-footer flex-shrink-0 my-sm-2 mt-5 me-sm-n2 py-sm-2 px-sm-0 border-0">
                         <a href="<?= base_url('pendaftaran-pelatihan?data=') . $this->encrypt->encode($batch->id) ?>" class="btn btn-outline-primary btn-hover-shadow d-sm-inline-block d-block float-end">Detail</a>

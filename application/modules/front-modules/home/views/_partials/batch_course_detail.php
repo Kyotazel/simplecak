@@ -18,7 +18,7 @@
                                     $badge_registrar = '';
                                     $badge_close = '';
                                     $btn_register = '<a href="'.base_url('member-area/register_course/detail?data='). $this->encrypt->encode($batch_course->id).'" class="btn btn-gradient btn-hover-shadow d-sm-inline-block d-none ms-4"><i class="fe fa-check-circle"> </i> Daftar Sekarang</a>';
-                                    if ($date > $batch_course->opening_date) {
+                                    if ($date <= $batch_course->closing_registration_date) {
                                         $badge_close = '<span class="badge bg-success">Pelatihan Dibuka</span>';
                                         $badge_date = '<h6 class="btn btn-outline-success mb-2"><i class="fa fa-calendar-check-0"></i> '. $batch_course->opening_date .' - ' . $batch_course->closing_date .' </h6>';
                                         $badge_registrar = '<h6 class="btn btn-outline-success mb-2"><i class="fa fa-user"></i> '. $count_peserta->total .'/'. $batch_course->target_registrant . ' Peserta </h6>'; 
@@ -45,7 +45,9 @@
                             <p class="h6 m-0">Jumlah Peserta: </p>
                             <?= $badge_registrar ?>
                             <h6 class="mt-2 fs-16">Deskripsi</h6>
-                            <?= $batch_course->description ?>
+                            <div style="max-height: 35vh" data-simplebar data-simplebar-auto-hide="false">
+                                <?= $batch_course->description ?>
+                            </div>
                         </div>
                     </div>
                 </div>
