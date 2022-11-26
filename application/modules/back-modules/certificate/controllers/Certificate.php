@@ -44,7 +44,7 @@ class Certificate extends BackendController
         foreach ($get_all as $data_table) {
 
             $get_before = $this->db->query("SELECT COUNT(*) as total FROM tb_batch_course_has_account
-             WHERE id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) AND id_batch_course = $data_table->id AND status=5")->row();
+             WHERE (id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) OR id_batch_course NOT IN(SELECT id_batch_course FROM tb_account_has_certificate)) AND id_batch_course = $data_table->id AND status=5")->row();
 
             $array_after = [
                 "select" => "COUNT(*) as total",
@@ -87,7 +87,7 @@ class Certificate extends BackendController
         Modules::run("security/is_ajax");
         $get_all = $this->db->query("SELECT a.*, b.name as name FROM tb_batch_course_has_account a
             LEFT JOIN tb_account b ON a.id_account = b.id
-             WHERE id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) AND a.id_batch_course = $id_batch_course AND a.status = 5")->result();
+             WHERE (id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) OR id_batch_course NOT IN(SELECT id_batch_course FROM tb_account_has_certificate)) AND a.id_batch_course = $id_batch_course AND a.status = 5")->result();
         $no = 0;
         $data = [];
         foreach ($get_all as $data_table) {

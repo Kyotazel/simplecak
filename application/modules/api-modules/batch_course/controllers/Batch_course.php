@@ -29,8 +29,31 @@ class Batch_course extends ApiController
         echo json_encode($response);
     }
 
+    private function _validate_register()
+    {
+        $response = array();
+        $response['error'] = FALSE;
+
+        $id_account = $this->input->post('id_account');
+        $id_batch_course = $this->input->post('id_batch_course');
+
+        $get_data = Modules::run('database/find', 'tb_batch_course_has_account', ['id_account' => $id_account, 'id_batch_course' => $id_batch_course])->row();
+
+        if($get_data) {
+            $response['msg'][] = 'Akun ini pernah mendaftar di pelatihan ini';
+            $response['error'] = TRUE;
+        }
+
+        if ($response['error'] == TRUE) {
+            echo json_encode($response);
+            exit();
+        }
+
+    }
+
     public function registration_batch_course()
     {
+        $this->_validate_register();
         $id_account = $this->input->post('id_account');
         $id_batch_course = $this->input->post('id_batch_course');
 

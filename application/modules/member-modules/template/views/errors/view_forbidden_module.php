@@ -51,6 +51,7 @@
         <div class="main-error-wrapper page page-h">
             <img src="<?= base_url('assets/themes/valex/') ?>img/media/404.png" class="error-page" alt="error">
             <h2>TIDAK DAPAT DI AKSES.</h2>
+            <h4><?= $data ?></h4>
             <h6>mohon maaf anda tidak memiliki akses kehalaman ini.</h6><a class="btn btn-outline-danger" href="<?= Modules::run('helper/create_url', '/'); ?>">Kembali ke halaman utama</a>
         </div>
         <!-- /Main-error-wrapper -->

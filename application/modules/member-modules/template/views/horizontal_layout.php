@@ -50,6 +50,7 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/dataTables.bootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/responsivebootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.bootstrap4.min.css" rel="stylesheet" />
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/fileuploads/css/fileupload.css" rel="stylesheet" type="text/css"/>
 
     <!-- Jrsoftmedia -->
     <link href="<?= base_url('assets/plugin/'); ?>notify/css/notifIt.css" rel="stylesheet" />
@@ -338,7 +339,7 @@
         <!--End  Horizonatal menu-->
 
         <!-- Main Content-->
-        <div class="main-content pt-0">
+        <div class="main-content pt-0 mb-5">
 
             <div class="container">
                 <div class="inner-body">
@@ -433,6 +434,8 @@
     <script src="<?php echo base_url('assets/plugin/'); ?>print_js/print.min.js"></script>
 
     <script src="<?= base_url('assets/plugin/'); ?>darggable/jquery-ui-darggable.min.js"></script>
+
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/fileuploads/js/fileupload.js"></script>
 
     <!-- Custom js -->
     <script src="<?= base_url('assets/themes/spruhha/') ?>js/custom.js"></script>

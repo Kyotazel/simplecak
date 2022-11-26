@@ -104,7 +104,6 @@ $('.btn_save').click(function (e) {
 
 $(document).on('click', '.btn_delete', function () {
     id = $(this).data('id');
-    console.log(id);
     swal({
         title: "Apakah anda yakin?",
         text: "data akan dihapus!",
