@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-3 row">
-                    <h3 class="col-md-8">Daftar Gelombang Pelatihan</h3>
+                    <h3 class="col-md-8">Tes Gelombang Pelatihan</h3>
                     <div class="col-md-4 text-right">
                     <?= Modules::run('security/create_access', '<a href="' . Modules::run('helper/create_url', 'batch_course_history/add') . '" class="btn btn-primary "> <i class="fa fa-plus-circle"></i> Tambah Batch Pelatihan</a>'); ?>
                     </div>

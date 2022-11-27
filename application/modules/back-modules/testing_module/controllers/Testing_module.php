@@ -39,5 +39,6 @@ class Testing_module extends BackendController
         );
         echo json_encode($ouput);
     }
+    
 }
             

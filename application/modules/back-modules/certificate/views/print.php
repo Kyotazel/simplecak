@@ -72,7 +72,9 @@
             </div>
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 43%;"></td>
+                    <td style="width: 43%; text-align:center">
+                        <img src="<?= base_url('upload/') ?>/barcode/<?= $qrcode ?>" alt="" style="height: 140px">
+                    </td>
                     <td style="width: 14%; text-align:center">
                     <?php if($data->photo == '') : ?>
                         <img src="<?= base_url('upload/') ?>/member/1668143398667.jpg" alt="" style="height: 140px">

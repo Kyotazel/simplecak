@@ -44,7 +44,7 @@ class Certificate extends BackendController
         foreach ($get_all as $data_table) {
 
             $get_before = $this->db->query("SELECT COUNT(*) as total FROM tb_batch_course_has_account
-             WHERE id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) AND id_batch_course = $data_table->id AND status=5")->row();
+             WHERE (id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) OR id_batch_course NOT IN(SELECT id_batch_course FROM tb_account_has_certificate)) AND id_batch_course = $data_table->id AND status=5")->row();
 
             $array_after = [
                 "select" => "COUNT(*) as total",
@@ -87,7 +87,7 @@ class Certificate extends BackendController
         Modules::run("security/is_ajax");
         $get_all = $this->db->query("SELECT a.*, b.name as name FROM tb_batch_course_has_account a
             LEFT JOIN tb_account b ON a.id_account = b.id
-             WHERE id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) AND a.id_batch_course = $id_batch_course AND a.status = 5")->result();
+             WHERE (id_account NOT IN (SELECT id_account FROM tb_account_has_certificate) OR id_batch_course NOT IN(SELECT id_batch_course FROM tb_account_has_certificate)) AND a.id_batch_course = $id_batch_course AND a.status = 5")->result();
         $no = 0;
         $data = [];
         foreach ($get_all as $data_table) {
@@ -199,10 +199,10 @@ class Certificate extends BackendController
         $expired_date = $this->input->post('exp_date');
         $sk_date = $this->input->post('sk_date');
         $kompeten = $this->input->post('kompeten');
-        
+
         $kompetensi = '';
         $kompetensi_en = '';
-        if($kompeten) {
+        if ($kompeten) {
             $kompetensi = 'dan dinyatakan KOMPETEN';
             $kompetensi_en = 'and Declared COMPETENT';
         }
@@ -217,20 +217,32 @@ class Certificate extends BackendController
             ],
             "where" => ['a.id' => $id]
         ];
-
         $get_data = Modules::run('database/get', $array_query)->row();
+
+        $array_key = [
+            'id' => $get_data->id,
+            'id_account' => $get_data->id_account,
+            'id_batch_course' => $get_data->id_batch_course,
+        ];
+
+        $encrypted_url = base_url("certificate/check/");
+        $encrypted_url .= urlencode(base64_encode(json_encode($array_key)));
+
+        $qrcode = $this->create_qr_code($encrypted_url);
+
         $data['data'] = $get_data;
         $data['no_peserta'] = $no_peserta;
         $data['no_sk'] = $no_sk;
         $data['jp'] = $jp;
         $data['sk_date'] = $sk_date;
         $data['kompetensi'] = $kompetensi;
+        $data['qrcode'] = $qrcode;
         $data['kompetensi_en'] = $kompetensi_en;
         $html = $this->load->view('print', $data, TRUE);
         // echo $this->load->view('print', $data, TRUE);
         $filename = time();
         $path = FCPATH . '../upload/certificate/';
-        $pdf = new \Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'en', true, 'UTF-8', [10,10,10,0]);
+        $pdf = new \Spipu\Html2Pdf\Html2Pdf('L', 'A4', 'en', true, 'UTF-8', [10, 10, 10, 0]);
         $pdf->WriteHTML($html);
         $pdf->Output($path . $filename . '.pdf', 'F');
 
@@ -244,6 +256,32 @@ class Certificate extends BackendController
 
         Modules::run('database/insert', 'tb_account_has_certificate', $array_insert);
 
+        Modules::run('database/update', 'tb_account', ['id' => $get_data->id_account], ['is_alumni' => 1]);
+
         echo json_encode(['status' => true]);
+    }
+
+    private function create_qr_code($code)
+    {
+        error_reporting(0);
+        $this->load->library('ciqrcode'); //pemanggilan library QR CODE
+        $config['cacheable']    = true; //boolean, the default is true
+        $config['cachedir']     = '../upload/'; //string, the default is application/cache/
+        $config['errorlog']     = '../upload/'; //string, the default is application/logs/
+        $config['imagedir']     = '../upload/barcode/'; //direktori penyimpanan qr code
+        $config['quality']      = true; //boolean, the default is true
+        $config['size']         = '1024'; //interger, the default is 1024
+        $config['black']        = array(224, 255, 255); // array, default is array(255,255,255)
+        $config['white']        = array(70, 130, 180); // array, default is array(0,0,0)
+        $this->ciqrcode->initialize($config);
+        $image_name = time() . '.png'; //buat name dari qr code sesuai dengan nim
+        $params['data'] = $code; //data yang akan di jadikan QR CODE
+        $params['level'] = 'H'; //H=High
+        $params['size'] = 10;
+        $params['savename'] = FCPATH . $config['imagedir']  . $image_name; //simpan image QR CODE ke folder assets/images/
+
+
+        $this->ciqrcode->generate($params); // fungsi untuk generate QR CODE
+        return $image_name;
     }
 }

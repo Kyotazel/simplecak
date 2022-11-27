@@ -20,13 +20,11 @@
                         <tbody></tbody>
                     </table>
                 </div>
-            </div>
-            <div class="card-footer row">
-                <div class="col-md-8"></div>
-                <div class="col-md-4 text-right">
-                        <?= Modules::run("security/create_access", '<a href="' . Modules::run('helper/create_url', 'course_category/export_pdf') . '" class="btn btn-outline-danger"><i class="fa fa-save"></i> Unduh Pdf </a>') ?>
-                        <?= Modules::run("security/create_access", '<a href="' . Modules::run('helper/create_url', 'course_category/export_excel') . '" class="btn btn-outline-success"><i class="fa fa-table"></i> Unduh Excel </a>') ?>
-                    </div>
+                <div class="text-right pt-3">
+                    <small>(*klik untuk export)</small>
+                    <a href="javascript:void(0)" data-doc="excel" class="btn  btn-outline-dark btn_print"> <i class="mdi mdi-file-excel"></i> Cetak Excel</a>
+                    <a href="javascript:void(0)" data-doc="pdf" class="btn  btn-outline-dark btn_print"> <i class="mdi mdi-file-pdf"></i> Cetak PDF</a>
+                </div>
             </div>
         </div>
     </div>
