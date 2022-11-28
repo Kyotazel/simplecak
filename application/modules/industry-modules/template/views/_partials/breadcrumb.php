@@ -5,8 +5,9 @@
     <?php
     if ($breadcrumb['method_tag'] == '') {
         echo '
-                <li class="breadcrumb-item active">' . $breadcrumb['controller_tag'] . '</li>
+                <li class="breadcrumb-item active">' . ucwords(str_replace('_', ' ', $breadcrumb['controller'])) . '</li>
             ';
+
     } else {
         echo '
             <li class="breadcrumb-item">
@@ -15,6 +16,7 @@
             <li class="breadcrumb-item active">' . $breadcrumb['method_tag'] . '</li>
         ';
     }
+
     ?>
 
 </ol>

@@ -23,10 +23,9 @@ class Home extends BackendController
 
     public function index()
     {
-        $view_file = 'empty_dashboard';
-
-        $this->app_data['page_title']   = 'dashboard';
-        $this->app_data['view_file']    = $view_file;
+        // data nanti disini
+        $this->app_data['page_title']   = 'Dashboard';
+        $this->app_data['view_file']    = 'main_view';
         echo Modules::run('template/horizontal_layout', $this->app_data);
     }
 
