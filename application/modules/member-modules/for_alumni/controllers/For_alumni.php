@@ -101,4 +101,35 @@ class For_alumni extends CommonController
         }
     }
 
+    public function make_cv()
+    {
+        $id = $this->session->userdata('member_id');
+        $account = Modules::run('database/find', 'tb_account', ['id' => $id])->row();
+        $get_intern = Modules::run('database/find', 'tb_cv_intern', ['id_account' => $id])->row();
+        if(!$get_intern) {
+            Modules::run('database/insert', 'tb_cv_intern', ['id_account' => $id]);
+        }
+        $intern_cv = Modules::run('database/find', 'tb_cv_intern', ['id_account' => $id])->row();
+        
+        
+        $this->app_data['data_account'] = $account;
+        $this->app_data['intern_cv']    = $intern_cv;
+        $this->app_data['page_title']   = "Informasi Tambahan";
+        $this->app_data['view_file']    = 'make_cv';
+        echo Modules::run('template/horizontal_layout', $this->app_data);
+    }
+
+    public function salary_edit()
+    {
+        $id = $this->session->userdata('member_id');
+        $expected_salary = $this->input->post('expected_salary');
+        $link_portfolio = $this->input->post('link_portfolio');
+
+        Modules::run('database/update', 'tb_cv_intern', ['id_account' => $id], ['expected_salary' => $expected_salary, 'link_portfolio' => $link_portfolio]);
+
+        $redirect = Modules::run('helper/create_url', 'for_alumni/make_cv');
+
+        echo json_encode(['status' => TRUE, 'redirect' => $redirect]);
+    }
+
 }

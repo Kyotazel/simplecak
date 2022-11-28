@@ -38,4 +38,18 @@ class Export extends BackendController
         $pdf->Output('laporan_dosen_mengajar.pdf', 'I');
     }
 
+    public function print_cv()
+    {
+        $data['tes'] = "tes";
+        $html = $this->load->view('cv', $data, TRUE);
+        $pdf = new \Spipu\Html2Pdf\Html2Pdf('P', 'A4', 'en', true, 'UTF-8', [16,16,16,16]);
+        $pdf->WriteHTML($html);
+        $pdf->Output('contoh_cv.pdf', 'I');
+    }
+
+    public function check_cv()
+    {
+        echo $this->load->view('cv');
+    }
+
 }

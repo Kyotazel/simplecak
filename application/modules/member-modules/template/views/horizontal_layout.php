@@ -52,6 +52,9 @@
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.bootstrap4.min.css" rel="stylesheet" />
     <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/fileuploads/css/fileupload.css" rel="stylesheet" type="text/css"/>
 
+    <!-- Internal Summernote css-->
+		<link rel="stylesheet" href="<?= base_url('assets/themes/spruhha/') ?>/plugins/summernote/summernote-bs4.css">
+
     <!-- Jrsoftmedia -->
     <link href="<?= base_url('assets/plugin/'); ?>notify/css/notifIt.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?= base_url('assets/plugin/jquery.ui/') ?>css/jquery-ui.css">
@@ -425,7 +428,6 @@
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/datatable/fileexport/buttons.colVis.min.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/amazeui-datetimepicker/js/amazeui.datetimepicker.min.js"></script>
-    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/summernote/summernote-bs4.js"></script>
     
     <!-- jrsoftmedia setting -->
     <script src="<?= base_url('assets/plugin/'); ?>notify/js/notifIt.js"></script>
@@ -443,6 +445,8 @@
     <!--   ckeditor -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>ckeditor/ckeditor.js"></script>
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>ckeditor/adapters/jquery.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/summernote/summernote-bs4.js"></script>
+
     <!--   Dropzones -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>dropzone/dropzone.min.js"></script>
     <!-- additional js -->
