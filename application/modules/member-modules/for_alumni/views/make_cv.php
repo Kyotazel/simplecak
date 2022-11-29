@@ -4,6 +4,12 @@
         font-weight: 600;
         margin: 0;
     }
+
+    .jsplus_ui_toolbar_line,
+    .cke_bottom,
+    .n1ed_top_right_block {
+        display: none !important
+    }
 </style>
 
 <?php
@@ -13,6 +19,16 @@ if ($data_account->gender == 1) {
     $gender = "Perempuan";
 }
 ?>
+<div class="card mb-2">
+    <div class="card-body">
+        <div style="float: left;">
+            <h2>Curriculum Vitae</h2>
+        </div>
+        <div class="text-right">
+            <a class="btn btn-light" target="_blank" href="<?= Modules::run('helper/create_url', 'for_alumni/print_cv') ?>"><i class="fa fa-print"></i> Export ke Pdf</a>
+        </div>
+    </div>
+</div>
 <div class="card">
     <div class="card-body">
         <div class="row">
@@ -70,65 +86,76 @@ if ($data_account->gender == 1) {
             </h3>
             <hr>
             <p><?= $intern_cv->about_me ?></p>
-            <!-- <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Saepe perspiciatis quas itaque ullam, maiores vitae asperiores! Eligendi optio, laboriosam, ab nesciunt possimus officia blanditiis inventore dignissimos quo, deleniti delectus quis! Ullam vero temporibus earum ad ut? Alias omnis laborum laudantium delectus sapiente ab eaque, voluptates qui molestias est libero doloribus unde deleniti veniam facere explicabo consequatur? Magnam similique nisi, non recusandae incidunt ex unde obcaecati blanditiis. Earum sit quis, officiis ea voluptas sequi amet quae atque esse sint cumque nulla voluptatum asperiores ipsum ipsam dolorem nihil ullam ut minima dolores repellat. Voluptates eveniet consectetur iste quas vel, quasi nihil quis!</p> -->
+        </div>
+        <div style="margin-bottom: 100px;">
+            <h3>Kemampuan & Keahlian
+                <span style="font-size: 16px; margin-left: 12px; float: right;">
+                    <button class="btn btn-outline-primary btn_add_skill"><i class="fa fa-plus"></i> Tambah Kemampuan</button>
+                </span>
+            </h3>
+            <hr>
+            <?php foreach (Modules::run('database/find', 'tb_cv_intern_has_skill', ['id_cv_intern' => $intern_cv->id])->result() as $value) : ?>
+                <div style="margin-left: 24px; margin-bottom: 16px">
+                    <h4><?= $value->skill ?>
+                        <span style="font-size: 16px; margin-left: 12px; float: right;">
+                            <button class="btn btn-link text-info btn_edit_skill" data-id="<?= $value->id ?>"><i class="fa fa-pen"></i> EDIT</button>
+                            <button class="btn btn-link text-danger btn_delete_skill" data-id="<?= $value->id ?>"><i class="fa fa-trash"></i> DELETE</button>
+                        </span>
+                    </h4>
+                </div>
+            <?php endforeach ?>
         </div>
         <div style="margin-bottom: 100px;">
             <h3>PENGALAMAN
                 <span style="font-size: 16px; margin-left: 12px; float: right;">
-                    <button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Tambah Pengalaman Kerja</button>
+                    <button class="btn btn-outline-primary btn_add_experience"><i class="fa fa-plus"></i> Tambah Pengalaman</button>
                 </span>
             </h3>
             <hr>
-            <div style="margin-left: 24px; margin-bottom: 16px">
-                <h4>PT Dummy 1 Testing
-                    <span style="font-size: 16px; margin-left: 12px; float: right;">
-                        <button class="btn btn-link text-info"><i class="fa fa-pen"></i> EDIT</button>
-                        <button class="btn btn-link text-danger"><i class="fa fa-trash"></i> DELETE</button>
-                    </span>
-                </h4>
-                <h6>Web Programmer</h6>
-                <p class="mb-1">Januari 2021 - Desember 2021 (12 Bulan)</p>
-                <div class="ml-2">
-                    - Mengerjakan abc menggunakan def <br>
-                    - Tes Abcdefghi dengan asdasd
+            <?php foreach (Modules::run('database/find', 'tb_cv_intern_has_experience', ['id_cv_intern' => $intern_cv->id])->result() as $value) : ?>
+                <div style="margin-left: 24px; margin-bottom: 16px">
+                    <h4><?= $value->company_name ?>
+                        <span style="font-size: 16px; margin-left: 12px; float: right;">
+                            <button class="btn btn-link text-info btn_edit_experience" data-id="<?= $value->id ?>"><i class="fa fa-pen"></i> EDIT</button>
+                            <button class="btn btn-link text-danger btn_delete_experience" data-id="<?= $value->id ?>"><i class="fa fa-trash"></i> DELETE</button>
+                        </span>
+                    </h4>
+                    <h6><?= $value->position ?></h6>
+                    <?php
+                    $date1 = new DateTime($value->end_date);
+                    $date2 = new DateTime($value->started_date);
+                    $diff = $date1->diff($date2);
+                    $get_diff = ($diff->format('%y') * 12) + $diff->format('%m');
+                    ?>
+                    <p class="mb-1"><?= Modules::run('helper/month_indo', $value->started_date, '-') ?> - <?= Modules::run('helper/month_indo', $value->end_date, '-') ?> (<?= $get_diff ?> Bulan)</p>
+                    <div class="ml-2">
+                        <?= $value->description ?>
+                    </div>
                 </div>
-            </div>
-            <div style="margin-left: 24px; margin-bottom: 16px">
-                <h4>PT Dummy 1 Testing
-                    <span style="font-size: 16px; margin-left: 12px; float: right;">
-                        <button class="btn btn-link text-info"><i class="fa fa-pen"></i> EDIT</button>
-                        <button class="btn btn-link text-danger"><i class="fa fa-trash"></i> DELETE</button>
-                    </span>
-                </h4>
-                <h6>Web Programmer</h6>
-                <p class="mb-1">Januari 2021 - Desember 2021 (12 Bulan)</p>
-                <div class="ml-2">
-                    - Mengerjakan abc menggunakan def <br>
-                    - Tes Abcdefghi dengan asdasd
-                </div>
-            </div>
+            <?php endforeach ?>
         </div>
         <div style="margin-bottom: 100px;">
             <h3>PENDIDIKAN
                 <span style="font-size: 16px; margin-left: 12px; float: right;">
-                    <button class="btn btn-outline-primary"><i class="fa fa-plus"></i> Tambah Pendidikan</button>
+                    <button class="btn btn-outline-primary btn_add_education"><i class="fa fa-plus"></i> Tambah Pendidikan</button>
                 </span>
             </h3>
             <hr>
-            <div style="margin-left: 24px; margin-bottom: 16px">
-                <h4>Universitas Brawijaya
-                    <span style="font-size: 16px; margin-left: 12px; float: right;">
-                        <button class="btn btn-link text-info"><i class="fa fa-pen"></i> EDIT</button>
-                        <button class="btn btn-link text-danger"><i class="fa fa-trash"></i> DELETE</button>
-                    </span>
-                </h4>
-                <h6>Teknik Informatika</h6>
-                <p class="mb-1">2012 - 2016 (4 Tahun)</p>
-                <div class="ml-2">
-                    - Mengerjakan abc menggunakan def <br>
-                    - Tes Abcdefghi dengan asdasd
+            <?php foreach (Modules::run('database/find', 'tb_cv_intern_has_education', ['id_cv_intern' => $intern_cv->id])->result() as $value) : ?>
+                <div style="margin-left: 24px; margin-bottom: 16px">
+                    <h4><?= $value->school_name ?>
+                        <span style="font-size: 16px; margin-left: 12px; float: right;">
+                            <button class="btn btn-link text-info btn_edit_education" data-id="<?= $value->id ?>"><i class="fa fa-pen"></i> EDIT</button>
+                            <button class="btn btn-link text-danger btn_delete_education" data-id="<?= $value->id ?>"><i class="fa fa-trash"></i> DELETE</button>
+                        </span>
+                    </h4>
+                    <h6><?= $value->study_program ?></h6>
+                    <p class="mb-1"><?= $value->started_date ?> - <?= $value->end_date ?> (<?= $value->end_date - $value->started_date ?> Tahun)</p>
+                    <div class="ml-2">
+                        <?= $value->description ?>
+                    </div>
                 </div>
-            </div>
+            <?php endforeach ?>
         </div>
     </div>
 </div>
@@ -173,12 +200,190 @@ if ($data_account->gender == 1) {
                     <div>
                         <div class="form-group">
                             <label for="name">Tentang Saya</label>
-                            <textarea name="about_me" id="about_me" class="asdasd form-control" cols="30" rows="10"><?= $intern_cv->about_me ?></textarea>
+                            <textarea name="description_about_me" id="description_about_me" class="ckeditor_forma" rows="10"><?= $intern_cv->about_me ?></textarea>
                             <span class="invalid-feedback"></span>
                         </div>
                     </div>
                     <div class="text-right">
                         <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save_about_me"><i class="fa fa-save"></i> Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_experience" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title"></h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form class="form_input_experience">
+                    <div>
+                        <div class="form-group">
+                            <label for="company_name">Nama Perusahaan</label>
+                            <input type="text" class="form-control" name="company_name">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="position">Posisi</label>
+                            <input type="text" class="form-control" name="position">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="start_month">Tanggal Mulai</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select name="start_month" class="form-control" id="start_month">
+                                        <option value="">Bulan</option>
+                                        <option value="01">Januari</option>
+                                        <option value="02">Februari</option>
+                                        <option value="03">Maret</option>
+                                        <option value="04">April</option>
+                                        <option value="05">Mei</option>
+                                        <option value="06">Juni</option>
+                                        <option value="07">Juli</option>
+                                        <option value="08">Agustus</option>
+                                        <option value="09">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="start_year" id="start_year" class="form-control">
+                                        <option value="">Tahun</option>
+                                        <?php for ($i = date('Y'); $i >= date('Y') - 50; $i--) : ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php endfor ?>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="end_month">Tanggal Selesai</label>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <select name="end_month" class="form-control" id="end_month">
+                                        <option value="">Bulan</option>
+                                        <option value="01">Januari</option>
+                                        <option value="02">Februari</option>
+                                        <option value="03">Maret</option>
+                                        <option value="04">April</option>
+                                        <option value="05">Mei</option>
+                                        <option value="06">Juni</option>
+                                        <option value="07">Juli</option>
+                                        <option value="08">Agustus</option>
+                                        <option value="09">September</option>
+                                        <option value="10">Oktober</option>
+                                        <option value="11">November</option>
+                                        <option value="12">Desember</option>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <select name="end_year" id="end_year" class="form-control">
+                                        <option value="">Tahun</option>
+                                        <?php for ($i = date('Y'); $i >= date('Y') - 50; $i--) : ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php endfor ?>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description_experience">Deskripsi Pengalaman (Opsional)</label>
+                            <textarea name="description_experience" id="description_experience" class="ckeditor_forma" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save_experience"><i class="fa fa-save"></i> Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_education" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title"></h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form class="form_input_education">
+                    <div>
+                        <div class="form-group">
+                            <label for="school_name">Nama Sekolah</label>
+                            <input type="text" class="form-control" name="school_name">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="study_program">Jurusan</label>
+                            <input type="text" class="form-control" name="study_program">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="start_month">Tahun Mulai</label>
+                                    <select name="start_year" id="start_year" class="form-control">
+                                        <option value="">Tahun</option>
+                                        <?php for ($i = date('Y'); $i >= date('Y') - 50; $i--) : ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php endfor ?>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="start_month">Tahun Selesai</label>
+                                    <select name="end_year" id="end_year" class="form-control">
+                                        <option value="">Tahun</option>
+                                        <?php for ($i = date('Y'); $i >= date('Y') - 50; $i--) : ?>
+                                            <option value="<?= $i ?>"><?= $i ?></option>
+                                        <?php endfor ?>
+                                    </select>
+                                    <span class="invalid-feedback"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="description_education">Deskripsi Pengalaman (Opsional)</label>
+                            <textarea name="description_education" id="description_education" class="ckeditor_forma" rows="5"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save_education"><i class="fa fa-save"></i> Simpan Data</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_skill" aria-hidden="true">
+    <div class="modal-dialog modal-md" role="document">
+        <div class="modal-content modal-content-demo">
+            <div class="modal-header">
+                <h6 class="modal-title"></h6><button aria-label="Close" class="close" data-dismiss="modal" type="button"><span aria-hidden="true">×</span></button>
+            </div>
+            <div class="modal-body">
+                <form class="form_input_skill">
+                    <div>
+                        <div class="form-group">
+                            <label for="skill">Nama Keahlian</label>
+                            <input type="text" class="form-control" name="skill">
+                            <span class="invalid-feedback"></span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary mt-3 mb-0 btn_save_skill"><i class="fa fa-save"></i> Simpan Data</button>
                     </div>
                 </form>
             </div>
