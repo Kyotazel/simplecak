@@ -157,21 +157,21 @@ class Login extends CommonController
         Modules::run('security/login_validation');
         // Modules::run('security/token_validation');
         $token  = $this->input->get('token');
-        $us_id  = $this->session->userdata('member_id');
+        $us_id  = $this->session->userdata('industry_id');
 
         Modules::run('database/update', 'tb_account', ['id' => $us_id], ['token' => '']);
 
         $session_data = [
-            'member_token_login',
-            'member_credential',
-            'member_credetial_name',
-            'member_credential_menu',
-            'member_credential_access',
-            'member_id',
-            'member_image',
-            'member_name',
-            'member_email',
-            'member_last_check_admin'
+            'industry_token_login',
+            'industry_credential',
+            'industry_credetial_name',
+            'industry_credential_menu',
+            'industry_credential_access',
+            'industry_id',
+            'industry_image',
+            'industry_name',
+            'industry_email',
+            'industry_last_check_admin'
         ];
 
         //update data log 
@@ -320,13 +320,13 @@ class Login extends CommonController
         if (isset($_FILES['upload_background']) && !empty($_FILES['upload_background']['name'])) {
             $image_name = $this->upload_image('upload_background');
             $array_update = ['value' => $image_name];
-            Modules::run('database/update', 'app_setting', ['field' => 'member_login_background'], $array_update);
+            Modules::run('database/update', 'app_setting', ['field' => 'industry_login_background'], $array_update);
         }
 
         if (isset($_FILES['upload_image']) && !empty($_FILES['upload_image']['name'])) {
             $image_name = $this->upload_image('upload_image');
             $array_update = ['value' => $image_name];
-            Modules::run('database/update', 'app_setting', ['field' => 'member_login_image'], $array_update);
+            Modules::run('database/update', 'app_setting', ['field' => 'industry_login_image'], $array_update);
         }
 
         echo json_encode(['status' => true]);
@@ -357,21 +357,21 @@ class Login extends CommonController
         Modules::run('security/is_ajax');
         $type = $this->input->post('type');
         if ($type == 'background') {
-            $get_image = Modules::run('database/find', 'app_setting', ['field' => 'member_login_background'])->row()->value;
+            $get_image = Modules::run('database/find', 'app_setting', ['field' => 'industry_login_background'])->row()->value;
             $dir = realpath(APPPATH . '../upload/banner');
             if (file_exists($dir . '/' . $get_image)) {
                 unlink($dir . '/' . $get_image);
             }
 
-            Modules::run('database/update', 'app_setting', ['field' => 'member_login_background'], ['value' => '']);
+            Modules::run('database/update', 'app_setting', ['field' => 'industry_login_background'], ['value' => '']);
         }
         if ($type == 'image') {
-            $get_image = Modules::run('database/find', 'app_setting', ['field' => 'member_login_image'])->row()->value;
+            $get_image = Modules::run('database/find', 'app_setting', ['field' => 'industry_login_image'])->row()->value;
             $dir = realpath(APPPATH . '../upload/banner');
             if (file_exists($dir . '/' . $get_image)) {
                 unlink($dir . '/' . $get_image);
             }
-            Modules::run('database/update', 'app_setting', ['field' => 'member_login_image'], ['value' => '']);
+            Modules::run('database/update', 'app_setting', ['field' => 'industry_login_image'], ['value' => '']);
         }
         echo json_encode(['status' => true]);
     }

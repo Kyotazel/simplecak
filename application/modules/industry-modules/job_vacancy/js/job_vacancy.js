@@ -1,266 +1,203 @@
 var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '/';
-var save_method;
+var save_method, min_salary, max_salary, experience;
 var id_use = 0;
 
 $(document).ready(function () {
-    load_service();
+    $('#education').select2({
+		placeholder: 'Tidak dibatasi',
+		searchInputPlaceholder: 'Tidak dibatasi',
+		 width: '100%'
+	});
+    $('#work_field').select2({
+		placeholder: 'Bidang pekerjaan yang dikerjakan di lowongan ini',
+		searchInputPlaceholder: 'Bidang pekerjaan yang dikerjakan di lowongan ini',
+		 width: '100%'
+	});
+    $('#employment_status').select2({
+		placeholder: 'Jenis pekerjaan di lowongan ini',
+		searchInputPlaceholder: 'Jenis pekerjaan di lowongan ini',
+		 width: '100%'
+	});
+    $('#applicant_gender').select2({
+		placeholder: 'Lowongan ini dikhususkan untuk gender',
+		searchInputPlaceholder: 'Lowongan ini dikhususkan untuk gender',
+		 width: '100%'
+	});
+    $('#job_skill').select2({
+		placeholder: 'Keahlian yang diperlukan di lowongan ini',
+		searchInputPlaceholder: 'Keahlian yang diperlukan di lowongan ini',
+		 width: '100%'
+	});
+    min_salary = new Cleave('#min_salary', {
+        numeral: true,
+        prefix: 'Rp ',
+        delimiter: '.',
+        numeralDecimalMark: ',',
+    });
+    max_salary = new Cleave('#max_salary', {
+        numeral: true,
+        prefix: 'Rp ',
+        delimiter: '.',
+        numeralDecimalMark: ',',
+    });
+    experience = new Cleave('#experience', {
+        numeral: true,
+        prefix: ' Tahun',
+        tailPrefix: true,
+        delimiter: '.',
+        numeralDecimalMark: ',',
+    });
 });
 
-
-$('.btn_update_profile').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('.form-profile')[0]);
-
-    $.ajax({
-        url: url_controller+'update_profile'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                hideLoading();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-});
-
-
-$('.btn_update_sosmed').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('.form-sosmed')[0]);
-
-    $.ajax({
-        url: url_controller+'update_sosmed'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                hideLoading();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-});
-
-$('.btn-add-service').click(function () {
-    save_method = 'add';
-	$('.form-group').removeClass('has-danger');
- 	$('.help-block').empty();
- 	$('#form-service')[0].reset();
-	$('.modal-title').text('TAMBAH DATA');
-    $('#modal_service').modal('show');
-});
-
-
-function load_service() {
-    showLoading();
-    $.ajax({
-        url: url_controller+'list_service'+'/?token='+_token_user,
-        type: "POST",
-        dataType :"JSON",
-        success: function (data) {
-            hideLoading();
-            if(data.status){
-                $('#tbody-service').html(data.html_respon);
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-}
-
-$('.btn_save_service').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    // save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('#form-service')[0]);
-    var url;
-    if(save_method=='add'){
-        url = 'save_service';
-    }else{
-        url = 'update_service';
-        formData.append('id', id_use);
+$('#education').change(function (e) {
+    if ($(this).val().length > 1 && $(this).val().find(element => element == 0) == 0) {
+        $('#education').val(0).trigger('change');
     }
+})
+
+$(document).on('click', '.change_status', function () {
+    var selector = $(this);
+    $(this).toggleClass('on');
+    update_status(selector)
+    
+});
+
+$('.btn_save').click(function (e) {
+    e.preventDefault();
+    $(".form-control").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
+    $('#min_salary').val(min_salary.getRawValue().replace('Rp ', ''));
+    $('#max_salary').val(max_salary.getRawValue().replace('Rp ', ''));
+    $('#experience').val(experience.getRawValue().replace(' Tahun', ''));
+    var formData = new FormData($('.form_input')[0]);
+    var url;
+    var status;
+    save_method = $(this).data('method');
+    var job_desc = CKEDITOR.instances['job_desc'].getData();
+    if (save_method === 'add') {
+        url = 'save';
+        status = "Ditambahkan";
+        formData.append('job_desc', job_desc);
+    } else {
+        url = 'update';
+        status = "Diubah";
+        formData.append('id', $(this).data('id'));
+        formData.append('job_desc', job_desc);
+    }
+
     $.ajax({
-        url: url_controller+url+'/?token='+_token_user,
+        url: url_controller + url + '?token=' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
-        processData : false,
-        dataType :"JSON",
+        processData: false,
+        dataType: "JSON",
         success: function (data) {
-            hideLoading();
-            if(data.status){
+            if (data.status) {
                 notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
+                    msg: `<b>Sukses : </b> Data berhasil ${status}`,
                     type: "success"
-                });
-                $('#modal_service').modal('hide');
-                load_service();
-
-            } else{
-                for (var i = 0; i < data.inputerror.length; i++)
-                {
-                    $('.notif_'+data.inputerror[i]).parent().addClass('has-danger');
-                    $('.notif_'+data.inputerror[i]).text(data.error_string[i]);
+                })
+                location.href = data.redirect;
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
                 }
             }
         },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
+        error: function (jqXHR, textStatus, errorThrown) {
+            $('.btn_save_group').button('reset');
         }
-	});//end ajax
-});
+    })
+})
 
-$(document).on('click', '.btn_edit_service', function () {
-    showLoading();
-    $('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    id_use = $(this).data('id');
-    save_method = 'update';
+$(document).on('click', '.btn_edit', function () {
+    $('.modal-title').text('EDIT DATA');
+    $(".form-group").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
+    id = $(this).data('id');
+    id_use = id;
+    save_method = 'edit';
     $.ajax({
-        url: url_controller+'get_data_service'+'/?token='+_token_user,
+        url: url_controller + 'get_data' + '?token=' + _token_user,
         type: "POST",
         dataType: "JSON",
-        data:{'id':id_use},
+        data: { 'id': id },
         success: function (data) {
-            hideLoading();
-            $('[name="title"]').val(data.name);
-            $('[name="description"]').val(data.description);
-            $('#modal_service').modal('show');
+            if (data.status) {
+                $('[name="name"]').val(data.course.name);
+                $('[name="description"]').val(data.course.description);
+                $('[name="id_category_course"]').val(data.course.id_category_course);
+                $('[name="skill"]').val(data.skill.id_skill);
+                $('#modal_form').modal('show');
+            }
         },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
+        error: function (jqXHR, textStatus, errorThrown) { }
+    })
+})
 
-    });//end ajax
-});
 
-$(document).on('click', '.btn_delete_service', function () {
-    id = $(this).data('id');
+$('.btn_delete').click(function (e) {
+    var id = $(this).data('id');
     swal({
         title: "Apakah anda yakin?",
         text: "data akan dihapus!",
-        type: "warning",
+        type: "error",
         showCancelButton: true,
         confirmButtonClass: "btn-danger",
         confirmButtonText: "Ya , Lanjutkan",
         cancelButtonText: "Batal",
         closeOnConfirm: true,
-        closeOnCancel: true
+        closeOnCancel: true,
+        dangerMode: true
     },
-    function(isConfirm) {
-        if (isConfirm) {
-            showLoading();
-            $.ajax({
-                url: url_controller+'delete_service'+'/?token='+_token_user,
-                type: "POST",
-                dataType: "JSON",
-                data:{'id':id},
-                success: function (data) {
-                    hideLoading();
-                    if (data.status) {
-                        notif({
-                            msg: "<b>Sukses :</b> Data berhasil dihapus",
-                            type: "success"
-                        });
-                        load_service();
-                    } 
-                },
-                error:function(jqXHR, textStatus, errorThrown)
-                {
-                    hideLoading();
-                }
+        function (isConfirm) {
+            if (isConfirm) {
+                $.ajax({
+                    url: url_controller + 'delete' + '?token=' + _token_user,
+                    type: "POST",
+                    dataType: "JSON",
+                    data: { 'id': id },
+                    success: function (data) {
+                        if (data.status) {
+                            notif({
+                                msg: "<b>Sukses : </b> Data Berhasil Dihapus",
+                                type: "success"
+                            })
 
-            });//end ajax
+                            location.href = url_controller;
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                    }
+                })
+            }
         }
-    });
-    
-});
+    )
+})
 
-$(document).on('click', '.btn_save_description', function () { 
-    var content = CKEDITOR.instances['content_profile'].getData();
-    var content_short = CKEDITOR.instances['content_short_profile'].getData();
-    
-    
-   var PostData = {'content':content,'content_short':content_short};
+function update_status(selector) {
+    var id = selector.data('id');
+    var field = selector.data('status');
+    active_status = selector.hasClass('on') ? 1 : 0;
     $.ajax({
-        url:  url_controller+'update_description/?token='+_token_user,
+        url: url_controller+'update_status'+'/?token='+_token_user,
         type: "POST",
-        data: PostData,
-        dataType :"JSON",
+        dataType: "JSON",
+        data:{'id':id,'status':active_status,'field':field},
         success: function(data){
-            if(data.status){
-                alert_success('Data Berhasil Disimpan');
+            if (data.status) {
+                notif({
+                    msg: "<b>Sukses :</b> Data berhasil diupdate",
+                    type: "success"
+                });
             } 
         },
         error:function(jqXHR, textStatus, errorThrown)
         {
-            alert_error('error process');
         }
 
     });//end ajax
-});
-
-$(document).on('change', '.upload_form', function () { 
-    var formData = new FormData($('.form_update_front_profile')[0]);
-    formData.append('id', $(this).data('id'));
-    $.ajax({
-        url: url_controller+'update_image'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                location.reload();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            // $('.btn_save_group').button('reset');
-        }
-	});//end ajax
-});
+}

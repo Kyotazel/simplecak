@@ -57,6 +57,9 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/dropzone.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/basic.min.css') ?>">
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/custom.css" rel="stylesheet">
+
+    <link href="<?= base_url('assets/themes/spruhha/') ?>plugins/bootstrap-datepicker/bootstrap-datepicker.css" rel="stylesheet">
+
 </head>
 <script>
     //configuration
@@ -330,7 +333,7 @@
         <!-- Mobile-header closed -->
 
         <!-- Horizonatal menu-->
-        <div class="main-navbar hor-menu sticky">
+        <div class="main-navbar hor-menu sticky" style="z-index: 30;">
             <div class="container">
                 <?php $this->load->view('_partials/horizontal_main_menu'); ?>
             </div>
@@ -442,16 +445,19 @@
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>ckeditor/adapters/jquery.js"></script>
     <!--   Dropzones -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>dropzone/dropzone.min.js"></script>
+    <!-- Cleave -->
+    <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>cleave/cleave.min.js"></script>
     <!-- additional js -->
     <script src="<?= base_url('assets/plugin/'); ?>responsive-paginate.js"></script>
+    <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/jquery-ui/ui/widgets/datepicker.js"></script>
 
     <?php
     echo '
-            <script src="' . base_url('application/modules/member-modules/template/js/js-module-configuration.js') . '"></script>
+            <script src="' . base_url('application/modules/industry-modules/template/js/js-module-configuration.js') . '"></script>
         ';
     foreach ($module_js as $item_js) {
         echo '
-                    <script src="' . base_url('application/modules/member-modules/' . $module_directory . '/js/' . $item_js . '.js') . '"></script>
+                    <script src="' . base_url('application/modules/industry-modules/' . $module_directory . '/js/' . $item_js . '.js') . '"></script>
                 ';
     }
     ?>

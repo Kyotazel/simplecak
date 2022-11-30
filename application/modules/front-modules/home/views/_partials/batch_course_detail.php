@@ -104,7 +104,7 @@
                         'select' => 'a.id, a.title, a.description, a.target_registrant, 
                                 DATE_FORMAT(a.opening_registration_date, "%d %M %Y") opening_date,
                                 DATE_FORMAT(a.closing_registration_date, "%d %M %Y") closing_date,
-                                a.image, a.target_registrant',
+                                a.image, a.target_registrant, a.closing_registration_date',
                         'from' => 'tb_batch_course a',
                         'order_by' => 'a.created_date DESC',
                         'where_not_in' => [
@@ -121,7 +121,7 @@
                             "where" => "id_batch_course = $slide_batch->id AND status = 5"
                         ];
                         $count_peserta      = Modules::run("database/get", $array_peserta)->row();
-                        if ($date > $slide_batch->closing_date) {
+                        if ($date >= $slide_batch->closing_registration_date) {
                             $badge_date = '<span class="badge bg-danger fw-bold">'.$slide_batch->closing_date.' | ' . $count_peserta->total .'/'. $slide_batch->target_registrant . ' Peserta</span>';          
                         } else {
                             $badge_date = '<span class="badge bg-success fw-bold">'.$slide_batch->closing_date.' | ' . $count_peserta->total .'/'. $slide_batch->target_registrant . ' Peserta</span>';
@@ -135,7 +135,7 @@
                             </div>
                             <div class="card-body py-3 text-center">
                                 <h4 class="card-title h5 mb-1"><?= $slide_batch->title ?></h4>
-                                <p class="card-text text-muted"><?= strip_tags($slide_batch->description); ?></p>
+                                <p class="card-text text-muted" style="height: 20vh;overflow: hidden;"><?= strip_tags($slide_batch->description); ?></p>
                             </div>
                         </a>
                     <?php endforeach; ?>

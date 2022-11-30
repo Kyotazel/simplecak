@@ -1,6 +1,6 @@
 var getUrl = window.location;
 var baseUrl =_base_url;
-var prefix_folder_admin = 'member-area';
+var prefix_folder_admin = 'industry-area';
 var prefix_folder_api = 'api';
 
 
@@ -8,7 +8,10 @@ $(document).ready(function () {
 	$('.horizontal-mainwrapper').show();
     $('.datepicker').datepicker({
         autoclose: true,
-        dateFormat: 'yy-mm-dd'
+        dateFormat: 'yy-mm-dd',
+        changeMonth: true,
+        changeYear: true,
+		viewMode: "date",
     });
     $('.datepicker_form').datepicker({
         autoclose: true,
