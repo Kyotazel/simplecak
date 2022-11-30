@@ -75,9 +75,9 @@
                     <td style="width: 43%;"></td>
                     <td style="width: 14%; text-align:center">
                     <?php if($user->image == '') : ?>
-                        <img src="<?= base_url('upload/') ?>/member/default.png" alt="" style="height: 140px">
+                        <img src="<?= base_url('upload/') ?>/courses/1668405875613.png" alt="" style="height: 140px">
                     <?php else: ?>
-                        <img src="<?= base_url('upload/') ?>/member/<?= $user->image ?>" alt="" style="height: 140px">
+                        <img src="<?= base_url('upload/') ?>/courses/1668405875613.png" alt="" style="height: 140px">
                     <?php endif ?>
                     </td>
                     <td style="width: 43%; text-align:center;">

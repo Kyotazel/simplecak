@@ -73,6 +73,16 @@ class Helper extends CommonController
         return $date_return;
     }
 
+    public function month_indo($date, $delimiter)
+    {
+        $array_month = [
+            '01' => 'januari', '02' => 'februari', '03' => 'maret', '04' => 'april', '05' => 'mei', '06' => 'juni', '07' => 'juli', '08' => 'agustus', '09' => 'september', '10' => 'oktober', '11' => 'november', '12' => 'december'
+        ];
+        $explode_date = explode($delimiter, $date);
+        $date_return = ucfirst($array_month[$explode_date[1]]) . ' ' . $explode_date[0];
+        return $date_return;
+    }
+
     public function datetime_indo($datetime)
     {
         $explode_datetime = explode(' ', $datetime);
