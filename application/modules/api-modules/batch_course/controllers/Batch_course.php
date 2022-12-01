@@ -1,4 +1,5 @@
 <?php
+
 defined('BASEPATH') or exit('No direct script access allowed');
 
 class Batch_course extends ApiController
@@ -132,5 +133,26 @@ class Batch_course extends ApiController
         }
 
         echo json_encode($response);
+    }
+
+    public function certificate()
+    {
+        $id = $this->input->post('id_account');
+        $get_certificate = Modules::run('database/find', 'tb_account_has_certificate', ['id_account' => $id])->result();
+
+        if($get_certificate) {
+            $response = [
+                "error" => False,
+                "data" => $get_certificate
+            ];
+        } else {
+            $response = [
+                "error" => True,
+                "msg" => "Data tidak ditemukan",
+            ];
+        }
+
+        echo json_encode($response);
+
     }
 }
