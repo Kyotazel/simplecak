@@ -125,7 +125,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="form-group">
                                         <label for="job_address">Alamat Pekerjaan</label>
-                                        <textarea name="job_address" id="job_address" cols="30" rows="3" placeholder="Alamat pekerjaan ini dikerjakan"></textarea>
+                                        <textarea name="job_address" class="form-control" id="job_address" cols="30" rows="3" placeholder="Alamat pekerjaan ini dikerjakan"></textarea>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>

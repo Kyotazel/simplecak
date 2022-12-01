@@ -157,7 +157,7 @@
                                 <div class="col-sm-12 col-md-3">
                                     <div class="form-group">
                                         <label for="job_address">Alamat Pekerjaan</label>
-                                        <textarea name="job_address" id="job_address" cols="30" rows="3" placeholder="Alamat pekerjaan ini dikerjakan"><?= isset($data_detail->job_address) ? $data_detail->job_address : '' ?></textarea>
+                                        <textarea name="job_address" class="form-control" id="job_address" cols="30" rows="3" placeholder="Alamat pekerjaan ini dikerjakan"><?= isset($data_detail->job_address) ? $data_detail->job_address : '' ?></textarea>
                                         <div class="invalid-feedback"></div>
                                     </div>
                                 </div>

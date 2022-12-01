@@ -113,32 +113,6 @@ $('.btn_save').click(function (e) {
     })
 })
 
-$(document).on('click', '.btn_edit', function () {
-    $('.modal-title').text('EDIT DATA');
-    $(".form-group").removeClass('is-invalid');
-    $('.invalid-feedback').empty();
-    id = $(this).data('id');
-    id_use = id;
-    save_method = 'edit';
-    $.ajax({
-        url: url_controller + 'get_data' + '?token=' + _token_user,
-        type: "POST",
-        dataType: "JSON",
-        data: { 'id': id },
-        success: function (data) {
-            if (data.status) {
-                $('[name="name"]').val(data.course.name);
-                $('[name="description"]').val(data.course.description);
-                $('[name="id_category_course"]').val(data.course.id_category_course);
-                $('[name="skill"]').val(data.skill.id_skill);
-                $('#modal_form').modal('show');
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) { }
-    })
-})
-
-
 $('.btn_delete').click(function (e) {
     var id = $(this).data('id');
     swal({

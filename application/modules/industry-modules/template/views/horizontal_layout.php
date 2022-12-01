@@ -447,6 +447,7 @@
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>dropzone/dropzone.min.js"></script>
     <!-- Cleave -->
     <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>cleave/cleave.min.js"></script>
+    <script type="text/javascript" src="<?php echo base_url('assets/plugin/'); ?>cleave/cleave-phone.id.js"></script>
     <!-- additional js -->
     <script src="<?= base_url('assets/plugin/'); ?>responsive-paginate.js"></script>
     <script src="<?= base_url('assets/themes/spruhha/') ?>plugins/jquery-ui/ui/widgets/datepicker.js"></script>
