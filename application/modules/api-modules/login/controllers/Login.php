@@ -12,94 +12,6 @@ class Login extends ApiController
         $id = $this->input->post('id');
 
         $email = Modules::run('database/find', 'tb_account', ['email' => $this->input->post('email')])->row();
-        if ($this->input->post('email') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Email Harus Diisi';
-        }
-        if ($this->input->post('nik') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'NIK Harus Diisi';
-        }
-        if ($this->input->post('no_kk') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'No KK Harus Diisi';
-        }
-        if ($this->input->post('name') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Nama Harus Diisi';
-        }
-        if ($this->input->post('birth_place') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Tempat Lahir Harus Diisi';
-        }
-        if ($this->input->post('birth_date') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Tanggal Lahir Harus Diisi';
-        }
-        if ($this->input->post('gender') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Jenis Kelamin Harus Diisi';
-        }
-        if ($this->input->post('religion') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Agama Harus Diisi';
-        }
-        if ($this->input->post('married_status') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Status Pernikahan Harus Diisi';
-        }
-        if ($this->input->post('id_last_education') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Pendidikan Terakhir Harus Diisi';
-        }
-        if ($this->input->post('last_school') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Sekolah Terakhir Harus Diisi';
-        }
-        if ($this->input->post('province_id') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Provinsi Asal Harus Diisi';
-        }
-        if ($this->input->post('city_id') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Kota Asal Harus Diisi';
-        }
-        if ($this->input->post('regency_id') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Kecamatan Asal Harus Diisi';
-        }
-        if ($this->input->post('village_id') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Desa Asal Harus Diisi';
-        }
-        if ($this->input->post('address') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Alamat Asal Harus Diisi';
-        }
-        if ($this->input->post('province_id_current') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Provinsi Sekarang Harus Diisi';
-        }
-        if ($this->input->post('city_id_current') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Kota Sekarang Harus Diisi';
-        }
-        if ($this->input->post('regency_id_current') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Kecamatan Sekarang Harus Diisi';
-        }
-        if ($this->input->post('village_id_current') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Desa Sekarang Harus Diisi';
-        }
-        if ($this->input->post('address_current') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Alamat Sekarang Harus Diisi';
-        }
-        if ($this->input->post('password') == '') {
-            $response['error'] = TRUE;
-            $response['msg'][] = 'Kata Sandi Harus Diisi';
-        }
         if (!empty($email)) {
             $response['error'] = TRUE;
             $response['msg'][] = 'Email Sudah Terdaftar';
@@ -125,16 +37,16 @@ class Login extends ApiController
         $married_status     = $this->input->post('married_status');
         $id_last_education  = $this->input->post('id_last_education');
         $last_school        = $this->input->post('last_school');
-        $id_province        = $this->input->post('id_province');
-        $id_city            = $this->input->post('id_city');
-        $id_regency         = $this->input->post('id_regency');
-        $id_village         = $this->input->post('id_village');
+        $id_province        = $this->input->post('province_id');
+        $id_city            = $this->input->post('city_id');
+        $id_regency         = $this->input->post('regency_id');
+        $id_village         = $this->input->post('village_id');
         $address            = $this->input->post('address');
-        $id_province_current        = $this->input->post('id_province_current');
-        $id_city_current            = $this->input->post('id_city_current');
-        $id_regency_current         = $this->input->post('id_regency_current');
-        $id_village_current         = $this->input->post('id_village_current');
-        $address_current            = $this->input->post('address_current');
+        $id_province_current        = $this->input->post('province_id');
+        $id_city_current            = $this->input->post('city_id');
+        $id_regency_current         = $this->input->post('regency_id');
+        $id_village_current         = $this->input->post('village_id');
+        $address_current            = $this->input->post('address');
         $email              = $this->input->post('email');
         $registration_date  = date("Y-m-d");
         $username           = $email;
@@ -172,12 +84,8 @@ class Login extends ApiController
             'password' => $hash_password,
             'status' => $status,
             'is_confirm' => $is_confirm,
+            'image' => $image
         ];
-
-        if ($image !== '') {
-            $image = ["image" => $image];
-            $array_insert = array_merge($array_insert, $image);
-        }
 
         Modules::run("database/insert", "tb_account", $array_insert);
 

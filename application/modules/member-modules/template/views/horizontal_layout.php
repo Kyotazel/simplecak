@@ -61,6 +61,11 @@
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/dropzone.min.css') ?>">
     <link rel="stylesheet" href="<?php echo base_url('assets/plugin/dropzone/basic.min.css') ?>">
     <link href="<?= base_url('assets/themes/spruhha/') ?>css/custom.css" rel="stylesheet">
+    <style>
+    .card {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19); 
+    }
+</style>
 </head>
 <script>
     //configuration
