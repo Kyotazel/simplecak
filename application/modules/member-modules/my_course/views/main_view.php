@@ -35,7 +35,7 @@
             }
         ?>
 
-        <div class="col-md-12">
+        <div class="col-md-12 mb-5">
             <div class="card">
                 <div class="card-body">
                     <div class="row">
