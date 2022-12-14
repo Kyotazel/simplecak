@@ -89,4 +89,8 @@ class Helper extends CommonController
         $date_return .= '&nbsp;&nbsp; ' . $explode_time[0] . ':' . $explode_time[1];
         return $date_return;
     }
+
+    public function format_phone ($val) {
+        return substr($val, 0, 4) . '-' . substr($val, 4, 4) . '-' . substr($val, 8, 4);
+    }  
 }

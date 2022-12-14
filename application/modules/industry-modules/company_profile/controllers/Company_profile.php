@@ -26,215 +26,143 @@ class Company_profile extends BackendController
 
     public function index()
     {
-        $this->app_data['company_name'] = Modules::run('database/find', 'app_setting', ['field' => 'company_name'])->row()->value;
-        $this->app_data['company_tagline'] = Modules::run('database/find', 'app_setting', ['field' => 'company_tagline'])->row()->value;
-        $this->app_data['company_email'] = Modules::run('database/find', 'app_setting', ['field' => 'company_email'])->row()->value;
-        $this->app_data['company_number_phone'] = Modules::run('database/find', 'app_setting', ['field' => 'company_number_phone'])->row()->value;
-        $this->app_data['company_website'] = Modules::run('database/find', 'app_setting', ['field' => 'company_website'])->row()->value;
-        $this->app_data['company_address'] = Modules::run('database/find', 'app_setting', ['field' => 'company_address'])->row()->value;
-        $this->app_data['company_link_video'] = Modules::run('database/find', 'app_setting', ['field' => 'company_link_video'])->row()->value;
-        $this->app_data['company_schedule'] = Modules::run('database/find', 'app_setting', ['field' => 'company_schedule'])->row()->value;
-        $this->app_data['company_description'] = Modules::run('database/find', 'app_setting', ['field' => 'company_description'])->row()->value;
-        $this->app_data['company_short_description'] = Modules::run('database/find', 'app_setting', ['field' => 'company_short_description'])->row()->value;
-        $this->app_data['company_front_banner'] = Modules::run('database/find', 'app_setting', ['field' => 'company_front_banner'])->row()->value;
-        // print_r($this->app_data['company_front_banner']);
-        // exit;
-
-        $this->app_data['company_instagram'] = Modules::run('database/find', 'app_setting', ['field' => 'company_instagram'])->row()->value;
-        $this->app_data['company_facebook'] = Modules::run('database/find', 'app_setting', ['field' => 'company_facebook'])->row()->value;
-        $this->app_data['company_line'] = Modules::run('database/find', 'app_setting', ['field' => 'company_line'])->row()->value;
-        $this->app_data['company_twitter'] = Modules::run('database/find', 'app_setting', ['field' => 'company_twitter'])->row()->value;
-        $this->app_data['company_youtube'] = Modules::run('database/find', 'app_setting', ['field' => 'company_youtube'])->row()->value;
-
+        $data = [
+            'select' => 'a.*, a.name company, b.name sector_name',
+            'from' => 'tb_industry a',
+            'join' => [
+                'tb_industry_sector b, b.id = a.sector, left'
+            ],
+            'where' => [
+                'a.id' => $this->session->userdata('industry_id')
+            ]
+        ];
+        $this->app_data['company_profile'] = Modules::run('database/get', $data)->row();
+        $this->app_data['company_vacancy'] = Modules::run('database/find', 'tb_job_vacancy', ['id_industry' => $this->session->userdata('industry_id')])->result();
         $this->app_data['page_title']   = "Profil Perusahaan";
         $this->app_data['view_file']    = 'main_view';
         echo Modules::run('template/horizontal_layout', $this->app_data);
     }
 
-    public function update_profile()
+    public function edit () {
+        $this->app_data['company_profile'] = Modules::run('database/find', 'tb_industry', ['id' => $this->session->userdata('industry_id')])->row();
+        $this->app_data['company_vacancy'] = Modules::run('database/find', 'tb_job_vacancy', ['id_industry' => $this->session->userdata('industry_id')])->result();
+        $this->app_data['sector']          = Modules::run('database/get_all', 'tb_industry_sector')->result();
+        $this->app_data['page_title']      = "Edit Profil Perusahaan";
+        $this->app_data['view_file']       = 'view_detail';
+        echo Modules::run('template/horizontal_layout', $this->app_data);
+    }
+
+    private function validate_profile()
     {
         Modules::run('security/is_ajax');
-        $name       = $this->input->post('name');
-        $tagline    = $this->input->post('tagline');
-        $number_phone = $this->input->post('number_phone');
+        $data = array();
+
+        $data['error_string'] = array();
+        $data['inputerror'] = array();
+        $data['status'] = TRUE;
+        // this validate if there is same file to be uploaded
+        $id = $this->input->post('id');
+        if ($this->input->post('company_name') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'company_name';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('sector') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'sector';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('description') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'description';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('email') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'email';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('phone') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'phone';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('email') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'email';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('website') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'website';
+            $data['status'] = FALSE;
+        }
+        if ($this->input->post('company_address') == '') {
+            $data['error_string'][] = 'Harus Diisi';
+            $data['inputerror'][] = 'company_address';
+            $data['status'] = FALSE;
+        }
+
+        if ($data['status'] == FALSE) {
+            echo json_encode($data);
+            exit();
+        }
+    }
+
+    public function update () {
+        Modules::run("security/is_ajax");
+        $this->validate_profile();
+
+        $id = $this->session->userdata('industry_id');
+        $cover = $this->upload_img('company_cover', 'cover', time());
+        $logo = $this->upload_img('company_logo', 'company', time());
+        $company_name = $this->input->post('company_name');
+        $sector = $this->input->post('sector');
+        $description = $this->input->post('description');
         $email = $this->input->post('email');
+        $phone = $this->input->post('phone');
         $website = $this->input->post('website');
-        $address = $this->input->post('address');
-        $link_profile = $this->input->post('link_profile');
-        $array_schedule = $this->input->post('schedule');
-
-        Modules::run('database/update', 'app_setting', ['field' => 'company_name'], ['value' => $name]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_tagline'], ['value' => $tagline]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_email'], ['value' => $email]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_number_phone'], ['value' => $number_phone]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_website'], ['value' => $website]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_address'], ['value' => $address]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_link_video'], ['value' => $link_profile]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_schedule'], ['value' => json_encode($array_schedule)]);
-        echo json_encode(['status' => TRUE]);
-    }
-
-    public function update_sosmed()
-    {
-        Modules::run('security/is_ajax');
-        $facebook    = $this->input->post('facebook');
-        $instagram   = $this->input->post('instagram');
-        $twitter     = $this->input->post('twitter');
-        $line       = $this->input->post('line');
-        $youtube    = $this->input->post('youtube');
-
-        Modules::run('database/update', 'app_setting', ['field' => 'company_youtube'], ['value' => $youtube]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_twitter'], ['value' => $twitter]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_line'], ['value' => $line]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_facebook'], ['value' => $facebook]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_instagram'], ['value' => $instagram]);
-        echo json_encode(['status' => TRUE]);
-    }
-
-    public function save_service()
-    {
-        Modules::run('security/is_ajax');
-        $image_name = $this->upload_image();
-        $title = $this->input->post('title');
-        $description = $this->input->post('description');
-
-
-        $array_insert = [
-            'type' => $this->service_company_type,
-            'name' => $title,
-            'description' => $description,
-            'image' => $image_name
-        ];
-        Modules::run('database/insert', 'tb_service_company', $array_insert);
-        echo json_encode(['status' => TRUE]);
-    }
-
-    public function list_service()
-    {
-        Modules::run('security/is_ajax');
-        $get_all_data = Modules::run('database/find', 'tb_service_company', ['type' => $this->service_company_type])->result();
-        $html_respon = '';
-        foreach ($get_all_data as $item_data) {
-            $html_respon .= '
-                <tr>
-                    <td>
-                        <div class="row justify-content-center align-items-center">
-                            <div class="col-3">
-                                <img src="' . base_url('upload/profile/' . $item_data->image) . '" alt="">
-                            </div>
-                            <div class="col-9">
-                                <h2>' . $item_data->name . '</h2>
-                                <p>' . $item_data->description . '</p>
-                            </div>
-                        </div>
-                    </td>
-                    <td style="vertical-align:middle;">
-                        <a href="javascript:void(0)" data-id="' . $item_data->id . '" class="btn btn-warning-gradient btn-sm btn-rounded btn_edit_service"><i class="fa fa-edit"></i> Edit</a>
-                        <a href="javascript:void(0)" data-id="' . $item_data->id . '"  class="btn btn-danger-gradient btn-sm btn-rounded btn_delete_service"><i class="fa fa-trash"></i> Hapus</a>
-                    </td>
-                </tr>
-            ';
-        }
-        echo json_encode(['status' => TRUE, 'html_respon' => $html_respon]);
-    }
-
-    public function get_data_service()
-    {
-        Modules::run('security/is_ajax');
-        $id = $this->input->post('id');
-        $get_data = Modules::run('database/find', 'tb_service_company', ['id' => $id])->row();
-        $get_data->status = TRUE;
-
-        echo json_encode($get_data);
-    }
-
-    public function update_service()
-    {
-        Modules::run('security/is_ajax');
-        $id = $this->input->post('id');
-
-        $title = $this->input->post('title');
-        $description = $this->input->post('description');
-
+        $testimony = $this->input->post('testimony');
+        $company_address = $this->input->post('company_address');
+        
         $array_update = [
-            'name' => $title,
-            'description' => $description
+            'name' => $company_name,
+            'cover' => $cover,
+            'image' => $logo,
+            'sector' => $sector,
+            'description' => str_replace("[removed]", '', $description),
+            'email' => $email,
+            'phone_number' => $phone,
+            'website' => $website,
+            'address' => $company_address,
+            'testimony' => $testimony
         ];
-        if (!empty($_FILES['media']['name'])) {
-            $image_name = $this->upload_image();
-            $array_update['image'] = $image_name;
-        }
-        Modules::run('database/update', 'tb_service_company', ['id' => $id], $array_update);
-        echo json_encode(['status' => TRUE]);
+
+        Modules::run("database/update", "tb_industry", ['id' => $id], $array_update);        
+        $redirect = Modules::run('helper/create_url', "company_profile/");
+        echo json_encode(['status' => true, 'redirect' => $redirect]);
     }
 
-    public function delete_service()
+    private function upload_img($name, $folder, $file_name)
     {
-        Modules::run('security/is_ajax');
-        $id = $this->input->post('id');
-        Modules::run('database/delete', 'tb_service_company', ['id' => $id]);
-        echo json_encode(['status' => TRUE]);
-    }
+        if (isset($_FILES[$name]["name"])) {
+            $config['upload_path'] = '../upload/' . $folder . "/";
+            $config['allowed_types'] = 'jpg|jpeg|png';
+            $config['overwrite'] = TRUE;
+            $config['file_name'] = $file_name; //just milisecond timestamp fot unique name
+            $this->load->library('upload', $config);
+            $this->upload->initialize($config);
+            
+            if (!$this->upload->do_upload($name)) {
+                echo $this->upload->display_errors();
+                return "";
+            } else {
+                $data = $this->upload->data();
 
-
-    private function upload_image()
-    {
-        $config['upload_path']          = realpath(APPPATH . '../upload/profile');
-        $config['allowed_types']        = 'gif|jpg|png|pdf';
-        $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('media')) //upload and validate
-        {
-            $data['inputerror'][] = 'upload_banner';
-            $data['error_string'][] = 'Upload error: ' . $this->upload->display_errors('', ''); //show ajax error
-            $data['status'] = FALSE;
-            echo json_encode($data);
-            exit();
-        } else {
-            $upload_data = $this->upload->data();
-            $image_name = $upload_data['file_name'];
-            return $image_name;
-        }
-    }
-
-    public function update_description()
-    {
-        Modules::run('security/is_ajax');
-
-        $content = $_POST['content'];
-        $content_short = $_POST['content_short'];
-        Modules::run('database/update', 'app_setting', ['field' => 'company_description'], ['value' => $content]);
-        Modules::run('database/update', 'app_setting', ['field' => 'company_short_description'], ['value' => $content_short]);
-        echo json_encode(['status' => TRUE]);
-    }
-
-    public function update_image()
-    {
-        Modules::run('security/is_ajax');
-        $id = $this->session->userdata('us_id');
-        $image_data = $this->upload_image_banner();
-        //update image
-        Modules::run('database/update', 'app_setting', ['field' => 'company_front_banner'], ['value' => $image_data]);
-        echo json_encode(['status' => TRUE]);
-    }
-
-    private function upload_image_banner()
-    {
-        $config['upload_path']          = realpath(APPPATH . '../upload/banner');
-        $config['allowed_types']        = 'gif|jpg|png|jpeg';
-        $config['file_name']            = round(microtime(true) * 1000); //just milisecond timestamp fot unique name
-        $this->load->library('upload', $config);
-        if (!$this->upload->do_upload('upload_profile')) //upload and validate
-        {
-            $data['inputerror'][] = 'upload_banner';
-            $data['error_string'][] = 'Upload error: ' . $this->upload->display_errors('', ''); //show ajax error
-            $data['status'] = FALSE;
-            echo json_encode($data);
-            exit();
-        } else {
-            $upload_data = $this->upload->data();
-            $image_name = $upload_data['file_name'];
-            return $image_name;
-        }
+                $file_name = $data['file_name'];
+                return $file_name;
+            }
+        } 
+        return '';
     }
 }

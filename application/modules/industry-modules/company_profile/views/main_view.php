@@ -1,23 +1,19 @@
-<?php
-$type = $this->input->get('type');
-$array_schedule = json_decode($company_schedule, TRUE);
-?>
 <div class="container">
     <div class="row row-sm">
         <div class="col-sm-12 text-right m-0 mb-2">
-            <a class="btn btn-outline-primary btn-rounded"><i class="mdi mdi-wrench mr-2"></i>Edit</a>
+            <a class="btn btn-outline-primary btn-rounded" href="<?= base_url('industry-area/company_profile/edit') ?>"><i class="mdi mdi-wrench mr-2"></i>Edit</a>
         </div>
         <div class="col-12">
             <div class="card">
-                <img src="<?= base_url('upload/cover/cover.jpg') ?>" class="img-fluid ht-250" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" alt="image cover">
+                <img src="<?= base_url('upload/cover/') . $company_profile->cover ?>" class="img-fluid ht-250" style="border-top-left-radius: 10px; border-top-right-radius: 10px;" alt="image cover">
                 <div class="card-body">
                     <div class="row">
                         <div class="col-sm-12 col-md-3 ht-100">
-                            <img src="<?= base_url('upload/company/istok.jpg') ?>" alt="img profile" class="img-rounded-circle border-3 rounded-circle" style="position: absolute; top: -90px;width: 200px;height: 200px;">
+                            <img src="<?= base_url('upload/company/') . $company_profile->image ?>" alt="img profile" class="img-rounded-circle border-3 rounded-circle" style="position: absolute; top: -90px;width: 200px;height: 200px;">
                         </div>
                         <div class="col-sm-12 col-md-9">
-                            <h3>Health Med International</h3>
-                            <p>Medicine</p>
+                            <h3><?= $company_profile->company ?></h3>
+                            <p><?= $company_profile->sector_name ?></p>
                         </div>
                     </div>
                 </div>
@@ -37,19 +33,19 @@ $array_schedule = json_decode($company_schedule, TRUE);
                                 <ul class="list-group list-group-flush">
                                     <li class="list-group-item">
                                         <i class="zmdi zmdi-email mr-2"></i>
-                                        wilujengroup@wilujeng.com
+                                        <?= $company_profile->email ?>
                                     </li>
                                     <li class="list-group-item">
                                         <i class="icon ion-ios-call mr-2"></i>
-                                        0812 - 2000 - 1000
+                                        <?= Modules::run('helper/format_phone', $company_profile->phone_number) ?>
                                     </li>
                                     <li class="list-group-item">
                                         <i class="icon ion-md-globe mr-2"></i>
-                                        <a href="http://wilujeng.com" target="_blank" rel="noopener noreferrer">wilujeng.com</a>
+                                        <a href="<?= $company_profile->website ?>" target="_blank" rel="external"><?= str_replace('http://', '', $company_profile->website) ?></a>
                                     </li>
                                     <li class="list-group-item">
                                         <i class="zmdi zmdi-pin mr-2"></i>
-                                        Jalan Soekarno Hatta No. 99
+                                        <?= $company_profile->address ?>
                                     </li>
                                 </ul>
                             </div>
@@ -63,7 +59,7 @@ $array_schedule = json_decode($company_schedule, TRUE);
                         </div>
                         <div class="card-body">
                             <blockquote class="blockquote">
-                                <em>"BLK Surabaya sangat mengerti akan kebutuhan industri yang bergerak sangat cepat dan membutuhakn SDM yang berkualitas."</em>
+                                <em>"<?= $company_profile->testimony ?>"</em>
                             </blockquote>
                         </div>
                     </div>
@@ -79,14 +75,7 @@ $array_schedule = json_decode($company_schedule, TRUE);
                         </div>
                         <div class="card-body">
                             <p class="card-text">
-                                Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat laborum corporis 
-                                ab maxime et? Illo quibusdam reiciendis praesentium laboriosam quasi dolores necessitatibus 
-                                ullam voluptatum corrupti quod incidunt atque ab vel voluptate, molestiae quaerat iure nam 
-                                eius, ad blanditiis perspiciatis. Sed perferendis totam voluptates incidunt eveniet tempore explicabo 
-                                aliquid, perspiciatis sit odio consequuntur necessitatibus, neque quae reiciendis sint assumenda eum dicta 
-                                laudantium. Quos vel corrupti fugit doloremque. Eum numquam similique nam qui, dolor fugiat. Sit mollitia 
-                                distinctio voluptates natus ut ad nam molestias ea at doloribus neque, quo labore saepe, libero 
-                                nostrum fugit qui perspiciatis fuga. Eaque similique soluta explicabo odit.
+                                <?= $company_profile->description ?>
                             </p>
                         </div>
                     </div>
@@ -94,80 +83,39 @@ $array_schedule = json_decode($company_schedule, TRUE);
                 <div class="col-12 mt-3">
                     <div class="card">
                         <div class="card-header mb-0">
-                            <h5>Lowongan Kerja di Health Med International</h5>
+                            <h5>Lowongan Kerja di <?= $company_profile->name ?></h5>
                         </div>
                         <div class="card-body">
                             <div class="row">
+                                <?php foreach ($company_vacancy as $value) : ?>
                                 <div class="col-md-3 text-center">
                                     <a class="card text-dark shadow-lg text-decoration-none" href="#">
-                                        <div class="card-body">
-                                            <h6>Staff Adminsitrasi</h6>
-                                            <p class="text-muted mb-1">Health Med International</p>
+                                        <div class="card-body pb-0">
+                                            <h6><?= $value->job_name ?></h6>
+                                            <p class="text-muted mb-1"><?= $company_profile->name ?></p>
                                             <p class="text-muted">
                                                 <i class="zmdi zmdi-pin mr-2"></i>
-                                                Jl. Dr. Soepomo No. 8
+                                                <?= $value->job_address ?>
                                             </p>
                                             <p class="text-card">
                                                 <i class="si si-wallet"></i>
-                                                2.000.000 - 4.000.000
+                                                <?= 'Rp ' . number_format((float) $value->minimum_salary, 0, '', '.') . ' - ' . number_format((float) $value->maximum_salary, 0, '', '.') ?> 
                                             </p>
                                         </div>
                                         <div class="card-footer text-right">
                                             <p class="text-muted">
                                                 <i class="mdi mdi-update"></i>
-                                                1 Jam yang lalu
+                                                <?php $date = date_diff(date_create($value->created_date), date_create(date('Y-m-d'))); 
+                                                echo $date->format("%a Hari yang lalu") ?>
                                             </p>
                                         </div>
                                     </a>
                                 </div>
-                                <div class="col-md-3 text-center">
-                                    <a class="card text-dark shadow-lg text-decoration-none" href="#">
-                                        <div class="card-body">
-                                            <h6>Staff Adminsitrasi</h6>
-                                            <p class="text-muted mb-1">Health Med International</p>
-                                            <p class="text-muted">
-                                                <i class="zmdi zmdi-pin mr-2"></i>
-                                                Jl. Dr. Soepomo No. 8
-                                            </p>
-                                            <p class="text-card">
-                                                <i class="si si-wallet"></i>
-                                                2.000.000 - 4.000.000
-                                            </p>
-                                        </div>
-                                        <div class="card-footer text-right">
-                                            <p class="text-muted">
-                                                <i class="mdi mdi-update"></i>
-                                                1 Hari yang lalu
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
-                                <div class="col-md-3 text-center">
-                                    <a class="card text-dark shadow-lg text-decoration-none" href="#">
-                                        <div class="card-body">
-                                            <h6>Staff Adminsitrasi</h6>
-                                            <p class="text-muted mb-1">Health Med International</p>
-                                            <p class="text-muted">
-                                                <i class="zmdi zmdi-pin mr-2"></i>
-                                                Jl. Dr. Soepomo No. 8
-                                            </p>
-                                            <p class="text-card">
-                                                <i class="si si-wallet"></i>
-                                                2.000.000 - 4.000.000
-                                            </p>
-                                        </div>
-                                        <div class="card-footer text-right">
-                                            <p class="text-muted">
-                                                <i class="mdi mdi-update"></i>
-                                                3 Hari yang lalu
-                                            </p>
-                                        </div>
-                                    </a>
-                                </div>
+                                <?php endforeach; ?>
                                 <div class="col-md-3 text-center">
                                     <a class="card text-dark shadow-lg mx-auto text-decoration-none" href="#">
                                         <div class="card-body">
-                                            <h6>Lowongan lainya di Health Med International</h6>
+                                            <h6>Lowongan lainya di <?= $company_profile->name ?></h6>
                                         </div>
                                     </a>
                                 </div>

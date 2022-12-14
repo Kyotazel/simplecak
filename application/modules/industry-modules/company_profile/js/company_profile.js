@@ -1,266 +1,107 @@
 var url_controller = baseUrl + '/' + prefix_folder_admin + '/' + _controller + '/';
 var save_method;
 var id_use = 0;
+var telp;
 
 $(document).ready(function () {
-    load_service();
+    $('#sector').select2({
+		placeholder: 'Sektor perusahaan',
+		searchInputPlaceholder: 'Sektor perusahaan',
+		 width: '100%'
+	});
+    telp = new Cleave('#phone', {
+        phone: true,
+        phoneRegionCode: 'ID',
+        delimiter: '-',
+    });
 });
 
+Dropzone.options.uploadForms = { // The camelized version of the ID of the form element
 
-$('.btn_update_profile').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('.form-profile')[0]);
-
-    $.ajax({
-        url: url_controller+'update_profile'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                hideLoading();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-});
-
-
-$('.btn_update_sosmed').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('.form-sosmed')[0]);
-
-    $.ajax({
-        url: url_controller+'update_sosmed'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                hideLoading();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-});
-
-$('.btn-add-service').click(function () {
-    save_method = 'add';
-	$('.form-group').removeClass('has-danger');
- 	$('.help-block').empty();
- 	$('#form-service')[0].reset();
-	$('.modal-title').text('TAMBAH DATA');
-    $('#modal_service').modal('show');
-});
-
-
-function load_service() {
-    showLoading();
-    $.ajax({
-        url: url_controller+'list_service'+'/?token='+_token_user,
-        type: "POST",
-        dataType :"JSON",
-        success: function (data) {
-            hideLoading();
-            if(data.status){
-                $('#tbody-service').html(data.html_respon);
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-	});//end ajax
-}
-
-$('.btn_save_service').click(function (e) {
-    e.preventDefault();
-    showLoading();
-	$('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    // save_method = $(this).data('method');
-	  //defined form
-    var formData = new FormData($('#form-service')[0]);
-    var url;
-    if(save_method=='add'){
-        url = 'save_service';
-    }else{
-        url = 'update_service';
-        formData.append('id', id_use);
+    // The configuration we've talked about above
+    autoProcessQueue: false,
+    uploadMultiple: true,
+    parallelUploads: 100,
+    maxFiles: 100,
+  
+    // The setting up of the dropzone
+    init: function() {
+      var myDropzone = this;
+  
+      // First change the button to actually tell Dropzone to process the queue.
+      this.element.querySelector("button[type=submit]").addEventListener("click", function(e) {
+        // Make sure that the form isn't actually being sent.
+        e.preventDefault();
+        e.stopPropagation();
+        myDropzone.processQueue();
+      });
+  
+      // Listen to the sendingmultiple event. In this case, it's the sendingmultiple event instead
+      // of the sending event because uploadMultiple is set to true.
+      this.on("sendingmultiple", function() {
+        // Gets triggered when the form is actually being sent.
+        // Hide the success button or the complete form.
+      });
+      this.on("successmultiple", function(files, response) {
+        // Gets triggered when the files have successfully been sent.
+        // Redirect user or notify of success.
+      });
+      this.on("errormultiple", function(files, response) {
+        // Gets triggered when there was an error sending the files.
+        // Maybe show form again, and notify user of error
+      });
     }
+   
+  }
+  $('.btn_update').click(function (e) {
+    e.preventDefault();
+    $(".form-control").removeClass('is-invalid');
+    $('.invalid-feedback').empty();
+    $('#phone').val(telp.getRawValue());
+    var formData = new FormData($('.form_input')[0]);
+    var url;
+    var status;
+    save_method = $(this).data('method');
+    var description = CKEDITOR.instances['description'].getData();
+    if (save_method === 'add') {
+        url = 'save';
+        status = "Ditambahkan";
+        formData.append('description', description);
+    } else {
+        url = 'update';
+        status = "Diubah";
+        formData.append('description', description);
+    }
+
     $.ajax({
-        url: url_controller+url+'/?token='+_token_user,
+        url: url_controller + url + '?token=' + _token_user,
         type: "POST",
         data: formData,
         contentType: false,
-        processData : false,
-        dataType :"JSON",
+        processData: false,
+        dataType: "JSON",
         success: function (data) {
-            hideLoading();
-            if(data.status){
+            if (data.status) {
                 notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
+                    msg: `<b>Sukses : </b> Data berhasil ${status}`,
                     type: "success"
-                });
-                $('#modal_service').modal('hide');
-                load_service();
-
-            } else{
-                for (var i = 0; i < data.inputerror.length; i++)
-                {
-                    $('.notif_'+data.inputerror[i]).parent().addClass('has-danger');
-                    $('.notif_'+data.inputerror[i]).text(data.error_string[i]);
+                })
+                location.href = data.redirect;
+            } else {
+                for (var i = 0; i < data.inputerror.length; i++) {
+                    $('[name="' + data.inputerror[i] + '"]').addClass("is-invalid");
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').addClass('d-block');
+                    $('[name="' + data.inputerror[i] + '"]').siblings(':last').text(data.error_string[i]);
                 }
+                telp = new Cleave('#phone', {
+                    phone: true,
+                    phoneRegionCode: 'ID',
+                    delimiter: '-',
+                });
             }
         },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
+        error: function (jqXHR, textStatus, errorThrown) {
+            $('.btn_save_group').button('reset');
         }
-	});//end ajax
-});
-
-$(document).on('click', '.btn_edit_service', function () {
-    showLoading();
-    $('.form-group').removeClass('has-danger');
-    $('.help-block').empty();
-    id_use = $(this).data('id');
-    save_method = 'update';
-    $.ajax({
-        url: url_controller+'get_data_service'+'/?token='+_token_user,
-        type: "POST",
-        dataType: "JSON",
-        data:{'id':id_use},
-        success: function (data) {
-            hideLoading();
-            $('[name="title"]').val(data.name);
-            $('[name="description"]').val(data.description);
-            $('#modal_service').modal('show');
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            hideLoading();
-        }
-
-    });//end ajax
-});
-
-$(document).on('click', '.btn_delete_service', function () {
-    id = $(this).data('id');
-    swal({
-        title: "Apakah anda yakin?",
-        text: "data akan dihapus!",
-        type: "warning",
-        showCancelButton: true,
-        confirmButtonClass: "btn-danger",
-        confirmButtonText: "Ya , Lanjutkan",
-        cancelButtonText: "Batal",
-        closeOnConfirm: true,
-        closeOnCancel: true
-    },
-    function(isConfirm) {
-        if (isConfirm) {
-            showLoading();
-            $.ajax({
-                url: url_controller+'delete_service'+'/?token='+_token_user,
-                type: "POST",
-                dataType: "JSON",
-                data:{'id':id},
-                success: function (data) {
-                    hideLoading();
-                    if (data.status) {
-                        notif({
-                            msg: "<b>Sukses :</b> Data berhasil dihapus",
-                            type: "success"
-                        });
-                        load_service();
-                    } 
-                },
-                error:function(jqXHR, textStatus, errorThrown)
-                {
-                    hideLoading();
-                }
-
-            });//end ajax
-        }
-    });
-    
-});
-
-$(document).on('click', '.btn_save_description', function () { 
-    var content = CKEDITOR.instances['content_profile'].getData();
-    var content_short = CKEDITOR.instances['content_short_profile'].getData();
-    
-    
-   var PostData = {'content':content,'content_short':content_short};
-    $.ajax({
-        url:  url_controller+'update_description/?token='+_token_user,
-        type: "POST",
-        data: PostData,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                alert_success('Data Berhasil Disimpan');
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            alert_error('error process');
-        }
-
-    });//end ajax
-});
-
-$(document).on('change', '.upload_form', function () { 
-    var formData = new FormData($('.form_update_front_profile')[0]);
-    formData.append('id', $(this).data('id'));
-    $.ajax({
-        url: url_controller+'update_image'+'/?token='+_token_user,
-        type: "POST",
-        data: formData,
-        contentType: false,
-        processData : false,
-        dataType :"JSON",
-        success: function(data){
-            if(data.status){
-                notif({
-                    msg: "<b>Sukses :</b> Data berhasil disimpan",
-                    type: "success"
-                });
-                location.reload();
-            } 
-        },
-        error:function(jqXHR, textStatus, errorThrown)
-        {
-            // $('.btn_save_group').button('reset');
-        }
-	});//end ajax
-});
+    })
+})

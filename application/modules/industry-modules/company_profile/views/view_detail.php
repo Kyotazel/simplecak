@@ -1,190 +1,146 @@
-<?php
-$active         = $data_user->status ? 'on' : '';
-$active_create  = $data_user->access_create ? 'on' : '';
-$active_update  = $data_user->access_update ? 'on' : '';
-$active_delete  = $data_user->access_delete ? 'on' : '';
-?>
-<div class="row row-sm">
-    <div class="col-lg-4">
-        <div class="card mg-b-20">
-            <div class="card-body">
-                <div class="mb-1">
-                    <a href="<?= Modules::run('helper/create_url', 'app_user'); ?>" class="btn btn-primary"><i class="fa fa-arrow-circle-left"></i> Kembali</a>
+<form method="POST" class="form_input" enctype="multipart/form-data">
+<div class="container">
+    <div class="row row-sm">
+        <div class="col-sm-12 text-right m-0 mb-2">
+            <a class="btn btn-outline-danger btn-rounded" href="<?= base_url('industry-area/company_profile') ?>"><i class="si si-close mr-2"></i>Batal</a>
+            <button type="submit" class="btn btn-outline-success btn-rounded btn_update" data-method="update"><i class="fa fa-save mr-2"></i>Simpan</button>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row row-sm">
+                <div class="col-12">
+                    <h3 class="">
+                        <i class="fa fa-industry"></i>
+                        Intro Perusahaan</h3>
                 </div>
-                <div class="pl-0">
-                    <div class="main-profile-overview text-center">
-                        <div class="main-img-user profile-user">
-                            <img alt="" src="<?= base_url('assets/themes/valex/') ?>img/faces/6.jpg">
-                        </div>
-                        <div class=" mg-b-20">
-                            <div>
-                                <h5 class="main-profile-name"><?= $data_user->name; ?></h5>
-                                <p class="main-profile-name-text"><?= $data_user->email; ?></p>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 border p-2">
-                                <h6><i class="fa fa-map-marker"></i> Alamat :</h6>
-                                <div class="main-profile-bio     ">
-                                    <?= nl2br($data_user->address); ?>
-                                </div>
-                            </div>
-                            <div class="col-md-6 border p-2">
-                                <h6><i class="fa fa-tv"></i> Credential :</h6>
-                                <h5 class="text-info"><span class="badge badge-dark text-uppercase"><?= $data_user->credential_name; ?></span></h5>
-                            </div>
-                            <div class="col-12 border">
-                                <table class=" text-left mt-2">
-                                    <tr>
-                                        <td style="width: 150px;padding:5px"><i class="fa fa-circle"></i> Status Aktif</td>
-                                        <td style="width: 10px;">:</td>
-                                        <td>
-                                            <div data-status="status" data-id="<?= $data_user->id; ?>" class="main-toggle main-toggle-dark change_status_detail <?= $active; ?>"><span></span></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="mb-1">
-                                        <td style="width: 150px;padding:5px"><i class="fa fa-circle"></i> is create</td>
-                                        <td style="width: 10px;">:</td>
-                                        <td>
-                                            <div data-status="create" data-id="<?= $data_user->id; ?>" class="main-toggle main-toggle-dark change_status_detail <?= $active_create; ?>"><span></span></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="mb-1">
-                                        <td style="width: 150px;padding:5px"> <i class="fa fa-circle"></i> is update</td>
-                                        <td style="width: 10px;">:</td>
-                                        <td>
-                                            <div data-status="update" data-id="<?= $data_user->id; ?>" class="main-toggle main-toggle-dark change_status_detail <?= $active_update; ?>"><span></span></div>
-                                        </td>
-                                    </tr>
-                                    <tr class="mb-1">
-                                        <td style="width: 150px;padding:5px"><i class="fa fa-circle"></i> is delete</td>
-                                        <td style="width: 10px;">:</td>
-                                        <td>
-                                            <div data-status="delete" data-id="<?= $data_user->id; ?>" class="main-toggle main-toggle-dark change_status_detail <?= $active_delete; ?>"><span></span></div>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </div>
-                    </div><!-- main-profile-overview -->
+            </div>
+        </div>
+        <div class="card-body pt-0">
+            <div class="row row-sm">
+                <div class="col-sm-12 col-md-3">
+                    <label for="logo">Logo Perusahaan</label>
+                    <div class="preview-logo ht-150" style="background: center / contain no-repeat url(<?= base_url('upload/company/') . $company_profile->image ?>) ;">
+                        <!-- <img src="<?= base_url('upload/company/') . $company_profile->image ?>" alt="img profile" class="img-thumbnail"> -->
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control" type="file" name="company_logo" accept="image/*" id="logo">
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-9">
+                    <label for="cover">Background Cover</label>
+                    <div class="preview-cover ht-150" style="background: center / contain no-repeat url(<?= base_url('upload/cover/') . $company_profile->cover ?>) ;">
+                        <!-- <img src="<?= base_url('upload/cover/') . $company_profile->cover ?>" class="img-thumbnail" alt="image cover"> -->
+                    </div>
+                    <div class="form-group">
+                        <input type="file" class="form-control" accept="image/*" name="company_cover" id="cover">
+                    </div>
+                </div>
+            </div>
+            <div class="row row-sm">
+                <div class="col-sm-12 col-md-9">
+                    <div class="form-group">
+                        <label for="company_name">Nama Perusahaan</label>
+                        <input type="text" id="company_name" name="company_name" class="form-control" placeholder="Perusahaan..." value="<?= isset($company_profile->name) ? $company_profile->name : '' ?>">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-3">
+                    <div class="form-group">
+                        <label for="sector">Sektor Industri</label>
+                        <select name="sector" id="sector" class="form-control">
+                            <option value="">Pilih Sector Industri</option>
+                            <?php foreach ($sector as $value) : ?>
+                                <option value="<?= $value->id ?>" <?= $selected = ($value->id == $company_profile->sector) ? 'selected' : '' ?>><?= $value->name ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                        <div class="invalid-feedback"></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-lg-8">
-
-        <div class="card">
-            <div class="card-body">
-                <div class="tabs-menu ">
-                    <!-- Tabs -->
-                    <ul class="nav nav-tabs profile navtab-custom panel-tabs">
-                        <li class="">
-                            <a href="#home" data-toggle="tab" aria-expanded="true" class="active"> <span class="visible-xs"><i class="las la-user-circle tx-16 mr-1"></i></span> <span class="hidden-xs">Update Data</span> </a>
-                        </li>
-                        <li class="">
-                            <a href="#profile" data-toggle="tab" aria-expanded="false" class=""> <span class="visible-xs"><i class="las la-images tx-15 mr-1"></i></span> <span class="hidden-xs">Update Login</span> </a>
-                        </li>
-                        <li class="">
-                            <a href="#settings" data-toggle="tab" aria-expanded="false"> <span class="visible-xs"><i class="las la-cog tx-16 mr-1"></i></span> <span class="hidden-xs">Log Activity</span> </a>
-                        </li>
-                    </ul>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row row-sm">
+                <div class="col-12">
+                    <h3 class="">
+                        <i class="fa fa-edit"></i>
+                        Profil Perusahaan</h3>
                 </div>
-                <div class="tab-content border-left border-bottom border-right border-top-0 p-4">
-                    <div class="tab-pane active" id="home">
-                        <form class="form-update-profile">
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Nama Lengkap</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="name" value="<?= $data_user->name; ?>" placeholder="nama lengkap..">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Email</label>
-                                <div class="col-sm-10">
-                                    <input type="email" class="form-control" name="email" value="<?= $data_user->email; ?>" placeholder="Email...">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Telp</label>
-                                <div class="col-sm-10">
-                                    <input type="text" class="form-control" name="phone_number" value="<?= $data_user->phone_number; ?>" placeholder="telp..">
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-1">
-                                <label for="inputEmail3" class="col-sm-2 control-label text-right">Alamat Lengkap</label>
-                                <div class="col-sm-10">
-                                    <textarea name="address" class="form-control" i cols="30" rows="10"><?= $data_user->address; ?> </textarea>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <div class="form-group  mb-1 text-right">
-                                <button type="submit" data-id="<?= $data_user->id; ?>" class="btn btn-primary btn_update_profile"><i class="fa fa-send"></i> Simpan Data</button>
-                            </div>
-                        </form>
+            </div>
+        </div>
+        <div class="card-body pt-0">
+            <div class="">
+                <textarea id="description" class="ckeditor_form" cols="30" rows="10"><?= isset($company_profile->description) ? $company_profile->description : ''; ?></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row row-sm">
+                <div class="col-12">
+                    <h3>
+                        <i class="fa fa-info"></i>
+                        Info Perusahaan</h3>
+                </div>
+            </div>
+        </div>
+        <div class="card-body pt-0">
+            <div class="row row-sm">
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label for="email">Email Perusahaan</label>
+                        <input type="email" id="email" name="email" class="form-control" placeholder="Email Perusahaan..." value="<?= isset($company_profile->email) ? $company_profile->email : '' ?>">
+                        <div class="invalid-feedback"></div>
                     </div>
-                    <div class="tab-pane" id="profile">
-                        <form class="form-login">
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-3 control-label text-right">Credential</label>
-                                <div class="col-sm-9">
-                                    <select name="credential" class="form-control">
-                                        <?php
-                                        foreach ($all_credential as $item_credential) {
-                                            $selected = $item_credential->id == $data_user->id_credential ? 'selected' : '';
-                                            echo '
-                                                    <option ' . $selected . ' value="' . $item_credential->id . '">' . $item_credential->name . '</option>
-                                                ';
-                                        }
-                                        ?>
-                                    </select>
-                                    <span class="help-block"></span>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group row mb-2">
-                                <label for="inputEmail3" class="col-sm-3 control-label text-right">username</label>
-                                <div class="col-sm-5">
-                                    <input type="text" name="username" value="<?= $data_user->username; ?>" class="form-control" id="inputEmail3" placeholder="username..">
-                                    <span class="help-block"></span>
-                                </div>
-                                <div class="col-md-4">
-                                    <small>(optional), silahkan di isi jika anda ingin update data</small>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="form-group row mb-2">
-                                <label for="inputPassword3" class="col-sm-3 control-label text-right">Password</label>
-                                <div class="col-sm-5">
-                                    <input type="password" class="form-control" name="password" placeholder="Password">
-                                    <span class="help-block"></span>
-                                </div>
-                                <div class="col-md-4">
-                                    <small>(optional), silahkan di isi jika anda ingin update data</small>
-                                </div>
-                            </div>
-                            <div class="form-group row mb-2 ">
-                                <label for="inputPassword3" class="col-sm-3 control-label text-right">Ulangi Password</label>
-                                <div class="col-sm-5">
-                                    <input type="password" class="form-control" name="re_password" placeholder="Password">
-                                    <span class="help-block"></span>
-                                </div>
-                                <div class="col-md-4">
-                                    <small>(optional), silahkan di isi jika anda ingin update data</small>
-                                </div>
-                            </div>
-                            <div class="form-group  mb-1 text-right">
-                                <button type="submit" data-id="<?= $data_user->id; ?>" class="btn btn-primary btn_save_login"><i class="fa fa-send"></i> Simpan Data</button>
-                            </div>
-                        </form>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label for="phone">Telepon Perusahaan</label>
+                        <input type="text" id="phone" name="phone" class="form-control" placeholder="Telepon Perusahaan..." value="<?= isset($company_profile->phone_number) ? $company_profile->phone_number : '' ?>">
+                        <div class="invalid-feedback"></div>
                     </div>
-                    <div class="tab-pane " id="settings">
-                        <h2>Log User</h2>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <div class="form-group">
+                        <label for="website">Website Perusahaan</label>
+                        <input type="text" id="website" name="website" class="form-control" placeholder="Link Web Perusahaan..." value="<?= isset($company_profile->website) ? $company_profile->website : '' ?>">
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group">
+                        <label for="company_address">Alamat Perusahaan</label>
+                        <textarea name="company_address" class="form-control" id="company_address" cols="30" rows="3" placeholder="Alamat pekerjaan ini dikerjakan"><?= $company_profile->address ?></textarea>
+                        <div class="invalid-feedback"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card mb-3">
+        <div class="card-header">
+            <div class="row row-sm">
+                <div class="col-12">
+                    <h3>
+                        <i class="fa fa-quote-left"></i>
+                        Testimoni ke BLK Surabaya
+                    </h3>
+                </div>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row row-sm">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="testimony">Testimoni</label>
+                        <textarea name="testimony" class="form-control" id="testimony" cols="30" rows="3" placeholder="Testimoni ke BLK Surabaya"><?= $company_profile->testimony ?></textarea>
+                        <div class="invalid-feedback"></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+</form>
