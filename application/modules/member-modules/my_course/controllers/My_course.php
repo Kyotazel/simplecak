@@ -35,7 +35,7 @@ class My_course extends CommonController
                 "tb_course_category c, b.id_category_course = c.id",
                 "tb_batch_course_has_account as d, a.id = d.id_batch_course"
             ],
-            "where" => "ending_date > '" . date('Y-m-d') . "' AND d.id_account = $id",
+            "where" => ["d.id_account" => $id],
             'order_by' => 'id,DESC'
         ];
 
